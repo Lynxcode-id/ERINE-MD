@@ -117,6 +117,9 @@ Kirim gambar dengan caption:
 - Jika bot tidak merespon, tunggu beberapa saat.
 - Jangan merename tanpa seizin pengembang script ini, tolong hargai kami agar kami terus melanjutkan project bot whatsapp ini sekian, terima kasih 🙏🏻
 - Contact Dev/Pengembang ada di config.js jika kalian belum merenamenya, jika ada fitur yang error segera ketik .lapor agar secepatnya saya fix
+- Fix Project ?? tergantung waktu kami biasanya 1-2 harian akan kami fix dan upload ke github
+- Sudah pairing tapi pas ketik command kek .menu di bot ga muncul? restart panel dulu yah !!
+- Selebihnya Tanya Tanya saja
 
 ---
 
