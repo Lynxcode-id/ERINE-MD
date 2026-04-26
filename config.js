@@ -46,7 +46,7 @@ global.prems = [] // Bebas
 global.nomorbot = '6285185681661' // No Bot
 global.nomorown = '6288258041396'// No Utama
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
-global.version = '10.0.2' // Versi Script Ini
+global.version = '16.9.5' // Versi Script Ini
 global.autotyping = false // Default : false
 global.autorecording = false // Default : false
 
