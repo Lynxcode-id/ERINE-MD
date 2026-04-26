@@ -31,10 +31,13 @@ async function uploadMedia(m) {
 }
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
+    // Gua aliasin conn jadi hydro, siapa tau lu kangen sindrom hydro wkwk
+    const hydro = conn; 
     const userId = m.sender;
     const isNanoPro = /nanopro/i.test(command);
     const prompt = text || m.quoted?.text || m.msg?.caption || "";
 
+    // === FITUR NANO PRO (COLLECTOR MODE) ===
     if (isNanoPro) {
         if (!bananaSession[userId]) bananaSession[userId] = { images: [] };
 
@@ -72,7 +75,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
                 if (!resultUrl) throw new Error('Generation timed out.');
 
-                await conn.sendMessage(m.chat, { 
+                await hydro.sendMessage(m.chat, { 
                     image: { url: resultUrl }, 
                     caption: `🍌 *NANO-BANANA PRO SUCCESS*\n\n🖼️ *Images Blended:* ${session.images.length}\n📝 *Prompt:* ${finalPrompt}\n🚀 *Source:* Omegatech API` 
                 }, { quoted: m });
@@ -97,11 +100,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         return m.reply(`✅ *Image ${bananaSession[userId].images.length}/4 Added*\n\nSend another image or type:\n*${usedPrefix + command} done <prompt>*`);
     }
 
-    if (command === 'nano') {
+    // === FITUR EDITIMG / NANO (SINGLE IMAGE) ===
+    if (/editimg|nano/i.test(command)) {
         const imageUrl = await uploadMedia(m);
         
         if (imageUrl) {
-            if (!prompt) return m.reply(`⚠️ *Instruction Required*\n\nExample: Reply to an image with \`${usedPrefix}nano make it a zombie\``);
+            if (!prompt) return m.reply(`⚠️ *Instruksi Diperlukan*\n\nContoh: Reply gambar dengan \`${usedPrefix}${command} buat rambut karakter ini menjadi blonde\``);
             
             await m.react('🎨');
             try {
@@ -115,7 +119,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                 }
 
                 if (resultUrl) {
-                    await conn.sendMessage(m.chat, { 
+                    await hydro.sendMessage(m.chat, { 
                         image: { url: resultUrl }, 
                         caption: `✨ *NANO EDIT SUCCESS*\n\n📝 *Prompt:* ${prompt}` 
                     }, { quoted: m });
@@ -126,13 +130,14 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                 m.reply("❌ Image edit failed.");
             }
         } else {
-            if (!prompt) return m.reply(`⚠️ *Input Required*\n\nUsage: ${usedPrefix}nano <prompt>`);
+            // Kalau nggak ada gambar, lari ke text-to-image biasa
+            if (!prompt) return m.reply(`⚠️ *Input Required*\n\nUsage: ${usedPrefix}${command} <prompt>`);
             
             await m.react('⏳');
             try {
                 const { data } = await axios.get(`https://omegatech-api.dixonomega.tech/api/ai/nano-banana-pro?prompt=${encodeURIComponent(prompt)}`);
                 if (data.image) {
-                    await conn.sendMessage(m.chat, { 
+                    await hydro.sendMessage(m.chat, { 
                         image: { url: data.image }, 
                         caption: `🍌 *NANO PRO GENERATION*\n\n📝 *Prompt:* ${prompt}` 
                     }, { quoted: m });
@@ -146,8 +151,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 };
 
-handler.help = ['edit'];
+handler.help = ['editimg <teks>', 'nano <teks>', 'nanopro'];
 handler.tags = ['ai'];
-handler.command = /^(edit)$/i;
+// Nah ini yang tadinya bikin ga konek. Gua tambahin regexnya biar nangkep semua.
+handler.command = /^(editimg|nano|nanopro)$/i;
 
 export default handler;
