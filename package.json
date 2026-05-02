@@ -1,6 +1,6 @@
 {
   "name": "ERINE-MD BY LYNX",
-  "version": "16.9.5",
+  "version": "16.7.1",
   "description": "Erine Project MD - WhatsApp Multi-Device Bot",
   "main": "index.js",
   "type": "module",
@@ -25,26 +25,26 @@
     "rpg-bot",
     "plugin-system"
   ],
-  "homepage": "https://github.com/Lynxcode-id/ERINE-MD",
+  "homepage": "https://github.com/Lynxcode-id/ERINE-MD-",
   "author": {
     "name": "Lynx decode"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Lynxcode-id/ERINE-MD.git"
+    "url": "git+https://github.com/Lynxcode-id/ERINE-MD-.git"
   },
   "bugs": {
-    "url": "https://github.com/Lynxcode-id/ERINE-MD/issues"
+    "url": "https://github.com/Lynxcode-id/ERINE-MD-/issues"
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@adiwajshing/keyed-db": "^0.2.4",
     "@bochilteam/scraper": "^5.0.1",
     "@cacheable/node-cache": "latest",
-    "@ibaraki-douji/pixivts": "^2.4.1",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@ibaraki-douji/pixivts": "^2.4.1",
     "@vitalets/google-translate-api": "^9.2.0",
-    "@wishkeysocket/baileys": "https://github.com/LuckyArch/OurinGlitch-Baileys/archive/refs/heads/main.tar.gz",
+    "@whiskeysocket/baileys": "https://github.com/LuckyArch/OurinGlitch-Baileys/archive/refs/heads/main.tar.gz",
     "audio-decode": "^2.2.3",
     "awesome-phonenumber": "^5.10.0",
     "axios": "^1.4.0",
