@@ -1,7 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const { S_WHATSAPP_NET } = pkg
 import jimp from 'jimp'
 const { Jimp } = jimp

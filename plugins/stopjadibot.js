@@ -14,6 +14,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     const userJid = m.sender
     const id = userJid.replace(/@.+/, '')
 
+    // Variabel ini namanya 'sessions'
     const sessions = global.jadibotSessionjadibots || new Map()
 
     if (!isActive(userJid)) {
@@ -23,8 +24,11 @@ let handler = async (m, { conn, usedPrefix }) => {
         )
     }
 
-    const sessionjadibot = sessionjadibots.get(id)
-    const uptime = session?.startedAt
+    // Panggil dari 'sessions', bukan 'sessionjadibots'
+    const sessionjadibot = sessions.get(id)
+    
+    // Panggil dari 'sessionjadibot', bukan 'session'
+    const uptime = sessionjadibot?.startedAt
         ? format(Date.now() - sessionjadibot.startedAt)
         : '-'
 
@@ -52,6 +56,6 @@ let handler = async (m, { conn, usedPrefix }) => {
 handler.help = ['stopjadibot']
 handler.tags = ['premium']
 handler.command = ['stopjadibot', 'stopjbot']
-handler.premium = true
+handler.premium = false
 
 export default handler

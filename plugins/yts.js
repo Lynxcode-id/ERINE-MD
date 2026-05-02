@@ -2,7 +2,7 @@
 // Developed by INF PROJECT
 
 import yts from "yt-search";
-import pkg from '@wishkeysocket/baileys';
+import pkg from '@whiskeysocket/baileys';
 const { generateWAMessageFromContent, proto } = pkg;
 import axios from 'axios';
 

@@ -2,7 +2,7 @@
 // Developed by INF PROJECT
 
 import fetch from 'node-fetch'
-import pkg from '@wishkeysocket/baileys' 
+import pkg from '@whiskeysocket/baileys' 
 const { getBinaryNodeChild, getBinaryNodeChildren } = pkg
 
 let handler = async (m, { conn, text, participants, usedPrefix, command }) => {

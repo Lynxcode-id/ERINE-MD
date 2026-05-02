@@ -14,7 +14,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) return m.reply(`Contoh:\n${usedPrefix + command} multo`)
 
   // ganti id channel
-  const idsal = '120363400411310874@newsletter'
+  const idsal = '120363400612665352@newsletter'
 
   let tempInput, tempOutput
 

@@ -1,9 +1,13 @@
 let handler = async (m, { conn, args }) => {
 	let list = Object.entries(global.db.data.users)
-	let lim = !args || !args[0] ? 25 : isNumber(args[0]) ? parseInt(args[0]) : 25
+	let lim = !args || !args[0] ? 15 : isNumber(args[0]) ? parseInt(args[0]) : 15
 	lim = Math.max(1, lim)
-	list.map(([user, data], i) => (Number(data.limit = lim)))
-		conn.reply(m.chat, `*Berhasil direset ${lim} / user*`, m)
+    
+	list.forEach(([user, data]) => {
+        data.limit = lim
+    })
+    
+    conn.reply(m.chat, `*Berhasil direset ${lim} limit / user*`, m)
 }
 handler.help = ['limit'].map(v => 'reset' + v)
 handler.tags = ['owner']

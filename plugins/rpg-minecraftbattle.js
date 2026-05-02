@@ -1,8 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@wishkeysocket/baileys'
-// Walaupun MessageType sudah mulai deprecated di versi baru, gue tetep include sesuai struktur lu
+import pkg from '@whiskeysocket/baileys'
 const { MessageType } = pkg 
 
 function pickRandom(list) {
@@ -11,11 +10,9 @@ function pickRandom(list) {
 
 let handler = async (m, { conn }) => {
   try {
-    // Inisialisasi database global (pastiin global.db.data sudah ada di main file lu)
     global.db.data = global.db.data || {}
     global.db.data.users = global.db.data.users || {}
     
-    // Inisialisasi data monsters & items jika belum ada
     if (!global.db.data.monsters) {
         global.db.data.monsters = [
             'Zombi', 'Creeper', 'Skeleton', 'Enderman',
@@ -78,7 +75,7 @@ let handler = async (m, { conn }) => {
       }
 
       if (user.health <= 0) {
-        user.health = 0 // Biar nggak minus
+        user.health = 0
         battleLog += `😵 *DEFEAT!*\nKamu tewas di tangan ${selectedMonster}. Pulihkan kesehatanmu dulu.\n`
         break
       }

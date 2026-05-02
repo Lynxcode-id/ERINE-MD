@@ -1,26 +1,21 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const { downloadContentFromMessage } = pkg
 
 let handler = async (m, { conn }) => {
-    // 1. Cek apakah ada pesan yang di-reply
     if (!m.quoted) throw '⚠️ Reply pesan *View Once* (Sekali Lihat) yang mau dibuka, Bang!'
     
-    // 2. Cek tipe pesan (View Once V2 atau Extension)
     const isViewOnce = m.quoted.mtype === 'viewOnceMessageV2' || m.quoted.mtype === 'viewOnceMessageV2Extension'
     if (!isViewOnce) throw '❌ Ini bukan pesan *View Once*.'
 
     await m.react('⏳')
 
     try {
-        // Ambil isi pesan aslinya (imageMessage / videoMessage)
         let msg = m.quoted.message
         let type = Object.keys(msg)[0]
         let mediaData = msg[type]
-
-        // 3. Download Media
         let media = await downloadContentFromMessage(
             mediaData, 
             type === 'imageMessage' ? 'image' : 'video'
@@ -31,7 +26,6 @@ let handler = async (m, { conn }) => {
             buffer = Buffer.concat([buffer, chunk])
         }
 
-        // 4. Kirim balik sebagai pesan biasa
         const caption = mediaData.caption || ''
         
         if (/video/.test(type)) {

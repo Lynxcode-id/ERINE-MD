@@ -87,10 +87,10 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 }
 
-handler.help = ['ttmp3 <url>']
+handler.help = ['ttmp3']
 handler.tags = ['download']
-handler.command = /^(ttmp3|ttmusic|tiktokmusic)$/i
+handler.command = /^(ttmp3|ttmusic|tiktokmusic|ttaudio|tiktokaudio)$/i
 handler.cooldown = 10
-handler.limit = 1 
+handler.limit = true
 
 export default handler

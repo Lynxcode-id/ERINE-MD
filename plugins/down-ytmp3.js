@@ -13,10 +13,16 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
   }
 
   try {
+    // 🔥 MASUKIN LINK API ZENNXD LU DI SINI 🔥
+    // Copas aja seadanya, gausah takut salah atau kepanjangan
     let baseApi = "https://api.zenzxz.my.id/download/youtube?url=https%3A%2F%2Fyoutube.com%2Fwatch%3Fv%3DpYrTbquWuCg"
     
+    // --- SYSTEM CORE : AUTO CLEANER ---
+    // Script ini bakal otomatis motong link lu kalau ada parameter nyangkut
+    // Jadi dijamin 100% ga bakal ada error tanda tanya (?) tabrakan lagi
     baseApi = baseApi.split('?')[0]
     
+    // Ngerakit URL yang udah pasti valid dan rapi
     const apiUrl = `${baseApi}?url=${encodeURIComponent(url)}&format=mp3`
     
     const res = await fetch(apiUrl)
@@ -38,6 +44,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         throw new Error("Data JSON sukses, tapi 'result.download' kosong / ga ketemu!");
     }
 
+    // Convert detik ke menit:detik buat UI estetik
     let durationText = '-'
     if (result.duration) {
         let mnt = Math.floor(result.duration / 60)
@@ -45,6 +52,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
         durationText = `${mnt}:${dtk}`
     }
 
+    // Teks info cyber-tech murni, polosan biar Jemima & Erine aman ngebacanya
     let info = `*乂  Y O U T U B E  -  A U D I O*\n\n`
     info += `  ∘ *Title:* ${result.title || 'Unknown'}\n`
     info += `  ∘ *Format:* MP3\n`
@@ -53,6 +61,7 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
     await m.reply(info)
 
+    // Eksekusi kirim audio murni
     await conn.sendMessage(m.chat, {
       audio: { url: result.download },
       mimetype: 'audio/mpeg',

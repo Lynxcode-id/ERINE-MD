@@ -3,17 +3,15 @@
 
 import axios from "axios"
 import PDFDocument from "pdfkit"
-import pkg from "@wishkeysocket/baileys"
+import pkg from "@whiskeysocket/baileys"
 const { extractImageThumb } = pkg
 import fetch from "node-fetch"
 
 let handler = async(m, { conn, args, usedPrefix }) => {
-  // 1. Cek NSFW Group
   if (m.isGroup && !global.db.data.chats[m.chat]?.nsfw) {
     throw `🚫 Group ini tidak dihidupkan nsfw \n\n ketik \n*${usedPrefix}enable nsfw* untuk menghidupkan fitur ini`;
   }
 
-  // 2. Cek Umur User
   let userAge = global.db.data.users[m.sender]?.age || 0;
   if (userAge < 17) return m.reply(`*Sepertinya umur kamu di bawah 18thn!*`);
 
@@ -30,16 +28,13 @@ let handler = async(m, { conn, args, usedPrefix }) => {
     
     data.images.pages.map((v, i) => {
       let ext = new URL(v.t).pathname.split('.')[1]
-      // Proxy DuckDuckGo buat bypass blockir/ip-block
       pages.push(`https://external-content.duckduckgo.com/iu/?u=https://i7.nhentai.net/galleries/${data.media_id}/${i + 1}.${ext}`)
     })
     
-    // Ambil Thumbnail
     const thumbRes = await fetch(thumbUrl)
     const thumbBuffer = Buffer.from(await thumbRes.arrayBuffer())
     let jpegThumbnail = await extractImageThumb(thumbBuffer)		
     
-    // Proses Gambar ke PDF
     let imagepdf = await toPDF(pages)		
     
     await conn.sendMessage(m.chat, { 

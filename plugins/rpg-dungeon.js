@@ -1,7 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const { generateWAMessageFromContent, proto, prepareWAMessageMedia } = pkg
 import fs from 'fs'
 

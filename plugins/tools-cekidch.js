@@ -1,7 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const { generateWAMessageFromContent, proto } = pkg
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
@@ -11,7 +11,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     await m.react('⏳')
 
     try {
-        // Ambil invite code dari link
         let result = text.split('https://whatsapp.com/channel/')[1]
         let res = await conn.newsletterMetadata("invite", result)
 

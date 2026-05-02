@@ -6,7 +6,7 @@
 */
 
 import fetch from 'node-fetch';
-import pkg from '@wishkeysocket/baileys';
+import pkg from '@whiskeysocket/baileys';
 const { proto } = pkg;
 import '../config.js';
 
@@ -32,7 +32,6 @@ const handler = async (m, { conn, text, command }) => {
   const password = generatePassword();
   const name = username.charAt(0).toUpperCase() + username.slice(1) + " Server";
 
-  // Pastikan variabel ini ada di config.js lu
   const { egg, nestid, loc, domain, apikey } = global;
 
   const resourceMap = {
@@ -50,7 +49,6 @@ const handler = async (m, { conn, text, command }) => {
   try {
     await m.react('⏳');
 
-    // 1. Create User
     const userRes = await fetch(`${domain}/api/application/users`, {
       method: 'POST',
       headers: {
@@ -72,7 +70,6 @@ const handler = async (m, { conn, text, command }) => {
     if (userJson.errors) return m.reply("❌ Error create user: " + userJson.errors[0].detail);
     const user = userJson.attributes;
 
-    // 2. Get Startup Command
     const eggRes = await fetch(`${domain}/api/application/nests/${nestid}/eggs/${egg}`, {
       headers: {
         Accept: "application/json",
@@ -84,7 +81,6 @@ const handler = async (m, { conn, text, command }) => {
     const eggJson = await eggRes.json();
     const startup_cmd = eggJson.attributes.startup;
 
-    // 3. Create Server (Node.js 22 LTS)
     const serverRes = await fetch(`${domain}/api/application/servers`, {
       method: 'POST',
       headers: {
@@ -133,7 +129,7 @@ const handler = async (m, { conn, text, command }) => {
 ◦ CPU: ${cpu == "0" ? "Unlimited" : cpu + "%"}
 ◦ Engine: Node.js 22
 
-> © INF PROJECT | JEMIMA-MD`.trim();
+> © INF PROJECT | Erine-MD`.trim();
 
     const msg = {
       viewOnceMessage: {
@@ -164,7 +160,6 @@ const handler = async (m, { conn, text, command }) => {
       }
     };
 
-    // Kirim ke target
     await conn.relayMessage(nomor, msg.message, { messageId: m.key.id });
 
     if (nomor !== m.chat) {

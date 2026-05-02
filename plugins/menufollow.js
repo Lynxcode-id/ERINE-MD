@@ -1,8 +1,12 @@
 import moment from 'moment-timezone'
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
+  global.__menuReplyLock ||= new Map()
+  if (global.__menuReplyLock.get(m.chat)) return
+  global.__menuReplyLock.set(m.chat, true)
+  setTimeout(() => global.__menuReplyLock.delete(m.chat), 2500)
+
   try {
-    // 1. Ambil semua plugin & kategori
     let plugins = Object.values(global.plugins || {}).filter(p => !p.disabled)
     let categories = {}
     for (let p of plugins) {
@@ -16,13 +20,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       }
     }
 
-    // 2. TENTUKAN APAKAH USER SEDANG MEMILIH KATEGORI ATAU TIDAK
-    // Kita cek 'text' dari perintah atau 'm.text' hasil klik button
     let input = (text || m.text || '').toLowerCase().trim()
     let arrayMenu = Object.keys(categories).sort()
-
-    // Jika input mengandung nama kategori (misal: ".menu ai")
-    // Kita bersihkan dulu command-nya agar tersisa nama kategorinya saja
     let selectedCategory = input.replace(usedPrefix + command, '').trim()
 
     if (selectedCategory && (categories[selectedCategory] || selectedCategory === 'all')) {
@@ -39,7 +38,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         }
       }
       
-      // Kirim hasil daftar menunya
       return await conn.sendMessage(m.chat, { 
         text: menuText.join('\n'),
         contextInfo: {
@@ -55,7 +53,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       }, { quoted: m })
     }
 
-    // 3. TAMPILAN AWAL (Jika tidak ada kategori yang dipilih)
     const teks = `*MANAGE MENU SETTING*
 
 Panduan memakai robot whatsapp ini:
@@ -66,7 +63,7 @@ penggunaan bot.`
     let rows = arrayMenu.map(v => ({
       title: `✨ Menu ${v.toUpperCase()}`,
       description: `Menampilkan daftar perintah ${v}`,
-      id: `${usedPrefix}${command} ${v}` // ID inilah yang akan dikirim bot saat diklik
+      id: `${usedPrefix}${command} ${v}`
     }))
 
     let msg = {

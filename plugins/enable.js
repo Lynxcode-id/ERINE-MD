@@ -1,4 +1,4 @@
-import pkg from '@wishkeysocket/baileys';
+import pkg from '@whiskeysocket/baileys';
 const { generateWAMessageFromContent, proto } = pkg;
 
 // --- HELPER UI (Native Flow List) ---

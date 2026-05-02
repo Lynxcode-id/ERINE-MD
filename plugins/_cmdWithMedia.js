@@ -1,4 +1,4 @@
-import { generateWAMessage, areJidsSameUser } from '@wishkeysocket/baileys'
+import { generateWAMessage, areJidsSameUser } from '@whiskeysocket/baileys'
 
 export async function before(m, { conn, chatUpdate }) {
   if (!m || m.isBaileys) return false
@@ -13,7 +13,6 @@ export async function before(m, { conn, chatUpdate }) {
     .toString('base64')
 
   const DB = conn.db || global.db
-  
   const stickerDb = DB?.data?.sticker || {}
 
   if (!(hashKey in stickerDb)) return false

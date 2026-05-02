@@ -5,8 +5,7 @@
 */
 
 import axios from 'axios'
-// Pakai alias sesuai package.json lu
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const {
   proto,
   generateWAMessageFromContent,

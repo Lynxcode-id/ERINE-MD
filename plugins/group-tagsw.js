@@ -1,7 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from "@wishkeysocket/baileys";
+import pkg from "@whiskeysocket/baileys";
 const { generateWAMessageContent, generateWAMessageFromContent } = pkg;
 import crypto from "node:crypto";
 import { PassThrough } from 'node:stream';

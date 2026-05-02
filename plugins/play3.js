@@ -2,7 +2,7 @@
 // Developed by INF PROJECT
 
 import yts from 'yt-search'
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
 
 function formatNumber(num) {
@@ -115,9 +115,9 @@ Silakan pilih format yang ingin diunduh atau cek liriknya melalui tombol di bawa
   }
 }
 
-handler.help = ['play']
+handler.help = ['play3']
 handler.tags = ['downloader']
-handler.command = /^(play)$/i
+handler.command = /^(play3)$/i
 handler.limit = true
 
 export default handler

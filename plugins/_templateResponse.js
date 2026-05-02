@@ -1,7 +1,7 @@
 // © INF PROJECT - Jemima-MD (ESM Version)
 // Developed by INF PROJECT
 
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const {
   proto,
   generateWAMessage,
@@ -49,6 +49,7 @@ export async function before(m, { conn, chatUpdate }) {
     let plugin = global.plugins[name]
     if (!plugin || plugin.disabled || typeof plugin !== 'function') continue
     if (!plugin.command) continue
+
     if (!global.opts?.['restrict']) {
       if (plugin.tags && plugin.tags.includes('admin')) continue
     }
