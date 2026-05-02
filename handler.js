@@ -10,15 +10,32 @@ import chalk from 'chalk'
 import fetch from 'node-fetch'
 
 /**
- * @type {import('@wishkeysocket/baileys')}
+ * @type {import('@whiskeysocket/baileys')}
  */
-import pkg from '@wishkeysocket/baileys'
+import pkg from '@whiskeysocket/baileys'
 const { proto } = pkg
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
 
-// JIKA KALIAN MEMAKAI BAILEYS NPM : SOCKETON@LATEST MAKA INI AKAN BERGUNA JIKA TIDAK GANTI AJALAH
+// 🔥 PATCH: Helper tambahan untuk memperkuat deteksi admin & JID
+const getParticipantAdmin = (participant = {}) => {
+    if (!participant || typeof participant !== 'object') return false
+    const role = String(participant.admin || '').toLowerCase()
+    if (role === 'superadmin' || participant.isSuperAdmin || participant.isCommunityAdmin) return 'superadmin'
+    if (role === 'admin' || participant.isAdmin) return 'admin'
+    return false
+}
+
+const sameJid = (a, b) => {
+    if (!a || !b) return false
+    const clean = v => String(v).split(':')[0].replace(/[^0-9]/g, '')
+    return clean(a) === clean(b)
+}
+
+const findParticipant = (list = [], jid = '') => list.find(u => sameJid(u.id || u.jid || u.lid, jid)) || {}
+// =========================================================
+
 const blacklistSpam = [
     '120363424238913151@newsletter', '120363406449745243@newsletter',
     '120363426933701922@newsletter', '120363425233122084@newsletter',
@@ -42,6 +59,7 @@ const blacklistSpam = [
 export async function handler(chatUpdate) {
     this.msgqueque = this.msgqueque || []
     
+    // 🔥 FIX JADIBOT 1: Bedain antara chatUpdate bot utama vs pesan langsung dari Jadibot
     let m;
     if (chatUpdate && chatUpdate.isJadibot) {
         m = chatUpdate;
@@ -54,6 +72,8 @@ export async function handler(chatUpdate) {
     if (!m) return
 
     const conn = this
+    
+    // 🔥 FIX JADIBOT 2: Otomatis nentuin mau pakai Database bot utama atau Jadibot
     const DB = conn.db || global.db
     
     if (!conn.hunterActive) {
@@ -84,7 +104,8 @@ export async function handler(chatUpdate) {
             });
         }, 120000); 
     }
-    
+    // ===============================================
+
     if (DB.data == null) await global.loadDatabase()
     
     try {
@@ -114,8 +135,9 @@ export async function handler(chatUpdate) {
                 DB.data.users[m.sender] = {}
             
             let user = DB.data.users[m.sender]
+            // 🔥 PATCH: Set default limit disamakan ke 15
             const defaults = {
-                registered: false, name: m.name || '', age: -1, regTime: -1, level: 0, warn: 0, exp: 0, limit: 100, afk: -1, afkReason: '', banned: false, banReason: '', role: 'Free user', autolevelup: false, chip: 0, money: 0, atm: 0, fullatm: 0, bank: 0, health: 100, energy: 100, sleep: 100, potion: 0, trash: 0, wood: 0, rock: 0, string: 0, petfood: 0, emerald: 0, diamond: 0, gold: 0, botol: 0, kardus: 0, kaleng: 0, gelas: 0, plastik: 0, iron: 0, common: 0, uncommon: 0, mythic: 0, legendary: 0, umpan: 0, pet: 0, paus: 0, kepiting: 0, gurita: 0, cumi: 0, buntal: 0, dory: 0, lumba: 0, lobster: 0, hiu: 0, udang: 0, orca: 0, banteng: 0, gajah: 0, harimau: 0, kambing: 0, panda: 0, buaya: 0, kerbau: 0, sapi: 0, monyet: 0, babihutan: 0, babi: 0, ayam: 0, steak: 0, ayam_goreng: 0, ribs: 0, roti: 0, udang_goreng: 0, bacon: 0, gandum: 0, minyak: 0, garam: 0, ojek: 0, polisi: 0, roket: 0, taxy: 0, lockBankCD: 0, lasthackbank: 0, lastadventure: 0, lastkill: 0, lastmisi: 0, lastdungeon: 0, lastwar: 0, lastsda: 0, lastduel: 0, lastmining: 0, lasthunt: 0, lastgift: 0, lastberkebon: 0, lastdagang: 0, lasthourly: 0, lastbansos: 0, lastrampok: 0, lastclaim: 0, lastnebang: 0, lastweekly: 0, lastmonthly: 0, apel: 0, anggur: 0, jeruk: 0, mangga: 0, pisang: 0, makanan: 0, bibitanggur: 0, bibitpisang: 0, bibitapel: 0, bibitmangga: 0, bibitjeruk: 0, horse: 0, horseexp: 0, cat: 0, catexp: 0, fox: 0, foxexp: 0, dogexp: 0, robo: 0, roboexp: 0, dragon: 0, dragonexp: 0, lion: 0, lionexp: 0, rhinoceros: 0, rhinocerosexp: 0, centaur: 0, centaurexp: 0, kyubi: 0, kyubiexp: 0, griffin: 0, griffinexp: 0, phonix: 0, phonixexp: 0, wolf: 0, wolfexp: 0, horselastfeed: 0, catlastfeed: 0, robolastfeed: 0, foxlastfeed: 0, doglastfeed: 0, dragonlastfeed: 0, lionlastfeed: 0, rhinoceroslastfeed: 0, centaurlastfeed: 0, kyubilastfeed: 0, griffinlastfeed: 0, phonixlastfeed: 0, wolflastfeed: 0, armor: 0, armordurability: 0, sword: 0, sworddurability: 0, pickaxe: 0, pickaxedurability: 0, fishingrod: 0, fishingroddurability: 0, robodurability: 0
+                registered: false, name: m.name || '', age: -1, regTime: -1, level: 0, warn: 0, exp: 0, limit: 15, afk: -1, afkReason: '', banned: false, banReason: '', role: 'Free user', autolevelup: false, chip: 0, money: 0, atm: 0, fullatm: 0, bank: 0, health: 100, energy: 100, sleep: 100, potion: 0, trash: 0, wood: 0, rock: 0, string: 0, petfood: 0, emerald: 0, diamond: 0, gold: 0, botol: 0, kardus: 0, kaleng: 0, gelas: 0, plastik: 0, iron: 0, common: 0, uncommon: 0, mythic: 0, legendary: 0, umpan: 0, pet: 0, paus: 0, kepiting: 0, gurita: 0, cumi: 0, buntal: 0, dory: 0, lumba: 0, lobster: 0, hiu: 0, udang: 0, orca: 0, banteng: 0, gajah: 0, harimau: 0, kambing: 0, panda: 0, buaya: 0, kerbau: 0, sapi: 0, monyet: 0, babihutan: 0, babi: 0, ayam: 0, steak: 0, ayam_goreng: 0, ribs: 0, roti: 0, udang_goreng: 0, bacon: 0, gandum: 0, minyak: 0, garam: 0, ojek: 0, polisi: 0, roket: 0, taxy: 0, lockBankCD: 0, lasthackbank: 0, lastadventure: 0, lastkill: 0, lastmisi: 0, lastdungeon: 0, lastwar: 0, lastsda: 0, lastduel: 0, lastmining: 0, lasthunt: 0, lastgift: 0, lastberkebon: 0, lastdagang: 0, lasthourly: 0, lastbansos: 0, lastrampok: 0, lastclaim: 0, lastnebang: 0, lastweekly: 0, lastmonthly: 0, apel: 0, anggur: 0, jeruk: 0, mangga: 0, pisang: 0, makanan: 0, bibitanggur: 0, bibitpisang: 0, bibitapel: 0, bibitmangga: 0, bibitjeruk: 0, horse: 0, horseexp: 0, cat: 0, catexp: 0, fox: 0, foxexp: 0, dogexp: 0, robo: 0, roboexp: 0, dragon: 0, dragonexp: 0, lion: 0, lionexp: 0, rhinoceros: 0, rhinocerosexp: 0, centaur: 0, centaurexp: 0, kyubi: 0, kyubiexp: 0, griffin: 0, griffinexp: 0, phonix: 0, phonixexp: 0, wolf: 0, wolfexp: 0, horselastfeed: 0, catlastfeed: 0, robolastfeed: 0, foxlastfeed: 0, doglastfeed: 0, dragonlastfeed: 0, lionlastfeed: 0, rhinoceroslastfeed: 0, centaurlastfeed: 0, kyubilastfeed: 0, griffinlastfeed: 0, phonixlastfeed: 0, wolflastfeed: 0, armor: 0, armordurability: 0, sword: 0, sworddurability: 0, pickaxe: 0, pickaxedurability: 0, fishingrod: 0, fishingroddurability: 0, robodurability: 0
             }
             for (let key in defaults) if (!(key in user)) user[key] = defaults[key]
 
@@ -141,6 +163,7 @@ export async function handler(chatUpdate) {
             console.error('INIT ERROR:', e)
         }
 
+        // Opts global definition support
         const opts = global.opts || {}
         if (opts['nyimak']) return
         if (opts['pconly'] && m.chat.endsWith('g.us')) return
@@ -148,6 +171,7 @@ export async function handler(chatUpdate) {
         if (opts['swonly'] && m.chat !== 'status@broadcast') return
         if (typeof m.text !== 'string') m.text = ''
 
+        // 🔥 Jadibot Fix: Identifikasi main bot ID & jadibot ID buat handle ownership
         const botId = conn.user?.id ? conn.decodeJid(conn.user.id) : ''
         const mainBotId = global.conn?.user?.id ? conn.decodeJid(global.conn.user.id) : botId
         
@@ -156,6 +180,7 @@ export async function handler(chatUpdate) {
         const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const isPrems = isROwner || DB.data.users[m.sender].premiumTime > 0
         
+        // 🔥 FIX JADIBOT 3: Pengecekan self mode khusus Jadibot
         const isSelf = conn.self !== undefined ? conn.self : opts['self']
         if (!isOwner && !m.fromMe && isSelf) return
 
@@ -174,6 +199,7 @@ export async function handler(chatUpdate) {
             m.exp += Math.ceil(Math.random() * 10)
         }
 
+        // 🔥 PATCH: Deteksi admin grup dibuat lebih kuat
         const groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat).catch(e => ({})) : {}
         const participants = m.isGroup ? (groupMetadata.participants || []) : [] 
         let groupUser = {}, bot = {}
@@ -181,22 +207,15 @@ export async function handler(chatUpdate) {
             const senderJid = conn.decodeJid(m.sender)
             const botJid = botId
 
-            groupUser = participants.find(u => 
-                (u.id && conn.decodeJid(u.id) === senderJid) || 
-                (u.jid && conn.decodeJid(u.jid) === senderJid) || 
-                (u.lid && conn.decodeJid(u.lid) === senderJid)
-            ) || {}
-            
-            bot = participants.find(u => 
-                (u.id && conn.decodeJid(u.id) === botJid) || 
-                (u.jid && conn.decodeJid(u.jid) === botJid) || 
-                (u.lid && conn.decodeJid(u.lid) === botJid)
-            ) || {}
+            groupUser = findParticipant(participants, senderJid)
+            bot = findParticipant(participants, botJid)
         }
 
-        const isRAdmin = groupUser?.admin === 'superadmin'
-        const isAdmin = isRAdmin || groupUser?.admin === 'admin'
-        const isBotAdmin = bot?.admin === 'admin' || bot?.admin === 'superadmin'
+        const isRAdmin = getParticipantAdmin(groupUser) === 'superadmin'
+        const isAdmin = !!getParticipantAdmin(groupUser)
+        const isBotAdmin = !!getParticipantAdmin(bot)
+        // =========================================================
+
         const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')
 
         let user = DB.data.users[m.sender]
@@ -347,6 +366,7 @@ export async function handler(chatUpdate) {
     }
 }
 
+// 🔥 UPDATE FITUR CANVAS WELCOME & GOODBYE + FIX LID BUG
 export async function participantsUpdate({ id, participants, action }) {
     const conn = this
     const DB = conn.db || global.db
@@ -366,6 +386,7 @@ export async function participantsUpdate({ id, participants, action }) {
     for (let user of participants) {
         user = user.id || user
 
+        // 🔥 FIX LID: Tarik PushName (Nama Profil) asli WA biar nggak keluar angka aneh
         let pushName = await conn.getName(user)
         if (!pushName || pushName === user.split('@')[0]) {
             pushName = user.includes('@lid') ? 'Hidden Member' : user.split('@')[0]
@@ -380,12 +401,13 @@ export async function participantsUpdate({ id, participants, action }) {
             let text = chat.sWelcome && chat.sWelcome.trim() ? chat.sWelcome : defaultWelcome
 
             text = text
-                .replace('@user', '@' + user.split('@')[0])
+                .replace('@user', '@' + user.split('@')[0]) // Buat ngetag tetep pake JID split biasa
                 .replace('@subject', groupName)
                 .replace('@desc', groupMetadata.desc || '')
-                .replace(/@rawUName/gi, pushName)
+                .replace(/@rawUName/gi, pushName) // Buat di Canvas pake PushName
                 .replace(/@rawGName/gi, groupName)
 
+            // 🔥 Kita balikin pake API welcomev5 yang emang peruntukannya buat Welcome
             let bgImage = global.welcomeBg || 'https://i.ibb.co/4YBNyvP/mountain-sunset.jpg'
             
             let api = `https://api.siputzx.my.id/api/canvas/welcomev5?username=${encodeURIComponent(pushName)}&guildName=${encodeURIComponent(groupName)}&memberCount=${memberCount + 1}&avatar=${encodeURIComponent(pp)}&background=${encodeURIComponent(bgImage)}&quality=90`
@@ -419,9 +441,10 @@ export async function participantsUpdate({ id, participants, action }) {
                 .replace('@user', '@' + user.split('@')[0])
                 .replace('@subject', groupName)
                 .replace('@desc', groupMetadata.desc || '')
-                .replace(/@rawUName/gi, pushName)
+                .replace(/@rawUName/gi, pushName) // Buat di Canvas pake PushName
                 .replace(/@rawGName/gi, groupName)
 
+            // 🔥 Teks perpisahan diganti jadi lebih singkat dan enak dilihat
             let bgImage = global.goodbyeBg || 'https://i.ibb.co/4YBNyvP/images-76.jpg'
             let titleText = 'Goodbye'
             let descText = `Sampai jumpa lagi, ${pushName} 👋`
