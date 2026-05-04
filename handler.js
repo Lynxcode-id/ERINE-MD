@@ -166,7 +166,10 @@ export async function handler(chatUpdate) {
         const botId = conn.user?.id ? conn.decodeJid(conn.user.id) : ''
         const mainBotId = global.conn?.user?.id ? conn.decodeJid(global.conn.user.id) : botId
         
-        const isROwner = [mainBotId, botId, ...global.owner.map(([number]) => number)].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+        let ownerList = global.owner || []
+        let flatOwners = ownerList.map(v => (Array.isArray(v) ? v[0] : v)).map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net')
+
+        const isROwner = [mainBotId, botId, ...flatOwners].includes(m.sender)
         const isOwner = isROwner || m.fromMe
         const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
         const isPrems = isROwner || DB.data.users[m.sender].premiumTime > 0
@@ -191,13 +194,11 @@ export async function handler(chatUpdate) {
 
         const groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat).catch(e => ({})) : {}
         const participants = m.isGroup ? (groupMetadata.participants || []) : [] 
+        
         let groupUser = {}, bot = {}
         if (m.isGroup && participants?.length > 0) { 
-            const senderJid = conn.decodeJid(m.sender)
-            const botJid = botId
-
-            groupUser = findParticipant(participants, senderJid)
-            bot = findParticipant(participants, botJid)
+            groupUser = findParticipant(participants, m.sender)
+            bot = findParticipant(participants, botId)
         }
 
         const isRAdmin = getParticipantAdmin(groupUser) === 'superadmin'
@@ -274,17 +275,16 @@ export async function handler(chatUpdate) {
 
                 if (chat?.isBanned && !isOwner) return 
                 if (user?.banned && !isOwner) return
-
                 if (plugin.rowner && !isROwner) { fail('rowner', m, this); continue }
                 if (plugin.owner && !isOwner) { fail('owner', m, this); continue }
                 if (plugin.mods && !isMods) { fail('mods', m, this); continue }
                 if (plugin.premium && !isPrems) { fail('premium', m, this); continue }
                 if (plugin.group && !m.isGroup) { fail('group', m, this); continue }
                 if (plugin.botAdmin && !isBotAdmin) { fail('botAdmin', m, this); continue }
-                if (plugin.admin && !isAdmin) { fail('admin', m, this); continue }
+                if (plugin.admin && !isAdmin && !isOwner) { fail('admin', m, this); continue }
                 if (plugin.private && m.isGroup) { fail('private', m, this); continue }
                 if (plugin.register && !user.registered) { fail('unreg', m, this); continue }
-
+                
                 m.isCommand = true
                 let xp = 'exp' in plugin ? parseInt(plugin.exp) : 17
                 if (xp < 200 && user?.autolevelup) m.exp += xp
