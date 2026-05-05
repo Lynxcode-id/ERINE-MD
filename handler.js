@@ -357,31 +357,77 @@ export async function participantsUpdate({ id, participants, action }) {
     const conn = this
     const DB = conn.db || global.db
     const opts = global.opts || {}
-    
+
     const isSelf = conn.self !== undefined ? conn.self : opts['self']
-    if (isSelf || this.isInit) return
+    
+    // FIX 1: Hapus "|| this.isInit" biar pas bot baru restart tetep nyambut member
+    if (isSelf) return 
+    
     if (DB.data == null) await global.loadDatabase()
 
+    // FIX 2: Pastiin DB.data.chats[id] diinisialisasi kalau bener-bener kosong
+    if (!DB.data.chats[id]) {
+        DB.data.chats[id] = {
+            isBanned: false,
+            welcome: false,
+            detect: false,
+            sWelcome: '',
+            sBye: '',
+            sPromote: '',
+            sDemote: '',
+            delete: false,
+            antiLink: false,
+            viewonce: false,
+            antiToxic: false,
+            simi: false,
+            autogpt: false,
+            autoSticker: false,
+            premium: false,
+            premiumTime: false,
+            nsfw: false,
+            menu: true,
+            rpgs: true,
+            expired: 0
+        }
+    }
+
     let chat = DB.data.chats[id]
-    if (!chat || !chat.welcome) return
+    if (!chat.welcome) return
 
-    const groupMetadata = (this.chats[id] || {}).metadata || (await this.groupMetadata(id).catch(() => ({})))
-    let groupName = groupMetadata.subject || 'Group'
-    let memberCount = groupMetadata.participants?.length || 0
+    // FIX 3: Safe Metadata Fetch
+    let groupMetadata = (conn.chats && conn.chats[id] && conn.chats[id].metadata) ? conn.chats[id].metadata : {};
+    if (Object.keys(groupMetadata).length === 0) {
+        try {
+            groupMetadata = await conn.groupMetadata(id);
+        } catch (e) {
+            groupMetadata = {};
+        }
+    }
 
-    for (let user of participants) {
-        user = user.id || user
+    const groupName = groupMetadata.subject || 'Group'
+    const memberCount = Array.isArray(groupMetadata.participants) ? groupMetadata.participants.length : 0
 
-        let pushName = await conn.getName(user)
+    for (let participant of (participants || [])) {
+        const user = participant?.id || participant?.jid || participant?.lid || participant
+        if (!user) continue
+
+        // FIX 4: Try/Catch untuk getName (anti crash undefined)
+        let pushName = '';
+        try {
+            if (conn.getName) pushName = await conn.getName(user);
+        } catch (e) {}
+
+        // FITUR LAMA: Tetep nembak JID/Nomor kalau nama kosong (No Cut Feature!)
         if (!pushName || pushName === user.split('@')[0]) {
-            pushName = user.includes('@lid') ? 'Hidden Member' : user.split('@')[0]
+            pushName = user.split('@')[0]
         }
 
         let pp = 'https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg'
-        try { pp = await this.profilePictureUrl(user, 'image') } catch {}
+        try {
+            pp = await this.profilePictureUrl(user, 'image')
+        } catch {}
 
         if (action === 'add') {
-
             let defaultWelcome = `👋 Halo @user!\n\nSelamat datang di *${groupName}* 🎉`
             let text = chat.sWelcome && chat.sWelcome.trim() ? chat.sWelcome : defaultWelcome
 
@@ -393,13 +439,18 @@ export async function participantsUpdate({ id, participants, action }) {
                 .replace(/@rawGName/gi, groupName)
 
             let bgImage = global.welcomeBg || 'https://i.ibb.co/4YBNyvP/mountain-sunset.jpg'
-            
             let api = `https://api.siputzx.my.id/api/canvas/welcomev5?username=${encodeURIComponent(pushName)}&guildName=${encodeURIComponent(groupName)}&memberCount=${memberCount + 1}&avatar=${encodeURIComponent(pp)}&background=${encodeURIComponent(bgImage)}&quality=90`
 
-            let res = await fetch(api)
-            if (res.ok) {
-                let buffer = Buffer.from(await res.arrayBuffer())
+            let buffer = null
+            try {
+                let res = await fetch(api)
+                if (res.ok) buffer = Buffer.from(await res.arrayBuffer())
+            } catch (e) {
+                console.error('WELCOME API ERROR:', e)
+            }
 
+            // FIX 5: Fallback Teks tetep kirim kalau API gambar mati
+            if (buffer) {
                 await this.sendMessage(id, {
                     text,
                     contextInfo: {
@@ -413,11 +464,17 @@ export async function participantsUpdate({ id, participants, action }) {
                         }
                     }
                 })
+            } else {
+                await this.sendMessage(id, {
+                    text,
+                    contextInfo: {
+                        mentionedJid: [user]
+                    }
+                })
             }
         }
 
         if (action === 'remove') {
-
             let defaultBye = `👋 Sampai jumpa @user`
             let text = chat.sBye && chat.sBye.trim() ? chat.sBye : defaultBye
 
@@ -431,13 +488,19 @@ export async function participantsUpdate({ id, participants, action }) {
             let bgImage = global.goodbyeBg || 'https://i.ibb.co/4YBNyvP/images-76.jpg'
             let titleText = 'Goodbye'
             let descText = `Sampai jumpa lagi, ${pushName} 👋`
-            
+
             let api = `https://api.siputzx.my.id/api/canvas/goodbyev4?avatar=${encodeURIComponent(pp)}&background=${encodeURIComponent(bgImage)}&title=${encodeURIComponent(titleText)}&description=${encodeURIComponent(descText)}&border=%232a2e35&avatarBorder=%232a2e35&overlayOpacity=0.3`
 
-            let res = await fetch(api)
-            if (res.ok) {
-                let buffer = Buffer.from(await res.arrayBuffer())
+            let buffer = null
+            try {
+                let res = await fetch(api)
+                if (res.ok) buffer = Buffer.from(await res.arrayBuffer())
+            } catch (e) {
+                console.error('GOODBYE API ERROR:', e)
+            }
 
+            // Fallback teks perpisahan
+            if (buffer) {
                 await this.sendMessage(id, {
                     text,
                     contextInfo: {
@@ -449,6 +512,13 @@ export async function participantsUpdate({ id, participants, action }) {
                             mediaType: 1,
                             renderLargerThumbnail: true
                         }
+                    }
+                })
+            } else {
+                await this.sendMessage(id, {
+                    text,
+                    contextInfo: {
+                        mentionedJid: [user]
                     }
                 })
             }
