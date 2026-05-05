@@ -1,341 +1,355 @@
-const _0xc47bb4 = _0x2cc8;
-(function (_0x247af1, _0x203061) {
-    const _0x37a2f0 = _0x2cc8, _0x4be669 = _0x247af1();
+const _0x16159b = _0x571d;
+(function (_0x252ef8, _0xfd81c3) {
+    const _0x90cf7 = _0x571d, _0x3e1f34 = _0x252ef8();
     while (!![]) {
         try {
-            const _0x8278d4 = -parseInt(_0x37a2f0(0xe1)) / (0x1 * -0x15e1 + -0x47 * -0xb + 0x12d5) * (-parseInt(_0x37a2f0(0xe2)) / (0xf2c * 0x2 + 0x238c + -0x12 * 0x3a9)) + parseInt(_0x37a2f0(0xaf)) / (-0xdeb * -0x1 + -0x1a59 + 0xc71) * (parseInt(_0x37a2f0(0xab)) / (0x1d9 * 0x3 + 0x4a * 0x77 + -0x27ed)) + -parseInt(_0x37a2f0(0xb8)) / (-0x1485 + -0x19ac + 0x2e36) * (parseInt(_0x37a2f0(0x8d)) / (0x456 + -0x62a + -0x4f * -0x6)) + -parseInt(_0x37a2f0(0x8e)) / (0x24d1 + -0x1 * 0x1349 + -0x1181) * (-parseInt(_0x37a2f0(0xdf)) / (-0x24 * 0x10f + -0x21dd * -0x1 + 0x447 * 0x1)) + parseInt(_0x37a2f0(0xef)) / (-0x2015 + 0x16ef + 0x92f) * (-parseInt(_0x37a2f0(0xf0)) / (0x129f * 0x2 + 0x25f9 + -0x4b2d * 0x1)) + -parseInt(_0x37a2f0(0xa1)) / (0x3 * -0x5ea + 0x1c0 + 0x1009) + -parseInt(_0x37a2f0(0xee)) / (0x2 * -0x8eb + -0x611 * 0x3 + 0x2415) * (-parseInt(_0x37a2f0(0xe3)) / (0x813 + -0x1 * -0x1c7f + -0x2485));
-            if (_0x8278d4 === _0x203061)
+            const _0x2c9f94 = parseInt(_0x90cf7(0x184)) / (-0x1e0a + 0x1 * 0x24bf + -0x11e * 0x6) + -parseInt(_0x90cf7(0x1ea)) / (0x625 + 0x14fb * 0x1 + -0x1b1e) * (parseInt(_0x90cf7(0x1d5)) / (-0x5 * -0x65d + -0x1028 + -0xfa6)) + -parseInt(_0x90cf7(0x19a)) / (0x267d + -0x2 * -0x53d + -0x30f3) + parseInt(_0x90cf7(0x1c2)) / (0x21 * 0x98 + -0x17 * 0x1a7 + -0x937 * -0x2) * (-parseInt(_0x90cf7(0x1e1)) / (0x17c2 + -0x3 * -0x4d1 + 0x73 * -0x55)) + parseInt(_0x90cf7(0x179)) / (-0xa64 + -0x1 * -0x1a99 + -0xda * 0x13) + -parseInt(_0x90cf7(0x193)) / (0xaaa + -0x762 + 0x1 * -0x340) + parseInt(_0x90cf7(0x1bc)) / (0x137 * -0x18 + -0x65 * -0x1 + 0x1ccc);
+            if (_0x2c9f94 === _0xfd81c3)
                 break;
             else
-                _0x4be669['push'](_0x4be669['shift']());
-        } catch (_0x3e1d2b) {
-            _0x4be669['push'](_0x4be669['shift']());
+                _0x3e1f34['push'](_0x3e1f34['shift']());
+        } catch (_0x42970c) {
+            _0x3e1f34['push'](_0x3e1f34['shift']());
         }
     }
-}(_0x216f, -0x1 * -0x2dcd3 + -0xd * -0x30ce + -0x3aa18));
-import _0xbbfc01 from 'fs';
-function _0x216f() {
-    const _0x514793 = [
-        'TIdSz',
-        '1221913uLUOKG',
-        'GrKPJ',
-        'Qjwgw',
-        'kIzoh',
-        'ftextt',
-        'BLabel:Pon',
-        'sender',
-        'Simple\x20Bot',
-        'fgif',
-        '1203634277',
-        '3940BBNuzH',
-        're\x20🌅',
-        'jpg',
-        'TJuxl',
-        '234uItzer',
-        'fdocs',
-        'wWQyf',
-        '40570717@g',
-        'fkontak',
-        'from',
-        'QQcRF',
-        'Selamat\x20Ma',
-        'OjmYK',
-        '20JDmYws',
-        'NkMkb',
-        'JCxyl',
-        '12665352@n',
-        'AgusD',
-        'BEGIN:VCAR',
-        'Selamat\x20So',
-        'ang\x20☀️',
-        'ity',
-        'image/jpeg',
-        'split',
-        'MTgVv',
-        'Erine\x20MD',
-        'termai.cc/',
-        'BFupt',
-        '「\x20🐣\x20ᴇʀɪɴᴇ-',
-        'xInfH',
-        'null',
-        'XvrbH',
-        'ewsletter',
-        'ARD',
-        'fgclink',
-        'Selamat\x20Si',
-        'ect',
-        'ᴍᴅ\x20ɪɴғᴏʀᴍᴀ',
-        'audio/ogg;',
-        '\x20codecs=op',
-        'nZnfn',
-        'sar',
-        'adReply',
-        '1203634006',
-        './thumbnai',
-        'Asia/Makas',
-        '.us',
-        'readFileSy',
-        '999',
-        'l.jpg',
-        '999999',
-        'sel\x0aEND:VC',
-        '300824PpNQJk',
-        ',;;;\x0aFN:',
-        '1vBENei',
-        '336104RHYvki',
-        '468wzVLDy',
-        'fKANL',
-        'lam\x20🌙',
-        '20000000',
-        '\x0aitem1.X-A',
-        ';waid=',
-        'PHOTO',
-        'adcast',
-        'mat\x20Berist',
-        '\x0aitem1.TEL',
-        'RZLaN',
-        '35988qOreQP',
-        '394281yOKMeh',
-        '30XJuvRN',
-        'ᴇᴄᴛ\x20-\x20ᴍᴜʟᴛ',
-        'Erine\x20Proj',
-        'ftoko',
-        'MffCD',
-        'IDR',
-        '\x20Esm',
-        'gi\x20☕',
-        'QRBRx',
-        'KMfLO',
-        'ᴇʀɪɴᴇ\x20ᴘʀᴏᴊ',
-        'cXEDi',
-        'pp.net',
-        'lwpZZ',
-        'D\x0aVERSION:',
-        'status@bro',
-        'lam\x20/\x20Sela',
-        'ɪ\x20ᴅᴇᴠɪᴄᴇ',
-        'fstatus',
-        'xbeXk',
-        'FCMJT',
-        'https://c.',
-        '169908BbGIqY',
-        '21doUiFp',
-        'ect\x20commun',
-        'Erine\x20proj',
-        'arrayBuffe',
-        '3.0\x0aN:XL;',
-        'hour',
-        'CNDJj',
-        'Selamat\x20Pa',
-        'Khecu',
-        'hGJAe',
-        'all',
-        'i194/ILPF.',
-        'fvn',
-        'irahat\x20🛌',
-        'Hmm',
-        'ᴛɪᴏɴ\x20🐣\x20」',
-        'sbhMS',
-        '0@s.whatsa'
-    ];
-    _0x216f = function () {
-        return _0x514793;
-    };
-    return _0x216f();
+}(_0x49ad, -0x25149 * -0x1 + 0x191 * -0x84 + 0x42b27));
+import _0xff0ad0 from 'fs';
+function _0x571d(_0x249cdf, _0x377527) {
+    _0x249cdf = _0x249cdf - (-0x4d4 * -0x2 + -0x2587 * 0x1 + -0x2 * -0xea8);
+    const _0x217b7f = _0x49ad();
+    let _0x534701 = _0x217b7f[_0x249cdf];
+    return _0x534701;
 }
-import _0x14ed3b from 'moment-timezone';
-import _0x3e10a3 from 'node-fetch';
-const fallbackThumb = _0xc47bb4(0x8c) + _0xc47bb4(0xc5) + _0xc47bb4(0x99) + _0xc47bb4(0xad);
-let handler = _0x57be63 => _0x57be63;
-handler[_0xc47bb4(0x98)] = async function (_0x4f6a04) {
-    const _0x5d03cd = _0xc47bb4, _0xa37738 = {
-            'QRBRx': _0x5d03cd(0x81) + _0x5d03cd(0xf1) + _0x5d03cd(0x88),
-            'Khecu': _0x5d03cd(0xd7) + _0x5d03cd(0xdc),
-            'TJuxl': function (_0x27b07d, _0x2e8c72) {
-                return _0x27b07d(_0x2e8c72);
+import _0xd5e99e from 'moment-timezone';
+import _0x346df0 from 'node-fetch';
+const fallbackThumb = _0x16159b(0x1ba) + _0x16159b(0x1c1) + _0x16159b(0x17b) + _0x16159b(0x1b0);
+let handler = _0x42fc43 => _0x42fc43;
+handler[_0x16159b(0x1c4)] = async function (_0xb0fe59) {
+    const _0x12825d = _0x16159b, _0x582253 = {
+            'ZoGqP': _0x12825d(0x17f) + _0x12825d(0x19b),
+            'cRqct': _0x12825d(0x1d3) + 'e',
+            'czlIR': _0x12825d(0x1a5) + _0x12825d(0x1dd) + _0x12825d(0x1a7),
+            'PwGTu': _0x12825d(0x18c) + _0x12825d(0x1ed),
+            'IMkvL': function (_0x2f713b, _0x128739) {
+                return _0x2f713b(_0x128739);
             },
-            'RZLaN': _0x5d03cd(0xd6) + _0x5d03cd(0xbb) + _0x5d03cd(0xcb),
-            'AgusD': function (_0x27dd3d) {
-                return _0x27dd3d();
+            'dRXcW': _0x12825d(0x1da) + _0x12825d(0x18b) + _0x12825d(0x1a4),
+            'VCYfd': function (_0x2c0872) {
+                return _0x2c0872();
             },
-            'KMfLO': _0x5d03cd(0xe9),
-            'fKANL': _0x5d03cd(0x9f) + _0x5d03cd(0x83),
-            'kIzoh': _0x5d03cd(0x86) + _0x5d03cd(0xea),
-            'FCMJT': _0x5d03cd(0x79) + _0x5d03cd(0xcf),
-            'nZnfn': _0x5d03cd(0xc4),
-            'XvrbH': _0x5d03cd(0xd1) + _0x5d03cd(0xd2) + 'us',
-            'OjmYK': _0x5d03cd(0xdd),
-            'xInfH': _0x5d03cd(0x9c),
-            'MTgVv': _0x5d03cd(0xdb),
-            'cXEDi': _0x5d03cd(0xc1),
-            'sbhMS': _0x5d03cd(0xa8) + _0x5d03cd(0x7d),
-            'QQcRF': _0x5d03cd(0x7c),
-            'xbeXk': _0x5d03cd(0xe6),
-            'lwpZZ': _0x5d03cd(0xaa) + _0x5d03cd(0xb2) + _0x5d03cd(0xd9),
-            'CNDJj': _0x5d03cd(0xc9),
-            'GrKPJ': _0x5d03cd(0x90) + _0x5d03cd(0x8f) + _0x5d03cd(0xc0)
+            'GbytT': _0x12825d(0x1b5),
+            'VSPPP': _0x12825d(0x19d) + _0x12825d(0x1d9),
+            'fwXGm': _0x12825d(0x17a) + _0x12825d(0x1e5),
+            'IFsib': _0x12825d(0x1d1) + _0x12825d(0x1b6),
+            'MNEwE': _0x12825d(0x186),
+            'fcdda': _0x12825d(0x176) + _0x12825d(0x1e4) + 'us',
+            'KrkVi': _0x12825d(0x1b4),
+            'LuLiF': _0x12825d(0x19f),
+            'YLWHz': _0x12825d(0x1e2),
+            'whmHy': _0x12825d(0x185),
+            'GIsRG': _0x12825d(0x1e0) + _0x12825d(0x191) + _0x12825d(0x1c3),
+            'axpQr': _0x12825d(0x1e3),
+            'UqMdw': _0x12825d(0x1c5),
+            'FlDKL': _0x12825d(0x1ca) + _0x12825d(0x18a) + _0x12825d(0x17e),
+            'cqxRs': _0x12825d(0x1e6),
+            'qoCJR': _0x12825d(0x1b8) + _0x12825d(0x17c) + _0x12825d(0x1b2)
         };
-    global['wm'] = _0xa37738[_0x5d03cd(0x7f)];
-    let _0x29757e;
+    let _0x3ea63f = _0x582253[_0x12825d(0x175)];
+    global[_0x12825d(0x1c7)] && global[_0x12825d(0x1c7)][-0xb49 + 0x985 + 0x1c4] && global[_0x12825d(0x1c7)][0xc0 * 0x16 + 0x1 * -0x20ed + 0x106d][-0x2 * -0x4a8 + 0x5 * -0x4e5 + 0xf29] && (_0x3ea63f = global[_0x12825d(0x1c7)][-0x458 + 0xba9 + -0x751][0x9d9 + 0x1 * 0x176b + -0x10a2 * 0x2]);
+    const _0x65a3d3 = _0x582253[_0x12825d(0x182)];
+    global['wm'] = _0x582253[_0x12825d(0x1cb)];
+    let _0x3d1812;
     try {
-        _0x29757e = _0xbbfc01[_0x5d03cd(0xda) + 'nc'](_0xa37738[_0x5d03cd(0x96)]);
+        _0x3d1812 = _0xff0ad0[_0x12825d(0x178) + 'nc'](_0x582253[_0x12825d(0x192)]);
     } catch {
-        _0x29757e = Buffer[_0x5d03cd(0xb4)](await (await _0xa37738[_0x5d03cd(0xae)](_0x3e10a3, fallbackThumb))[_0x5d03cd(0x91) + 'r']());
+        try {
+            let _0xd6b4dc = await _0x582253[_0x12825d(0x1b9)](_0x346df0, fallbackThumb);
+            _0x3d1812 = Buffer[_0x12825d(0x177)](await _0xd6b4dc[_0x12825d(0x189) + 'r']());
+        } catch {
+            _0x3d1812 = Buffer[_0x12825d(0x1e8)](-0x1 * 0xcf9 + 0x859 * 0x1 + 0x4a0);
+        }
     }
-    global[_0x5d03cd(0xd5)] = {
+    global[_0x12825d(0x197)] = {
         'contextInfo': {
             'forwardingScore': 0x3e7,
             'isForwarded': ![],
             'forwardedNewsletterMessageInfo': {
-                'newsletterName': _0x5d03cd(0xc7) + _0x5d03cd(0xd0) + _0x5d03cd(0x9d),
-                'newsletterJid': _0xa37738[_0x5d03cd(0xed)]
+                'newsletterName': _0x12825d(0x1a9) + _0x12825d(0x199) + _0x12825d(0x194),
+                'newsletterJid': _0x582253[_0x12825d(0x1a3)]
             },
             'externalAdReply': {
-                'title': _0x5d03cd(0x81) + _0x5d03cd(0xf1) + _0x5d03cd(0x88),
-                'body': '' + _0xa37738[_0x5d03cd(0xbc)](momentGreeting),
-                'previewType': _0xa37738[_0x5d03cd(0x80)],
-                'thumbnail': _0x29757e
+                'title': _0x12825d(0x1a5) + _0x12825d(0x1dd) + _0x12825d(0x1a7),
+                'body': '' + _0x582253[_0x12825d(0x198)](momentGreeting),
+                'previewType': _0x582253[_0x12825d(0x190)],
+                'thumbnail': _0x3d1812
             }
         }
-    }, global[_0x5d03cd(0x89)] = {
+    }, global[_0x12825d(0x172)] = {
         'key': {
-            'participant': _0xa37738[_0x5d03cd(0xe4)],
-            'remoteJid': _0xa37738[_0x5d03cd(0xa4)],
+            'participant': _0x582253[_0x12825d(0x1a2)],
+            'remoteJid': _0x582253[_0x12825d(0x183)],
             'fromMe': ![],
-            'id': _0xa37738[_0x5d03cd(0x8b)]
+            'id': _0x582253[_0x12825d(0x196)]
         },
         'message': {
             'locationMessage': {
-                'name': _0xa37738[_0x5d03cd(0xd3)],
-                'jpegThumbnail': _0x29757e
+                'name': _0x582253[_0x12825d(0x1ac)],
+                'jpegThumbnail': _0x3d1812
             }
         }
-    }, global[_0x5d03cd(0xb3)] = {
+    }, global[_0x12825d(0x18f)] = {
         'key': {
             'fromMe': ![],
-            'participant': _0x5d03cd(0x9f) + _0x5d03cd(0x83)
+            'participant': _0x12825d(0x19d) + _0x12825d(0x1d9)
         },
         'message': {
             'contactMessage': {
-                'displayName': global['wm'],
-                'vcard': _0x5d03cd(0xbd) + _0x5d03cd(0x85) + _0x5d03cd(0x92) + wm + _0x5d03cd(0xe0) + wm + (_0x5d03cd(0xec) + _0x5d03cd(0xe8)) + _0x4f6a04[_0x5d03cd(0xa7)][_0x5d03cd(0xc2)]('@')[0xf8 * -0x1 + 0x116 + -0x1e] + ':' + _0x4f6a04[_0x5d03cd(0xa7)][_0x5d03cd(0xc2)]('@')[-0x2622 + -0x1bae + 0x41d0] + (_0x5d03cd(0xe7) + _0x5d03cd(0xa6) + _0x5d03cd(0xde) + _0x5d03cd(0xcc)),
-                'jpegThumbnail': _0x29757e
+                'displayName': _0x65a3d3,
+                'vcard': _0x12825d(0x1b3) + _0x12825d(0x1ec) + _0x12825d(0x19c) + _0x65a3d3 + _0x12825d(0x180) + _0x65a3d3 + (_0x12825d(0x1aa) + _0x12825d(0x1df)) + _0x3ea63f + ':' + _0x3ea63f + (_0x12825d(0x1be) + _0x12825d(0x1db) + _0x12825d(0x187) + _0x12825d(0x188)),
+                'jpegThumbnail': _0x3d1812
             }
         }
-    }, global[_0x5d03cd(0x9a)] = {
+    }, global[_0x12825d(0x1e7)] = {
         'key': {
             'fromMe': ![],
-            'participant': _0x5d03cd(0x9f) + _0x5d03cd(0x83)
+            'participant': _0x12825d(0x19d) + _0x12825d(0x1d9)
         },
         'message': {
             'audioMessage': {
-                'mimetype': _0xa37738[_0x5d03cd(0xca)],
-                'seconds': _0xa37738[_0x5d03cd(0xb7)],
+                'mimetype': _0x582253[_0x12825d(0x1eb)],
+                'seconds': _0x582253[_0x12825d(0x18d)],
                 'ptt': !![]
             }
         }
-    }, global[_0x5d03cd(0xa5)] = {
+    }, global[_0x12825d(0x1a1)] = {
         'key': {
             'fromMe': ![],
-            'participant': _0x5d03cd(0x9f) + _0x5d03cd(0x83)
+            'participant': _0x12825d(0x19d) + _0x12825d(0x1d9)
         },
         'message': {
             'extendedTextMessage': {
-                'text': wm,
-                'title': wm,
-                'jpegThumbnail': _0x29757e
+                'text': global['wm'],
+                'title': global['wm'],
+                'jpegThumbnail': _0x3d1812
             }
         }
-    }, global[_0x5d03cd(0xa9)] = {
+    }, global[_0x12825d(0x1ae)] = {
         'key': {
             'fromMe': ![],
-            'participant': _0x5d03cd(0x9f) + _0x5d03cd(0x83)
+            'participant': _0x12825d(0x19d) + _0x12825d(0x1d9)
         },
         'message': {
             'videoMessage': {
-                'title': wm,
-                'h': _0xa37738[_0x5d03cd(0xc8)],
-                'seconds': _0xa37738[_0x5d03cd(0xc3)],
+                'title': global['wm'],
+                'h': _0x582253[_0x12825d(0x1c8)],
+                'seconds': _0x582253[_0x12825d(0x174)],
                 'gifPlayback': !![],
-                'caption': wm,
-                'jpegThumbnail': _0x29757e
+                'caption': global['wm'],
+                'jpegThumbnail': _0x3d1812
             }
         }
-    }, global[_0x5d03cd(0x7a)] = {
+    }, global[_0x12825d(0x1d4)] = {
         'key': {
             'fromMe': ![],
-            'participant': _0x5d03cd(0x9f) + _0x5d03cd(0x83)
+            'participant': _0x12825d(0x19d) + _0x12825d(0x1d9)
         },
         'message': {
             'productMessage': {
                 'product': {
                     'productImage': {
-                        'mimetype': _0xa37738[_0x5d03cd(0x82)],
-                        'jpegThumbnail': _0x29757e
+                        'mimetype': _0x582253[_0x12825d(0x1cd)],
+                        'jpegThumbnail': _0x3d1812
                     },
-                    'title': wm,
-                    'description': _0xa37738[_0x5d03cd(0x9e)],
-                    'currencyCode': _0xa37738[_0x5d03cd(0xb5)],
-                    'priceAmount1000': _0xa37738[_0x5d03cd(0x8a)],
-                    'retailerId': _0xa37738[_0x5d03cd(0x8b)],
+                    'title': global['wm'],
+                    'description': _0x582253[_0x12825d(0x1d8)],
+                    'currencyCode': _0x582253[_0x12825d(0x1a6)],
+                    'priceAmount1000': _0x582253[_0x12825d(0x1d2)],
+                    'retailerId': _0x582253[_0x12825d(0x196)],
                     'productImageCount': 0x1
                 },
-                'businessOwnerJid': _0x5d03cd(0x9f) + _0x5d03cd(0x83)
+                'businessOwnerJid': _0x3ea63f + (_0x12825d(0x18e) + _0x12825d(0x1bf))
             }
         }
-    }, global[_0x5d03cd(0xb0)] = {
-        'key': { 'participant': _0xa37738[_0x5d03cd(0xe4)] },
+    }, global[_0x12825d(0x1c6)] = {
+        'key': { 'participant': _0x582253[_0x12825d(0x1a2)] },
         'message': {
             'documentMessage': {
-                'title': wm,
-                'jpegThumbnail': _0x29757e
+                'title': global['wm'],
+                'jpegThumbnail': _0x3d1812
             }
         }
-    }, global[_0x5d03cd(0xcd)] = {
+    }, global[_0x12825d(0x1ce)] = {
         'key': {
             'fromMe': ![],
-            'participant': _0xa37738[_0x5d03cd(0xe4)]
+            'participant': _0x582253[_0x12825d(0x1a2)]
         },
         'message': {
             'groupInviteMessage': {
-                'groupJid': _0xa37738[_0x5d03cd(0x84)],
-                'inviteCode': _0xa37738[_0x5d03cd(0x94)],
-                'groupName': _0xa37738[_0x5d03cd(0xa2)],
-                'caption': wm,
-                'jpegThumbnail': _0x29757e
+                'groupJid': _0x582253[_0x12825d(0x1b7)],
+                'inviteCode': _0x582253[_0x12825d(0x1e9)],
+                'groupName': _0x582253[_0x12825d(0x1dc)],
+                'caption': global['wm'],
+                'jpegThumbnail': _0x3d1812
             }
         }
     };
 };
-function _0x2cc8(_0x5b8b40, _0x1f691b) {
-    _0x5b8b40 = _0x5b8b40 - (0x1e0 + -0x1cd4 + -0x1 * -0x1b6d);
-    const _0xb73426 = _0x216f();
-    let _0x410301 = _0xb73426[_0x5b8b40];
-    return _0x410301;
-}
 export default handler;
 function momentGreeting() {
-    const _0x112dca = _0xc47bb4, _0x575a78 = {
-            'Qjwgw': _0x112dca(0xd8) + _0x112dca(0xd4),
-            'wWQyf': function (_0x52c1c8, _0x1002f6) {
-                return _0x52c1c8 >= _0x1002f6;
+    const _0x3c687e = _0x16159b, _0x52acc4 = {
+            'ZVJAX': _0x3c687e(0x1ad) + _0x3c687e(0x1cf),
+            'npDOe': function (_0x3005ab, _0x4d5f65) {
+                return _0x3005ab >= _0x4d5f65;
             },
-            'JCxyl': _0x112dca(0xb6) + _0x112dca(0xe5),
-            'hGJAe': function (_0x2532c6, _0x42d8aa) {
-                return _0x2532c6 >= _0x42d8aa;
+            'jXOeS': _0x3c687e(0x1d7) + _0x3c687e(0x1d0),
+            'iAgNI': function (_0x4c9c2b, _0x373651) {
+                return _0x4c9c2b >= _0x373651;
             },
-            'MffCD': _0x112dca(0xbe) + _0x112dca(0xac),
-            'TIdSz': _0x112dca(0xce) + _0x112dca(0xbf),
-            'BFupt': _0x112dca(0x95) + _0x112dca(0x7e),
-            'NkMkb': _0x112dca(0xb6) + _0x112dca(0x87) + _0x112dca(0xeb) + _0x112dca(0x9b)
-        }, _0x427a6d = _0x14ed3b['tz'](_0x575a78[_0x112dca(0xa3)])[_0x112dca(0x93)]();
-    if (_0x575a78[_0x112dca(0xb1)](_0x427a6d, -0x28 * -0xc8 + -0xa * 0x67 + 0x1b28 * -0x1))
-        return _0x575a78[_0x112dca(0xba)];
-    if (_0x575a78[_0x112dca(0x97)](_0x427a6d, 0x1f5a + 0x4 * 0x4d5 + -0x1 * 0x329f))
-        return _0x575a78[_0x112dca(0x7b)];
-    if (_0x575a78[_0x112dca(0xb1)](_0x427a6d, -0x2403 + -0x3 * 0xce2 + 0x4ab4))
-        return _0x575a78[_0x112dca(0xa0)];
-    if (_0x575a78[_0x112dca(0x97)](_0x427a6d, 0x18a * -0x2 + 0xda3 + -0xa8b))
-        return _0x575a78[_0x112dca(0xc6)];
-    return _0x575a78[_0x112dca(0xb9)];
+            'CgNZD': _0x3c687e(0x1a0) + _0x3c687e(0x1de),
+            'IJjeX': _0x3c687e(0x173) + _0x3c687e(0x1c9),
+            'EwmHY': _0x3c687e(0x181) + _0x3c687e(0x1bd),
+            'nSixU': _0x3c687e(0x1d7) + _0x3c687e(0x17d) + _0x3c687e(0x1af) + _0x3c687e(0x1b1)
+        }, _0x3dde5c = _0xd5e99e['tz'](_0x52acc4[_0x3c687e(0x195)])[_0x3c687e(0x171)]();
+    if (_0x52acc4[_0x3c687e(0x1a8)](_0x3dde5c, -0x1213 + -0x4d * 0x1 + -0x3 * -0x626))
+        return _0x52acc4[_0x3c687e(0x1d6)];
+    if (_0x52acc4[_0x3c687e(0x1bb)](_0x3dde5c, -0x34e + 0x19a6 * -0x1 + 0x7 * 0x425))
+        return _0x52acc4[_0x3c687e(0x19e)];
+    if (_0x52acc4[_0x3c687e(0x1a8)](_0x3dde5c, -0xc5 * -0x8 + 0x3a7 * -0x5 + -0x26e * -0x5))
+        return _0x52acc4[_0x3c687e(0x1cc)];
+    if (_0x52acc4[_0x3c687e(0x1bb)](_0x3dde5c, 0x1 * 0x1d6b + -0x289 + -0x1ade * 0x1))
+        return _0x52acc4[_0x3c687e(0x1c0)];
+    return _0x52acc4[_0x3c687e(0x1ab)];
+}
+function _0x49ad() {
+    const _0xd23ff4 = [
+        '3.0\x0aN:XL;',
+        '0@s.whatsa',
+        'CgNZD',
+        'Hmm',
+        'Selamat\x20So',
+        'ftextt',
+        'VSPPP',
+        'dRXcW',
+        'ewsletter',
+        'ᴇʀɪɴᴇ\x20ᴘʀᴏᴊ',
+        'axpQr',
+        'ɪ\x20ᴅᴇᴠɪᴄᴇ',
+        'npDOe',
+        '「\x20🐣\x20ᴇʀɪɴᴇ-',
+        '\x0aitem1.TEL',
+        'nSixU',
+        'MNEwE',
+        'Asia/Makas',
+        'fgif',
+        'mat\x20Berist',
+        'jpg',
+        'irahat\x20🛌',
+        'ity',
+        'BEGIN:VCAR',
+        '999999',
+        'PHOTO',
+        'ect',
+        'FlDKL',
+        'Erine\x20proj',
+        'IMkvL',
+        'https://c.',
+        'iAgNI',
+        '5557527plJLFx',
+        'gi\x20☕',
+        '\x0aitem1.X-A',
+        'p.net',
+        'EwmHY',
+        'termai.cc/',
+        '20JjxrLr',
+        'x\x20Store',
+        'all',
+        '20000000',
+        'fdocs',
+        'owner',
+        'LuLiF',
+        'ang\x20☀️',
+        '1203634277',
+        'czlIR',
+        'IJjeX',
+        'whmHy',
+        'fgclink',
+        'sar',
+        'lam\x20🌙',
+        'Erine\x20Proj',
+        'UqMdw',
+        'Lynx\x20Decod',
+        'ftoko',
+        '1589934lOlBSQ',
+        'jXOeS',
+        'Selamat\x20Ma',
+        'GIsRG',
+        'pp.net',
+        '1203634006',
+        'BLabel:Dev',
+        'qoCJR',
+        'ᴇᴄᴛ\x20-\x20ᴍᴜʟᴛ',
+        're\x20🌅',
+        ';waid=',
+        'Simple\x20Bot',
+        '585384sEargi',
+        '999',
+        'IDR',
+        '\x20codecs=op',
+        'adcast',
+        'null',
+        'fvn',
+        'alloc',
+        'cqxRs',
+        '2hNzMyM',
+        'fcdda',
+        'D\x0aVERSION:',
+        'l.jpg',
+        'hour',
+        'fstatus',
+        'Selamat\x20Si',
+        'YLWHz',
+        'ZoGqP',
+        'audio/ogg;',
+        'from',
+        'readFileSy',
+        '5010425POinCV',
+        'status@bro',
+        'i194/ILPF.',
+        'ect\x20commun',
+        'lam\x20/\x20Sela',
+        '.us',
+        '6288258041',
+        ',;;;\x0aFN:',
+        'Selamat\x20Pa',
+        'cRqct',
+        'fwXGm',
+        '325715IOePBH',
+        'image/jpeg',
+        'Erine\x20MD',
+        'eloper\x0aEND',
+        ':VCARD',
+        'arrayBuffe',
+        '40570717@g',
+        '12665352@n',
+        './thumbnai',
+        'KrkVi',
+        '@s.whatsap',
+        'fkontak',
+        'GbytT',
+        '\x20Esm\x20-\x20Lyn',
+        'PwGTu',
+        '1577168VKHcFR',
+        'ᴛɪᴏɴ\x20🐣\x20」',
+        'ZVJAX',
+        'IFsib',
+        'adReply',
+        'VCYfd',
+        'ᴍᴅ\x20ɪɴғᴏʀᴍᴀ',
+        '677892zyeURS',
+        '396'
+    ];
+    _0x49ad = function () {
+        return _0xd23ff4;
+    };
+    return _0x49ad();
 }
