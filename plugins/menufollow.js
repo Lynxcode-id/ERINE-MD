@@ -1,10 +1,10 @@
 import moment from 'moment-timezone'
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
-  global.__menuReplyLock ||= new Map()
-  if (global.__menuReplyLock.get(m.chat)) return
-  global.__menuReplyLock.set(m.chat, true)
-  setTimeout(() => global.__menuReplyLock.delete(m.chat), 2500)
+  if (!global.__helpLock) global.__helpLock = new Map()
+  if (global.__helpLock.get(m.chat)) return
+  global.__helpLock.set(m.chat, true)
+  setTimeout(() => global.__helpLock.delete(m.chat), 3000)
 
   try {
     let plugins = Object.values(global.plugins || {}).filter(p => !p.disabled)
@@ -16,53 +16,33 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         if (!tag) continue
         tag = tag.toLowerCase().trim()
         if (!categories[tag]) categories[tag] = []
-        categories[tag].push({ helps, limit: p.limit, premium: p.premium, owner: p.owner, admin: p.admin, prefix: !p.customPrefix })
+        categories[tag].push({ helps, prefix: !p.customPrefix })
       }
     }
 
-    let input = (text || m.text || '').toLowerCase().trim()
+    let input = (text || '').toLowerCase().trim()
     let arrayMenu = Object.keys(categories).sort()
-    let selectedCategory = input.replace(usedPrefix + command, '').trim()
 
-    if (selectedCategory && (categories[selectedCategory] || selectedCategory === 'all')) {
-      let menuText = [`*───「 ${selectedCategory.toUpperCase()} 」───*\n`]
-      let targets = selectedCategory === 'all' ? arrayMenu : [selectedCategory]
+    if (input && (categories[input] || input === 'all')) {
+      let menuText = [`*───「 ${input.toUpperCase()} 」───*\n`]
+      let targets = input === 'all' ? arrayMenu : [input]
 
       for (let tag of targets) {
-        if (selectedCategory === 'all') menuText.push(`\n*# ${tag.toUpperCase()}*`)
+        if (input === 'all') menuText.push(`\n*# ${tag.toUpperCase()}*`)
         for (let item of categories[tag]) {
           for (let cmd of item.helps) {
-            let prefix = item.prefix ? usedPrefix : ''
-            menuText.push(`◦ ${prefix}${cmd}`)
+            menuText.push(`◦ ${item.prefix ? usedPrefix : ''}${cmd}`)
           }
         }
       }
       
-      return await conn.sendMessage(m.chat, { 
-        text: menuText.join('\n'),
-        contextInfo: {
-            externalAdReply: {
-                title: 'ᴇʀɪɴᴇ-ᴍᴅ ᴍᴀɴᴀɢᴇ ᴍᴇɴᴜ',
-                body: `Menampilkan Menu: ${selectedCategory}`,
-                thumbnailUrl: global.menuThumb,
-                sourceUrl: '',
-                mediaType: 1,
-                renderLargerThumbnail: true
-            }
-        }
-      }, { quoted: m })
+      return await conn.sendMessage(m.chat, { text: menuText.join('\n'), contextInfo: global.adReply.contextInfo }, { quoted: m })
     }
 
-    const teks = `*MANAGE MENU SETTING*
-
-Panduan memakai robot whatsapp ini:
-Jika kalian masih keliru ketik command ini
-*.tutorbot* untuk mendapatkan penjelasan tatacara
-penggunaan bot.`
-
+    const teks = `*MANAGE MENU SETTING*\n\nSilakan pilih kategori di bawah cuy.`
     let rows = arrayMenu.map(v => ({
       title: `✨ Menu ${v.toUpperCase()}`,
-      description: `Menampilkan daftar perintah ${v}`,
+      description: `Daftar perintah ${v}`,
       id: `${usedPrefix}${command} ${v}`
     }))
 
@@ -70,31 +50,18 @@ penggunaan bot.`
       viewOnceMessage: {
         message: {
           interactiveMessage: {
-            header: { title: `*ᴇʀɪɴᴇ-ᴍᴅ | ᴘʀᴏᴊᴇᴄᴛ*`, hasVideoMessage: false },
             body: { text: teks },
             footer: { text: 'ᴇʀɪɴᴇ-ᴍᴅ ᴍᴀɴᴀɢᴇ ᴍᴇɴᴜ' },
+            header: { title: `*ᴇʀɪɴᴇ-ᴍᴅ | ᴘʀᴏᴊᴇᴄᴛ*`, hasVideoMessage: false },
             nativeFlowMessage: {
               buttons: [
                 {
                   name: 'single_select',
-                  buttonParamsJson: JSON.stringify({
-                    title: '✨ Pilih Menu',
-                    sections: [{ title: `Tersedia ${arrayMenu.length} Kategori`, rows }]
-                  })
+                  buttonParamsJson: JSON.stringify({ title: '✨ Pilih Menu', sections: [{ title: `Tersedia ${arrayMenu.length} Kategori`, rows }] })
                 },
                 {
                   name: 'quick_reply',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: '📑 Semua Menu',
-                    id: `${usedPrefix}${command} all`
-                  })
-                },
-                {
-                  name: 'quick_reply',
-                  buttonParamsJson: JSON.stringify({
-                    display_text: '👤 Developer',
-                    id: `${usedPrefix}owner`
-                  })
+                  buttonParamsJson: JSON.stringify({ display_text: '📑 Semua Menu', id: `.help all` })
                 }
               ]
             }
@@ -103,12 +70,9 @@ penggunaan bot.`
       }
     }
 
-    await conn.relayMessage(m.chat, msg, {})
+    await conn.relayMessage(m.chat, msg, { quoted: global.fkontak })
 
-  } catch (error) {
-    console.error(error)
-    m.reply('Error menampilkan menu.')
-  }
+  } catch (error) { m.reply('Error menampilkan menu.') }
 }
 
 handler.help = ['help']
