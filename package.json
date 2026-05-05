@@ -48,6 +48,7 @@
     "audio-decode": "^2.2.3",
     "awesome-phonenumber": "^5.10.0",
     "axios": "^1.4.0",
+    "archiver": "^7.0.1",
     "baileys-inmemory-store": "1.0.1",
     "baileys_helper": "latest",
     "bing-translate-api": "^4.0.2",
