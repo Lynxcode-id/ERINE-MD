@@ -90,6 +90,17 @@ export async function handler(chatUpdate) {
 
     const conn = this
     
+    // 🔥 [FIX] Sistem Anti Double Respon (Message Deduplicator)
+    conn.msgCache = conn.msgCache || new Set();
+    if (m.key && m.key.id) {
+        if (conn.msgCache.has(m.key.id)) {
+            return; // Kalo ID pesan udah ada di cache, abaikan (Anti double respon)
+        }
+        conn.msgCache.add(m.key.id);
+        // Clear cache setelah 3 menit biar RAM ngga bengkak
+        setTimeout(() => conn.msgCache.delete(m.key.id), 180000);
+    }
+    
     const DB = conn.db || global.db
     
     if (!conn.hunterActive) {
@@ -381,9 +392,10 @@ export async function participantsUpdate({ id, participants, action }) {
 
     const isSelf = conn.self !== undefined ? conn.self : opts['self']
     
-    if (isSelf) return
+    if (isSelf) return 
     
     if (DB.data == null) await global.loadDatabase()
+
     if (!DB.data.chats[id]) {
         DB.data.chats[id] = {
             isBanned: false, welcome: false, detect: false, sWelcome: '', sBye: '', sPromote: '', sDemote: '',
@@ -457,19 +469,12 @@ export async function participantsUpdate({ id, participants, action }) {
                 console.error('WELCOME API ERROR:', e)
             }
 
-            // FIX 5: Fallback Teks tetep kirim kalau API gambar mati
             if (buffer) {
                 await this.sendMessage(id, {
-                    text,
+                    image: buffer,
+                    caption: text,
                     contextInfo: {
-                        mentionedJid: [user],
-                        externalAdReply: {
-                            title: `Welcome New Member 👋`,
-                            body: `Selamat datang cuy ${pushName}!`,
-                            thumbnail: buffer,
-                            mediaType: 1,
-                            renderLargerThumbnail: true
-                        }
+                        mentionedJid: [user]
                     }
                 })
             } else {
@@ -507,19 +512,12 @@ export async function participantsUpdate({ id, participants, action }) {
                 console.error('GOODBYE API ERROR:', e)
             }
 
-            // Fallback teks perpisahan
             if (buffer) {
                 await this.sendMessage(id, {
-                    text,
+                    image: buffer,
+                    caption: text,
                     contextInfo: {
-                        mentionedJid: [user],
-                        externalAdReply: {
-                            title: `Farewell 👋`,
-                            body: groupName,
-                            thumbnail: buffer,
-                            mediaType: 1,
-                            renderLargerThumbnail: true
-                        }
+                        mentionedJid: [user]
                     }
                 })
             } else {
@@ -546,7 +544,6 @@ export async function groupsUpdate(groupsUpdate) {
         const id = groupUpdate.id
         if (!id) continue
 
-        // 🔥 [DETAIL FIX] Auto-Refresh Metadata ketika info/setting grup berubah
         try {
             if (conn.chats && conn.chats[id]) {
                 conn.chats[id].metadata = await conn.groupMetadata(id)
@@ -556,7 +553,6 @@ export async function groupsUpdate(groupsUpdate) {
         let chats = DB.data.chats[id], text = ''
         if (!chats?.detect) continue
         
-        // 🔥 [FIX EDITOR IJO] Tambahin escape backslash (\) di backtick biar editor ga mabok
         if (groupUpdate.desc) text = (chats.sDesc || '\`\`\`Deskripsi diganti ke\`\`\`\n@desc').replace('@desc', groupUpdate.desc)
         if (groupUpdate.subject) text = (chats.sSubject || '\`\`\`Judul diganti ke\`\`\`\n@subject').replace('@subject', groupUpdate.subject)
         if (groupUpdate.icon) text = (chats.sIcon || '\`\`\`Icon grup diganti\`\`\`')
