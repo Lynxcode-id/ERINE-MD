@@ -47,7 +47,7 @@ global.nomorbot = '6285185681661' // No Bot
 global.nomorown = '6288258041396'// No Utama
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
 global.version = '18.2.5' // Versi Script Ini
-global.autotyping = false // Default : false
+global.autotyping = true // Default : true
 global.autorecording = false // Default : false
 
 // BOT SETTING WATERMARK
