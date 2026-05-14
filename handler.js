@@ -25,13 +25,34 @@ const getParticipantAdmin = (participant = {}) => {
     return false
 }
 
-const sameJid = (a, b) => {
-    if (!a || !b) return false
-    const clean = v => String(v).split(':')[0].replace(/[^0-9]/g, '')
-    return clean(a) === clean(b)
+const normalizeJid = (jid = '') => {
+    jid = String(jid || '').decodeJid?.() || String(jid || '')
+    if (!jid) return ''
+    if (/@(s\.whatsapp\.net|g\.us|broadcast)$/.test(jid)) return jid
+    if (/^\d+$/.test(jid)) return `${jid}@s.whatsapp.net`
+    return jid
 }
 
-const findParticipant = (list = [], jid = '') => list.find(u => sameJid(u.id || u.jid || u.lid, jid)) || {}
+const sameJid = (a, b) => {
+    if (!a || !b) return false
+    return normalizeJid(a).replace(/[^0-9]/g, '') === normalizeJid(b).replace(/[^0-9]/g, '')
+}
+
+const findParticipant = (list = [], jid = '') => {
+    const target = normalizeJid(jid)
+    const targetNum = target.replace(/[^0-9]/g, '')
+
+    return list.find(u => {
+        const candidates = [
+            u?.id,
+            u?.jid,
+            u?.lid,
+            u?.phoneNumber ? `${String(u.phoneNumber).replace(/[^0-9]/g, '')}@s.whatsapp.net` : null
+        ].filter(Boolean).map(normalizeJid)
+
+        return candidates.some(v => v === target || v.replace(/[^0-9]/g, '') === targetNum)
+    }) || {}
+}
 
 const blacklistSpam = [
     '120363424238913151@newsletter', '120363406449745243@newsletter',
@@ -196,9 +217,9 @@ export async function handler(chatUpdate) {
         const participants = m.isGroup ? (groupMetadata.participants || []) : [] 
         
         let groupUser = {}, bot = {}
-        if (m.isGroup && participants?.length > 0) { 
+        if (m.isGroup && participants?.length > 0) {
             groupUser = findParticipant(participants, m.sender)
-            bot = findParticipant(participants, botId)
+            bot = findParticipant(participants, botId || conn.user?.id || '')
         }
 
         const isRAdmin = getParticipantAdmin(groupUser) === 'superadmin'
@@ -360,41 +381,30 @@ export async function participantsUpdate({ id, participants, action }) {
 
     const isSelf = conn.self !== undefined ? conn.self : opts['self']
     
-    // FIX 1: Hapus "|| this.isInit" biar pas bot baru restart tetep nyambut member
-    if (isSelf) return 
+    if (isSelf) return
     
     if (DB.data == null) await global.loadDatabase()
-
-    // FIX 2: Pastiin DB.data.chats[id] diinisialisasi kalau bener-bener kosong
     if (!DB.data.chats[id]) {
         DB.data.chats[id] = {
-            isBanned: false,
-            welcome: false,
-            detect: false,
-            sWelcome: '',
-            sBye: '',
-            sPromote: '',
-            sDemote: '',
-            delete: false,
-            antiLink: false,
-            viewonce: false,
-            antiToxic: false,
-            simi: false,
-            autogpt: false,
-            autoSticker: false,
-            premium: false,
-            premiumTime: false,
-            nsfw: false,
-            menu: true,
-            rpgs: true,
-            expired: 0
+            isBanned: false, welcome: false, detect: false, sWelcome: '', sBye: '', sPromote: '', sDemote: '',
+            delete: false, antiLink: false, viewonce: false, antiToxic: false, simi: false, autogpt: false, autoSticker: false, premium: false, premiumTime: false, nsfw: false, menu: true, rpgs: true, expired: 0
+        }
+    }
+
+    if (action === 'promote' || action === 'demote') {
+        try {
+            const newMetadata = await conn.groupMetadata(id)
+            if (conn.chats && conn.chats[id]) {
+                conn.chats[id].metadata = newMetadata
+            }
+        } catch (e) {
+            console.error('Gagal update metadata grup saat promote/demote:', e)
         }
     }
 
     let chat = DB.data.chats[id]
     if (!chat.welcome) return
 
-    // FIX 3: Safe Metadata Fetch
     let groupMetadata = (conn.chats && conn.chats[id] && conn.chats[id].metadata) ? conn.chats[id].metadata : {};
     if (Object.keys(groupMetadata).length === 0) {
         try {
@@ -411,13 +421,11 @@ export async function participantsUpdate({ id, participants, action }) {
         const user = participant?.id || participant?.jid || participant?.lid || participant
         if (!user) continue
 
-        // FIX 4: Try/Catch untuk getName (anti crash undefined)
         let pushName = '';
         try {
             if (conn.getName) pushName = await conn.getName(user);
         } catch (e) {}
 
-        // FITUR LAMA: Tetep nembak JID/Nomor kalau nama kosong (No Cut Feature!)
         if (!pushName || pushName === user.split('@')[0]) {
             pushName = user.split('@')[0]
         }
@@ -537,11 +545,21 @@ export async function groupsUpdate(groupsUpdate) {
     for (const groupUpdate of groupsUpdate) {
         const id = groupUpdate.id
         if (!id) continue
+
+        // 🔥 [DETAIL FIX] Auto-Refresh Metadata ketika info/setting grup berubah
+        try {
+            if (conn.chats && conn.chats[id]) {
+                conn.chats[id].metadata = await conn.groupMetadata(id)
+            }
+        } catch (e) {}
+
         let chats = DB.data.chats[id], text = ''
         if (!chats?.detect) continue
-        if (groupUpdate.desc) text = (chats.sDesc || '```Deskripsi diganti ke```\n@desc').replace('@desc', groupUpdate.desc)
-        if (groupUpdate.subject) text = (chats.sSubject || '```Judul diganti ke```\n@subject').replace('@subject', groupUpdate.subject)
-        if (groupUpdate.icon) text = (chats.sIcon || '```Icon grup diganti```')
+        
+        // 🔥 [FIX EDITOR IJO] Tambahin escape backslash (\) di backtick biar editor ga mabok
+        if (groupUpdate.desc) text = (chats.sDesc || '\`\`\`Deskripsi diganti ke\`\`\`\n@desc').replace('@desc', groupUpdate.desc)
+        if (groupUpdate.subject) text = (chats.sSubject || '\`\`\`Judul diganti ke\`\`\`\n@subject').replace('@subject', groupUpdate.subject)
+        if (groupUpdate.icon) text = (chats.sIcon || '\`\`\`Icon grup diganti\`\`\`')
         if (groupUpdate.announce == true) text = '*Grup ditutup!*'
         if (groupUpdate.announce == false) text = '*Grup dibuka!*'
         
