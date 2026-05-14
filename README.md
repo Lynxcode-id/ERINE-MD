@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/43a375e181b4042701878cebf6b266f7.jpg" width="380"/>
+  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/file_00000000b5d471faa4c5c8b876d8ca6f.png" width="380"/>
 </p>
 
 <h1 align="center">ERINE MD</h1>
