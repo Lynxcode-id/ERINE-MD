@@ -103,15 +103,15 @@ User adalah cowok yang kamu ajak ngobrol santai.
     }
 
     await conn.sendMessage(m.chat, {
-      text: res.text,
+      image: { url: 'https://files.catbox.moe/y5b7l6.jpg' },
+      caption: res.text,
       contextInfo: {
-        externalAdReply: {
-          title: 'Kita Ikuyo AI',
-          body: 'Bocchi the Rock',
-          thumbnailUrl: 'https://files.catbox.moe/y5b7l6.jpg',
-          sourceUrl: 'https://github.com/himanackerman',
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

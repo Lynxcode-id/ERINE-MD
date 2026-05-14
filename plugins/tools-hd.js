@@ -1,75 +1,54 @@
-/* 
-• Plugins Upscale ( HD Foto ) 
-• Source: https://whatsapp.com/channel/0029VakezCJDp2Q68C61RH2C
-• Source Scrape: https://whatsapp.com/channel/0029Vb5blhMEawdx2QFALZ1D
-*/
-
-import fetch from 'node-fetch'
-import FormData from 'form-data'
-
-let handler = async (m, { conn, usedPrefix, command }) => {
-  const quoted = m.quoted ? m.quoted : m
-  const mime = quoted.mimetype || quoted.msg?.mimetype || ''
-
-  if (!/image\/(jpe?g|png)/i.test(mime)) {
-    await conn.sendMessage(m.chat, { react: { text: '❗', key: m.key } })
-    return m.reply(`Kirim atau *balas gambar* dengan perintah:\n*${usedPrefix + command}*`)
-  }
-
-  try {
-    await conn.sendMessage(m.chat, { react: { text: '⏳', key: m.key } })
-
-    const media = await quoted.download()
-    const ext = mime.split('/')[1]
-    const filename = `upscaled_${Date.now()}.${ext}`
-
-    const form = new FormData()
-    form.append('image', media, { filename, contentType: mime })
-    form.append('scale', '2')
-
-    const headers = {
-      ...form.getHeaders(),
-      'accept': 'application/json',
-      'x-client-version': 'web',
-      'x-locale': 'en'
+import axios from 'axios';
+import uploadImage from '../lib/uploadImage.js';
+const handler = async (m, { conn, command, prefix }) => {
+    let q = m.quoted ? m.quoted : m;
+    let mime = (q.msg || q).mimetype || '';
+    
+    if (!mime.includes('image')) {
+        return m.reply(`⚠️ Kirim atau balas gambar dengan caption *${prefix + command}*`);
     }
 
-    const res = await fetch('https://api2.pixelcut.app/image/upscale/v1', {
-      method: 'POST',
-      headers,
-      body: form
-    })
+    await conn.sendMessage(m.chat, { react: { text: '⚡', key: m.key } });
 
-    const json = await res.json()
+    try {
+        let imageBuffer = await q.download();
+        let imageUrl = await uploadImage(imageBuffer);
+        
+        if (!imageUrl) throw new Error('Gagal mengupload gambar.');
 
-    if (!json?.result_url || !json.result_url.startsWith('http')) {
-      throw new Error('Gagal mendapatkan URL hasil dari Pixelcut.')
+        const apiUrl = `https://api-varhad.my.id/tools/hd?imageUrl=${encodeURIComponent(imageUrl)}`;
+        
+        let apiRes = await axios.get(apiUrl, { responseType: 'arraybuffer' });
+        let resultBuffer;
+        let contentType = apiRes.headers['content-type'];
+        if (contentType && contentType.includes('application/json')) {
+            let json = JSON.parse(apiRes.data.toString('utf-8'));
+            let finalUrl = json.result || json.url || json.data; 
+            
+            if (!finalUrl) throw new Error('URL hasil HD tidak ditemukan di respon JSON');
+            
+            let imgRes = await axios.get(finalUrl, { responseType: 'arraybuffer' });
+            resultBuffer = Buffer.from(imgRes.data);
+        } else {
+            resultBuffer = Buffer.from(apiRes.data);
+        }
+        
+        await conn.sendMessage(m.chat, {
+            image: resultBuffer,
+            caption: `✨ *Proses Selesai!*\n\nGambar lu udah berhasil,Silahkan di simpan 😋`
+        }, { quoted: m });
+
+        await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } });
+
+    } catch (err) {
+        console.error("Error Cuy:", err.message);
+        await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } });
+        m.reply(`❌ *Gagal memproses gambar.*\nError: ${err.message}`);
     }
+};
 
-    const resultBuffer = await (await fetch(json.result_url)).buffer()
+handler.help = ['hd'];
+handler.tags = ['tools'];
+handler.command = /^(hd)$/i;
 
-    await conn.sendMessage(m.chat, {
-      image: resultBuffer,
-      caption: `
-✨ Gambar kamu telah ditingkatkan hingga 2x resolusi.
-
-📈 Kualitas lebih tajam & detail lebih jelas.
-
-🔧 _Gunakan fitur ini kapan saja untuk memperjelas gambar blur._
-`.trim()
-    }, { quoted: m })
-
-    await conn.sendMessage(m.chat, { react: { text: '✅', key: m.key } })
-  } catch (err) {
-    await conn.sendMessage(m.chat, { react: { text: '❌', key: m.key } })
-    m.reply(`❌ Upscaling gagal:\n${err.message || err}`)
-  }
-}
-
-handler.help = ['upscale']
-handler.tags = ['tools', 'image']
-handler.command = ['upscale', 'hd', 'remini']
-handler.limit = true
-handler.register = true
-
-export default handler
+export default handler;

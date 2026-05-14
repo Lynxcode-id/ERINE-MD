@@ -3,32 +3,64 @@ const channels = {};
 const handler = async (m, { conn, text, command }) => {
   const user = m.sender;
   
+  let wm = global.wm || "Erine System";
+  let senderNumber = m.sender.split('@')[0];
+  let fkontak = {
+      key: {
+          fromMe: false,
+          participant: `0@s.whatsapp.net`
+      },
+      message: {
+          contactMessage: {
+              displayName: wm,
+              vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+          }
+      }
+  };
+
+  const contextErine = {
+      forwardingScore: 999,
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+          newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+          newsletterJid: "120363400612665352@newsletter"
+      }
+  };
+
+  // Helper biar gampang ngirim respon ke user dengan style Erine
+  const replyErine = async (teks) => {
+      return await conn.sendMessage(m.chat, {
+          text: teks,
+          contextInfo: contextErine
+      }, { quoted: fkontak });
+  };
+
   if (command === "setchid") {
-    if (!text) return await m.reply("Gunakan: .setchid <id channel>");
+    if (!text) return await replyErine("Gunakan: .setchid <id channel>");
     channels[user] = [text];
-    return await m.reply(`ID channel berhasil disimpan: ${text}`);
+    return await replyErine(`ID channel berhasil disimpan: ${text}`);
   }
 
   if (command === "addchid") {
-    if (!text) return await m.reply("Gunakan: .addchid <id channel>");
+    if (!text) return await replyErine("Gunakan: .addchid <id channel>");
     if (!channels[user]) channels[user] = [];
     if (!channels[user].includes(text)) {
       channels[user].push(text);
-      return await m.reply(`ID channel berhasil ditambahkan: ${text}`);
+      return await replyErine(`ID channel berhasil ditambahkan: ${text}`);
     } else {
-      return await m.reply("ID channel sudah ada dalam daftar.");
+      return await replyErine("ID channel sudah ada dalam daftar.");
     }
   }
 
   if (command === "getchid") {
     const chidList = channels[user];
-    return await m.reply(chidList ? `ID channel Anda:\n${chidList.join("\n")}` : "Belum ada ID channel yang disimpan.");
+    return await replyErine(chidList ? `ID channel Anda:\n${chidList.join("\n")}` : "Belum ada ID channel yang disimpan.");
   }
 
   const chidList = channels[user];
-  if (!chidList || chidList.length === 0) return await m.reply("Set dulu ID channel dengan .setchid atau .addchid");
+  if (!chidList || chidList.length === 0) return await replyErine("Set dulu ID channel dengan .setchid atau .addchid");
 
-  if (!text && !m.quoted) return await m.reply("Masukkan teks atau reply media dengan teks");
+  if (!text && !m.quoted) return await replyErine("Masukkan teks atau reply media dengan teks");
 
   let messageOptions = {};
 
@@ -59,15 +91,7 @@ const handler = async (m, { conn, text, command }) => {
             newsletterJid: chidList[0], 
             serverMessageId: null,
             newsletterName: "ᴇʀɪɴᴇ-ᴍᴅ",
-          },
-          externalAdReply: {
-            title: "ᴇᴋʜᴇᴍ",
-            body: text || "Pesan audio",
-            thumbnailUrl: "https://c.termai.cc/i174/WqP0sWo.jpg", // Ubah sama thumbnail bot kalian
-            sourceUrl: null,
-            mediaType: 1,
-            renderLargerThumbnail: false,
-          },
+          }
         }
       };
     } else if (/sticker/.test(mime)) {
@@ -83,7 +107,7 @@ const handler = async (m, { conn, text, command }) => {
     await conn.sendMessage(chid, messageOptions);
   }
 
-  await m.reply("Pesan berhasil dikirim ke semua channel.");
+  await replyErine("✅ Pesan berhasil dikirim ke semua channel.");
 };
 
 handler.command = ["upch", "setchid", "addchid", "getchid"];

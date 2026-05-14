@@ -18,13 +18,12 @@ async function sendInteractive(conn, jid, title, text, footer, buttons, quoted) 
                         }))
                     },
                     contextInfo: {
-                        externalAdReply: {
-                            title: "E R I N E - M D | NOTIFICATION",
-                            body: "Registration System Success",
-                            thumbnailUrl: "https://c.termai.cc/i169/zUVceq.jpg",
-                            sourceUrl: "https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i",
-                            mediaType: 1,
-                            renderLargerThumbnail: true
+                        isForwarded: true,
+                        forwardingScore: 9999,
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: "120363400612665352@newsletter",
+                            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                            serverMessageId: -1
                         }
                     }
                 })
@@ -42,8 +41,22 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
     }
     
     let sn = createHash('md5').update(m.sender).digest('hex')
-    
     let name = m.name || m.pushName || conn.getName(m.sender) || 'User'
+    
+    let wm = global.wm || "Erine System"
+    let senderNumber = m.sender.split('@')[0]
+    let fkontak = {
+        key: {
+            fromMe: false,
+            participant: `0@s.whatsapp.net`
+        },
+        message: {
+            contactMessage: {
+                displayName: wm,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        }
+    }
 
     // =========================================
     // 1. TANGKAP TOMBOL "SALIN SN"
@@ -61,7 +74,7 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
         return await sendInteractive(conn, m.chat, "🔐 INFO SERIAL NUMBER", capSN, "» ᴇʀɪɴᴇ-ᴍᴅ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ «", [
             { text: '📋 Salin SN', id: `${usedPrefix}copysn_luu ${sn}` },
             { text: '📂 Menu Utama', id: `.menu` }
-        ], m)
+        ], fkontak)
     }
 
     // =========================================
@@ -78,9 +91,8 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
                      `2. *Jalur Anomali (Cepat):*\nKlik tombol di bawah.`
         
         return await sendInteractive(conn, m.chat, "📝 REGISTRATION MENU", capReg, "» ᴇʀɪɴᴇ-ᴍᴅ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ «", [
-        
             { text: '🚀 Daftar Cepat (Anomali)', id: `${usedPrefix}daftar_anomali ${name.replace(/[^\w\s]/g, '')}` }
-        ], m)
+        ], fkontak)
     }
 
     let inputName = (text || '').trim()
@@ -104,7 +116,7 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
         [
             { text: '📂 Buka Menu Utama', id: `.menu` },
             { text: '🔐 Cek SN', id: `${usedPrefix}sn` }
-        ], m
+        ], fkontak
     )
 }
 

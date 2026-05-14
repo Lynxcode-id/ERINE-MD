@@ -30,7 +30,6 @@ let handler = async (m, { conn, command, text, usedPrefix }) => {
 
     const filePath = path.join(tmpDir, `${safeTitle}.mp3`)
 
-    // Download audio file
     const audioResponse = await axios({
       method: 'get',
       url: data.url,
@@ -48,23 +47,21 @@ let handler = async (m, { conn, command, text, usedPrefix }) => {
 *Uploaded*: ${uploadDate}
 *URL*: ${videoUrl}`
 
-    // Kirim file audio sebagai dokumen
     await conn.sendMessage(m.chat, {
       document: { url: filePath },
       mimetype: 'audio/mpeg',
       fileName: `${safeTitle}.mp3`,
       caption,
       contextInfo: {
-        externalAdReply: {
-          //showAdAttribution: true,
-          mediaType: 2,
-          mediaUrl: videoUrl,
-          title: title,
-          body: 'Audio Download',
-          sourceUrl: videoUrl,
-          thumbnail: await (await conn.getFile(thumbnail)).data,
-        },
-      },
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
+        }
+      }
     }, { quoted: m })
 
     fs.unlink(filePath, () => { })

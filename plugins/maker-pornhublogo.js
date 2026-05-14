@@ -26,13 +26,12 @@ const handler = async (m, { conn, args, text, command }) => {
       image: { url: json.result },
       caption: `✅ *Berhasil membuat logo Pornhub*\n\n• *Text1:* ${text1}\n• *Text2:* ${text2}`,
       contextInfo: {
-        externalAdReply: {
-          title: "Pornhub Logo Generator",
-          body: "Powered By Zenzzz AI - MD",
-          thumbnailUrl: json.result,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          sourceUrl: json.result
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

@@ -2,8 +2,6 @@
 // Developed by INF PROJECT
 
 import yts from "yt-search";
-import pkg from '@whiskeysocket/baileys';
-const { generateWAMessageFromContent, proto } = pkg;
 import axios from 'axios';
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
@@ -49,23 +47,27 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             console.error('Gagal ambil thumbnail:', e)
         }
 
-        let msg = await generateWAMessageFromContent(m.chat, {
-            extendedTextMessage: {
-                text: teks,
-                jpegThumbnail: ytthumb,
-                contextInfo: {
-                    mentionedJid: [m.sender],
-                    externalAdReply: {
-                        title: 'Y O U T U B E  S E A R C H',
-                        body: `Hasil pencarian untuk: ${text}`,
-                        thumbnail: ytthumb,
-                        sourceUrl: tes[0].url
-                    }
+        let sendOptions = {
+            caption: teks,
+            contextInfo: {
+                mentionedJid: [m.sender],
+                isForwarded: true,
+                forwardingScore: 9999,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: "120363400612665352@newsletter",
+                    newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                    serverMessageId: -1
                 }
             }
-        }, { quoted: m })
+        }
 
-        await conn.relayMessage(m.chat, msg.message, { messageId: m.key.id })
+        if (ytthumb.length > 0) {
+            sendOptions.image = ytthumb
+        } else {
+            sendOptions.image = { url: tes[0].thumbnail }
+        }
+
+        await conn.sendMessage(m.chat, sendOptions, { quoted: m })
         await m.react('✅')
 
     } catch (e) {

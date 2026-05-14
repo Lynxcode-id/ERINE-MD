@@ -107,19 +107,33 @@ User adalah cowok yang kamu ajak ngobrol, meski kamu grogi.
       expire: Date.now() + 24 * 60 * 60 * 1000
     }
 
+    let wm = global.wm || "Erine System"
+    let senderNumber = m.sender.split('@')[0]
+    let fkontak = {
+        key: {
+            fromMe: false,
+            participant: `0@s.whatsapp.net`
+        },
+        message: {
+            contactMessage: {
+                displayName: wm,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        }
+    }
+
     await conn.sendMessage(m.chat, {
-      text: res.text,
+      image: { url: 'https://files.catbox.moe/8o5zc7.jpg' },
+      caption: res.text,
       contextInfo: {
-        externalAdReply: {
-          title: 'Bocchi AI',
-          body: 'Bocchi the Rock',
-          thumbnailUrl: 'https://files.catbox.moe/8o5zc7.jpg',
-          sourceUrl: 'https://github.com/himanackerman',
-          mediaType: 1,
-          renderLargerThumbnail: true
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+            newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+            newsletterJid: "120363400612665352@newsletter"
         }
       }
-    }, { quoted: m })
+    }, { quoted: fkontak })
 
   } catch (e) {
     console.error('[BOCCHI GEMINI ERROR]', e)

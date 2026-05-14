@@ -11,6 +11,16 @@ let handler = async (m, { conn, text }) => {
   let res = await fetch(apiUrl)
   let contentType = res.headers.get('content-type')
 
+  const contextInfo = {
+    isForwarded: true,
+    forwardingScore: 9999,
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: "120363400612665352@newsletter",
+      newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+      serverMessageId: -1
+    }
+  }
+
   if (contentType.includes('application/json')) {
     let json = await res.json()
     if (!json.status) throw json.error || 'Gagal membuat gambar.'
@@ -19,29 +29,13 @@ let handler = async (m, { conn, text }) => {
     await conn.sendMessage(m.chat, {
       image: { url: json.result.url },
       caption: `Selesai!\n\nNama: ${name}\nQuote: ${quote}`,
-      contextInfo: {
-        externalAdReply: {
-          title: 'Fake XNXX',
-          body: name,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          sourceUrl: apiUrl
-        }
-      }
+      contextInfo
     }, { quoted: m })
   } else {
     await conn.sendMessage(m.chat, {
       image: { url: apiUrl },
       caption: `Selesai!\n\nNama: ${name}\nQuote: ${quote}`,
-      contextInfo: {
-        externalAdReply: {
-          title: 'Fake XNXX',
-          body: name,
-          mediaType: 1,
-          renderLargerThumbnail: false,
-          sourceUrl: apiUrl
-        }
-      }
+      contextInfo
     }, { quoted: m })
   }
 }

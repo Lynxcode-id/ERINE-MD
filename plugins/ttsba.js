@@ -43,7 +43,6 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
     const text = args.join(" ")
     voiceQueue[user] = text
 
-
     let charList = '📚 *Daftar Karakter Blue Archive*\n'
     charList += `📝 Teks: "${text.length > 30 ? text.slice(0, 30) + '...' : text}"\n\n`
     
@@ -90,11 +89,12 @@ handler.before = async (m, { conn }) => {
       ptt: true,
       contextInfo: {
         mentionedJid: [user],
-        externalAdReply: {
-          title: `${selectedChar} - Blue Archive TTS`,
-          body: text.slice(0, 30) + (text.length > 30 ? "..." : ""),
-          thumbnailUrl: "https://i.ibb.co/0jqWZ4N/ba-tts.jpg",
-          sourceUrl: "https://bluearchive.nexon.com"
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

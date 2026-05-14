@@ -1,8 +1,3 @@
-/**
- * Fitur Github Downloader by Erine-MD
- * Base Nao ESM
- **/
-
 import fetch from 'node-fetch'
 
 let handler = async (m, { conn, args, usedPrefix, command }) => {
@@ -10,15 +5,13 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
       return m.reply(`Mana link GitHub-nya cuy?\n\nContoh:\n${usedPrefix + command} https://github.com/Lynxcode-id/ERINE-MD`)
   }
 
-  // Validasi simpel biar user masukin link github beneran
   if (!args[0].includes('github.com')) {
       return m.reply('❌ Link tidak valid! Pastikan itu adalah link dari github.com')
   }
 
   try {
-    await m.react('⏳') // React loading
+    await m.react('⏳')
 
-    // Hit API GitHub G4NGGAAA
     let res = await fetch(`https://www.api-g4nggaa.biz.id/api/download/github?url=${args[0]}`)
     let json = await res.json()
 
@@ -28,12 +21,10 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
 
     let { author, repository, description, stars, forks, branch, download_url } = json.result
 
-    // Bersihkan spasi atau enter berlebih dari data API
     let cleanStars = stars ? stars.replace(/\D/g, '') || '0' : '0'
     let cleanForks = forks ? forks.replace(/\D/g, '') || '0' : '0'
     let cleanDesc = description ? description.trim() : 'Tidak ada deskripsi.'
 
-    // --- CAPTION AESTHETIC ERINE-MD ---
     let caption = `┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴅ │๑˚₊ 🎀
 ┇ 🚀 › ɢɪᴛʜᴜʙ ᴅᴏᴡɴʟᴏᴀᴅᴇʀ
 ┇ 🌸 › sᴀꜰᴇ & ᴛʀᴜsᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ
@@ -53,10 +44,21 @@ ${cleanDesc}
 *Tunggu sebentar, file ZIP sedang dikirim...* ⏳
 © ᴇʀɪɴᴇ ᴍᴅ x ᴊᴋᴛ𝟺𝟾 ᴠɪʙᴇ`.trim()
 
-    // Ambil foto profil GitHub author untuk Thumbnail
-    const THUMB = `https://github.com/${author}.png`
+    let wm = global.wm || "Erine System"
+    let senderNumber = m.sender.split('@')[0]
+    let fkontak = {
+        key: {
+            fromMe: false,
+            participant: `0@s.whatsapp.net`
+        },
+        message: {
+            contactMessage: {
+                displayName: wm,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        }
+    }
 
-    // Kirim pesan File (Document) ZIP dengan caption rapi
     await conn.sendMessage(m.chat, {
         document: { url: download_url },
         fileName: `${repository}-${branch}.zip`,
@@ -68,19 +70,11 @@ ${cleanDesc}
             forwardedNewsletterMessageInfo: {
                 newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
                 newsletterJid: "120363400612665352@newsletter"
-            },
-            externalAdReply: {
-                title: repository,
-                body: `Author: ${author}`,
-                thumbnailUrl: THUMB,
-                sourceUrl: args[0],
-                mediaType: 1,
-                renderLargerThumbnail: true
             }
         }
-    }, { quoted: m })
+    }, { quoted: fkontak })
 
-    await m.react('✅') // React sukses
+    await m.react('✅')
 
   } catch (e) {
     console.error(e)

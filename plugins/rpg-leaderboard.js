@@ -32,22 +32,23 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
     helpText += list.map(v => `${emoticon(v)} ${v}`).join('\n')
     helpText += `\n\n📌 *Contoh:* _${usedPrefix + command} money_`
 
-    return conn.reply(m.chat, helpText.trim(), m, {
+    return conn.sendMessage(m.chat, {
+      image: { url: getRandom(flaImg) + 'LEADERBOARD' },
+      caption: helpText.trim(),
       contextInfo: {
-        externalAdReply: {
-          title: 'RPG LEADERBOARD',
-          body: 'Pilih kategori yang ingin dilihat',
-          thumbnailUrl: getRandom(flaImg) + 'LEADERBOARD',
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
-    })
+    }, { quoted: m })
   }
 
   await m.react('⏳')
 
-  // Sorting Top 10
   let sorted = users
     .map(v => ({ 
         jid: v.jid, 
@@ -69,15 +70,16 @@ let handler = async (m, { conn, args, usedPrefix, command }) => {
   text += `\n\n© INF PROJECT | ERINE-MD`
 
   await conn.sendMessage(m.chat, {
-    text,
+    image: { url: getRandom(flaImg) + type },
+    caption: text,
     contextInfo: {
       mentionedJid: top10.map(v => v.jid),
-      externalAdReply: {
-        title: 'LEADERBOARD ' + type.toUpperCase(),
-        body: 'Top 10 Global Player',
-        thumbnailUrl: getRandom(flaImg) + type,
-        mediaType: 1,
-        renderLargerThumbnail: true
+      isForwarded: true,
+      forwardingScore: 9999,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: "120363400612665352@newsletter",
+        newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+        serverMessageId: -1
       }
     }
   }, { quoted: m })

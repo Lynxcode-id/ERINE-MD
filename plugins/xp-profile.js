@@ -20,16 +20,12 @@ let handler = async (m, { conn }) => {
   let exp = user.exp || 0
   let limit = user.limit || 0
   let role = user.role || 'Beginner'
-
-  // Multiplier aman
   let { min, xp, max } = xpRange(level, global.multiplier || 1)
 
   let username = conn.getName(who)
   let premium = user.premiumTime > 0 ? 'Premium 🌟' : 'Free User'
   let number = PhoneNumber('+' + who.replace('@s.whatsapp.net', '')).getNumber('international')
   let link = `https://wa.me/${who.split('@')[0]}`
-
-  // Style Erine MD yang Aesthetic
   let str = `
 乂  *U S E R  -  P R O F I L E*
 
@@ -49,17 +45,15 @@ let handler = async (m, { conn }) => {
 > ✧ *Link:* _${link}_
 `.trim()
 
-  // Kirim dengan fake reply / adReply ala Erine MD
   conn.sendFile(m.chat, pp, 'profile.jpg', str, m, false, {
     contextInfo: { 
       mentionedJid: [who],
-      externalAdReply: {
-        title: `P R O F I L E - I N F O`,
-        body: `Menampilkan data dari ${username}`,
-        thumbnailUrl: pp,
-        sourceUrl: link,
-        mediaType: 1,
-        renderLargerThumbnail: true
+      isForwarded: true,
+      forwardingScore: 9999,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: "120363400612665352@newsletter",
+        newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+        serverMessageId: -1
       }
     }
   })

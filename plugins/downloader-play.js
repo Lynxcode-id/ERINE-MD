@@ -25,13 +25,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       mimetype: 'audio/mpeg',
       fileName: `${data.title}.mp3`,
       contextInfo: {
-        externalAdReply: {
-          title: data.title,
-          body: `${data.author} • ${data.views} views`,
-          thumbnailUrl: data.thumbnail,
-          sourceUrl: data.url,
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

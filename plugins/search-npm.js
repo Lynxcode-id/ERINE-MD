@@ -39,13 +39,12 @@ let handler = async (m, { conn, text, usedPrefix }) => {
       {
         text: caption.trim(),
         contextInfo: {
-          externalAdReply: {
-            title: 'NPM Package Search',
-            body: 'Powered by manzxy.my.id',
-            thumbnailUrl: 'https://nodejs.org/static/images/logo.svg',
-            sourceUrl: 'https://www.npmjs.com',
-            mediaType: 1,
-            renderLargerThumbnail: false
+          isForwarded: true,
+          forwardingScore: 9999,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: "120363400612665352@newsletter",
+            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+            serverMessageId: -1
           }
         }
       },

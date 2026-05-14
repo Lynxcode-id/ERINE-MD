@@ -57,16 +57,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             mimetype: 'audio/mpeg',
             fileName: `TikTok_Audio_${Date.now()}.mp3`,
             contextInfo: {
-                forwardingScore: 99,
                 isForwarded: true,
-                externalAdReply: {
-                    title: result.title || 'TikTok Audio',
-                    body: `👤 By \`${result.author?.username || '-'}\``,
-                    thumbnailUrl: result.author?.avatar || result.author?.cover,
-                    sourceUrl: url,
-                    mediaUrl: url,
-                    mediaType: 2,
-                    renderLargerThumbnail: false,
+                forwardingScore: 9999,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: "120363400612665352@newsletter",
+                    newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                    serverMessageId: -1
                 }
             }
         }, { quoted: m })

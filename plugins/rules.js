@@ -37,18 +37,16 @@ _"Gunakan teknologi dengan bijak. Let's keep the system clean and fast!"_
 `.trim();
 
     await conn.sendMessage(m.chat, {
-        text: rulesText,
+        image: { url: "https://c.termai.cc/i133/4qd262V.jpg" },
+        caption: rulesText,
         contextInfo: {
             mentionedJid: [m.sender],
             isForwarded: true,
-            forwardingScore: 999,
-            externalAdReply: {
-                title: "Erine-MD System Protocols",
-                body: "Status: Active | Version: Latest",
-                thumbnailUrl: "https://c.termai.cc/i133/4qd262V.jpg",
-                sourceUrl: "https://wa.me/6288258041396",
-                mediaType: 1,
-                renderLargerThumbnail: true
+            forwardingScore: 9999,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: "120363400612665352@newsletter",
+                newsletterName: "✨ - ᴇʀɪɴᴇ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                serverMessageId: -1
             }
         }
     }, { quoted: m });

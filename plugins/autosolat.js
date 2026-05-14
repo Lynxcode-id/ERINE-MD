@@ -29,17 +29,33 @@ export async function before(m) {
     const sholat = Object.keys(jadwalSholat).find(key => jadwalSholat[key] === timeNow)
     const caption = `@${who.split`@`[0]},\nWaktu *${sholat}* telah tiba, ambillah air wudhu dan segeralah shalat.\n\n*${timeNow}*\n_untuk wilayah Makassar dan sekitarnya._`
 
+    let wm = global.wm || "Erine System"
+    let senderNumber = m.sender.split('@')[0]
+    let fkontak = {
+        key: {
+            fromMe: false,
+            participant: `0@s.whatsapp.net`
+        },
+        message: {
+            contactMessage: {
+                displayName: wm,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        }
+    }
+
     this.autosholat[id] = {
-      msg: await this.reply(m.chat, caption, null, {
+      msg: await this.reply(m.chat, caption, fkontak, {
         contextInfo: {
           mentionedJid: [who],
-          externalAdReply: {
-            title: "ᴇ ʀ ɪ ɴ ᴇ - ᴍ ᴅ",
-            thumbnail: await (await this.getFile(
-              "https://cdn-icons-png.flaticon.com/128/4527/4527060.png"
-            )).data,
-          },
-        },
+          isForwarded: true,
+          forwardingScore: 9999,
+          forwardedNewsletterMessageInfo: {
+            newsletterJid: "120363400612665352@newsletter",
+            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+            serverMessageId: -1
+          }
+        }
       }),
       timestamp: now
     }

@@ -2,8 +2,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) throw (`Contoh:\n${usedPrefix}${command} Halo?`);
 
     let who = m.sender;
-    let url = await conn.profilePictureUrl(who, 'image').catch(() => null);
-    let idch = '120363400612665352@newsletter'; // ISI IDCHNYA DI SINI
+    let idch = '120363400612665352@newsletter';
 
     let username = conn.getName(who);
     await conn.sendMessage(m.chat, { react: { text: "🌟", key: m.key } });
@@ -21,14 +20,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     }
 
     content.contextInfo = {
-        externalAdReply: {
-           // title: "MSG To Chanel",
-            body: `Pesan dari ${username}`,
-            thumbnailUrl: url,
-            sourceUrl: null,
-            mediaType: 1,
-            renderLargerThumbnail: false,
-            showAdAttribution: false
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+            newsletterJid: "120363400612665352@newsletter",
+            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+            serverMessageId: -1
         }
     };
 

@@ -1,6 +1,8 @@
 import didyoumean from 'didyoumean'
 import similarity from 'similarity'
 import fetch from 'node-fetch'
+import fs from 'fs'
+import sharp from 'sharp'
 
 let handler = m => m
 
@@ -24,29 +26,52 @@ handler.before = async function (m, { match, usedPrefix }) {
 
     if (mean && noPrefix.toLowerCase() !== mean.toLowerCase()) {
 
-      // Ambil gambar thumbnail baru
-      let thumb = await fetch("https://c.termai.cc/i170/9Mu0.jpg")
-      let thumbnail = Buffer.from(await thumb.arrayBuffer())
-
       let text = `❓ *Sepertinya kamu nyari command ini?*\n\n` +
                  `✨ commandnya - cmd : *${usedPrefix + mean}*\n` +
                  `📊 akurasi kemiripan : *${similarityPercentage}%*`
 
-      await this.sendMessage(m.chat, {
-        text,
-        footer: '🍭 ᴇ ʀ ɪ ɴ ᴇ - ᴍ ᴅ',
-        headerType: 1,
-        contextInfo: {
-          externalAdReply: {
-            title: "ᴇʀɪɴᴇ ᴘʀᴏᴊᴇᴄᴛ - ᴍᴜʟᴛɪ ᴅᴇᴠɪᴄᴇ",
-            body: "✨ ᴇʀɪɴᴇ-ᴍᴅ ᴀᴜᴛᴏ ᴄᴏʀʀᴇᴄᴛ ᴄᴏᴍᴍᴀɴᴅ",
-            mediaType: 1,
-            renderLargerThumbnail: false,
-            thumbnail, // Foto baru
-            // sourceUrl: ""
+      // Membaca file gambar erine dari folder media
+      let imgBuffer = fs.readFileSync('./media/erine.jpg')
+
+      // Resize gambar menggunakan sharp
+      let resizedThumb = await sharp(imgBuffer)
+          .resize(300, 300, { fit: 'cover' })
+          .jpeg({ quality: 80 })
+          .toBuffer()
+
+      // Set watermark dan info kontak
+      let wm = global.wm || "Erine System"
+      let senderNumber = m.sender.split('@')[0]
+
+      // Membuat fake kontak
+      let fkontak = {
+          key: {
+              fromMe: false,
+              participant: `0@s.whatsapp.net`
+          },
+          message: {
+              contactMessage: {
+                  displayName: wm,
+                  vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`,
+                  jpegThumbnail: resizedThumb
+              }
           }
-        }
-      }, { quoted: m })
+      }
+
+      await this.sendMessage(
+          m.chat,
+          {
+              document: imgBuffer,
+              mimetype: 'image/png',
+              fileLength: 9999,
+              fileName: 'ᴇʀɪɴᴇ-ᴍᴅ ᴘʀᴏᴊᴇᴄᴛ',
+              caption: text,
+              jpegThumbnail: resizedThumb
+          },
+          {
+              quoted: fkontak
+          }
+      )
     }
   }
 }

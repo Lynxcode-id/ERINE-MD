@@ -23,6 +23,16 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     let input = (text || '').toLowerCase().trim()
     let arrayMenu = Object.keys(categories).sort()
 
+    const contextInfo = {
+      isForwarded: true,
+      forwardingScore: 9999,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: "120363400612665352@newsletter",
+        newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+        serverMessageId: -1
+      }
+    }
+
     if (input && (categories[input] || input === 'all')) {
       let menuText = [`*───「 ${input.toUpperCase()} 」───*\n`]
       let targets = input === 'all' ? arrayMenu : [input]
@@ -36,7 +46,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         }
       }
       
-      return await conn.sendMessage(m.chat, { text: menuText.join('\n'), contextInfo: global.adReply.contextInfo }, { quoted: m })
+      return await conn.sendMessage(m.chat, { text: menuText.join('\n'), contextInfo }, { quoted: m })
     }
 
     const teks = `*MANAGE MENU SETTING*\n\nSilakan pilih kategori di bawah cuy.`
@@ -53,6 +63,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
             body: { text: teks },
             footer: { text: 'ᴇʀɪɴᴇ-ᴍᴅ ᴍᴀɴᴀɢᴇ ᴍᴇɴᴜ' },
             header: { title: `*ᴇʀɪɴᴇ-ᴍᴅ | ᴘʀᴏᴊᴇᴄᴛ*`, hasVideoMessage: false },
+            contextInfo: contextInfo,
             nativeFlowMessage: {
               buttons: [
                 {
@@ -70,7 +81,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       }
     }
 
-    await conn.relayMessage(m.chat, msg, { quoted: global.fkontak })
+    await conn.relayMessage(m.chat, msg, { quoted: global.fkontak || m })
 
   } catch (error) { m.reply('Error menampilkan menu.') }
 }

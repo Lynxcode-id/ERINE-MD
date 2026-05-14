@@ -89,24 +89,30 @@ ${usedPrefix}open mythic 3
   let type = (args[0] || '').toLowerCase()
   let count = Math.floor(isNumber(args[1]) ? Math.min(Math.max(parseInt(args[1]), 1), Number.MAX_SAFE_INTEGER) : 1)
 
-  if (!(type in listCrate)) {
-    return await conn.reply(m.chat, info, m, {
-      contextInfo: {
-        externalAdReply: {
-          showAdAttribution: true,
-          mediaType: 1,
-          title: 'RPG Crate',
-          body: 'Open your crate',
-          thumbnail: THUMB,
-          renderLargerThumbnail: true,
-          sourceUrl: ''
-        }
-      }
-    })
+  const contextInfo = {
+    isForwarded: true,
+    forwardingScore: 9999,
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: "120363400612665352@newsletter",
+      newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+      serverMessageId: -1
+    }
   }
 
-  if (user[type] < count)
-    return m.reply(`Crate kamu kurang, cuma ada ${user[type]} ${global.rpg.emoticon(type)}${type}`)
+  if (!(type in listCrate)) {
+    return await conn.sendMessage(m.chat, {
+      image: THUMB,
+      caption: info,
+      contextInfo
+    }, { quoted: m })
+  }
+
+  if (user[type] < count) {
+    return await conn.sendMessage(m.chat, {
+      text: `Crate kamu kurang, cuma ada ${user[type]} ${global.rpg.emoticon(type)}${type}`,
+      contextInfo
+    }, { quoted: m })
+  }
 
   let crateReward = {}
   for (let i = 0; i < count; i++)
@@ -121,10 +127,15 @@ ${usedPrefix}open mythic 3
 
   user[type] -= count
 
-  m.reply(`
+  let successText = `
 Kamu membuka *${count}* ${global.rpg.emoticon(type)}${type} crate dan mendapatkan:
 ${Object.keys(crateReward).map(r => `*${global.rpg.emoticon(r)}${r}:* ${crateReward[r]}`).join('\n')}
-`.trim())
+`.trim()
+
+  await conn.sendMessage(m.chat, {
+    text: successText,
+    contextInfo
+  }, { quoted: m })
 }
 
 handler.help = ['open [crate] [count]']
@@ -133,6 +144,7 @@ handler.command = /^(open|buka|gacha)$/i
 handler.register = true
 handler.group = true
 handler.rpg = true
+
 export default handler
 
 function isNumber(number) {

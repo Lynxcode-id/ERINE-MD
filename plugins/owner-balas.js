@@ -18,21 +18,20 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     try {
     	let id = + new Date
         let txt = `Hai @${data.jid.split('@')[0]}, kamu menerima pesan Dari: *Owner*\nPesan: \n${pesan}`.trim();
-        conn.relayMessage(data.jid, {
-            extendedTextMessage:{
+        
+        conn.sendMessage(data.jid, {
             text: txt, 
             contextInfo: {
-            mentionedJid: [data.jid],
-                 externalAdReply: {
-                    title: 'SYSTEM',
-                    mediaType: 1,
-                    previewType: 0,
-                    //renderLargerThumbnail: true,
-                    //thumbnailUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIyz1dMPkZuNleUyfXPMsltHwKKdVddTf4-A&usqp=CAU',
-                    sourceUrl: ''
+                mentionedJid: [data.jid],
+                isForwarded: true,
+                forwardingScore: 9999,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: "120363400612665352@newsletter",
+                    newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                    serverMessageId: -1
                 }
             }
-      }}, {}).then(() => {
+        }).then(() => {
             m.reply('Berhasil mengirim pesan.')
             conn.ownreply[id] = {
                 id,
@@ -53,7 +52,6 @@ handler.tags = ['owner']
 handler.command = /^(balas|reply)/i
 
 handler.owner = true
-
 handler.fail = null
 
 export default handler

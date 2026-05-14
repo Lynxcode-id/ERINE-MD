@@ -21,13 +21,15 @@ let handler = async (m, { conn, text }) => {
     }
 
     await conn.sendMessage(m.chat, {
-      text: data.result,
+      image: { url: "https://raw.githubusercontent.com/himanackerman/Image/main/1767877404043-832.jpeg" },
+      caption: data.result,
       contextInfo: {
-        externalAdReply: {
-          title: "Kurumi Tokisaki AI",
-          thumbnailUrl: "https://raw.githubusercontent.com/himanackerman/Image/main/1767877404043-832.jpeg",
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

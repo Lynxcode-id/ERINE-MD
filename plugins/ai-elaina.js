@@ -107,15 +107,15 @@ User adalah seseorang yang membuat Elaina nyaman untuk ngobrol panjang.
     }
 
     await conn.sendMessage(m.chat, {
-      text: result.text,
+      image: { url: "https://raw.githubusercontent.com/himanackerman/Image/main/1769612088699-834.jpeg" },
+      caption: result.text,
       contextInfo: {
-        externalAdReply: {
-          title: "Elaina AI",
-          body: "The Wandering Witch sedang mendengarkanmu",
-          thumbnailUrl: "https://raw.githubusercontent.com/himanackerman/Image/main/1769612088699-834.jpeg",
-          sourceUrl: "https://github.com/himanackerman",
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

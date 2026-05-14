@@ -2,9 +2,9 @@ let handler = async (m, { conn }) => {
   let stats = Object.entries(db.data.stats).map(([key, val]) => {
     let help = plugins[key]?.help
     let name = Array.isArray(help) ? help.join(', ') : help || key
-    if (/exec/.test(name)) return null // kasih null biar bisa di filter
+    if (/exec/.test(name)) return null
     return { name, ...val }
-  }).filter(v => v) // buang null hasil exec
+  }).filter(v => v)
 
   stats = stats.sort((a, b) => b.total - a.total)
 
@@ -12,22 +12,20 @@ let handler = async (m, { conn }) => {
     return `乂 *Command* : *${name}*\n• *Global HIT* : ${total}`
   }).join`\n\n` || 'Belum ada statistik penggunaan.'
 
-  await conn.relayMessage(m.chat, {
-    extendedTextMessage: {
-      text: handlers,
-      contextInfo: {
-        externalAdReply: {
-          title: '',
-          mediaType: 1,
-          previewType: 0,
-          renderLargerThumbnail: true,
-          thumbnailUrl: 'https://telegra.ph/file/c43ee155efc11b774bee3.jpg',
-          sourceUrl: ''
-        }
-      },
-      mentions: [m.sender]
+  await conn.sendMessage(m.chat, {
+    image: { url: 'https://telegra.ph/file/c43ee155efc11b774bee3.jpg' },
+    caption: handlers,
+    contextInfo: {
+      mentionedJid: [m.sender],
+      isForwarded: true,
+      forwardingScore: 9999,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: "120363400612665352@newsletter",
+        newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+        serverMessageId: -1
+      }
     }
-  }, {})
+  }, { quoted: m })
 }
 
 handler.help = ['dashboard']

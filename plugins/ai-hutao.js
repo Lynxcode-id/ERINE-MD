@@ -111,15 +111,15 @@ User adalah cowok yang Hu Tao anggap menarik untuk diajak ngobrol.
     }
 
     await conn.sendMessage(m.chat, {
-      text: res.text,
+      image: { url: 'https://files.catbox.moe/72kpvd.jpg' },
+      caption: res.text,
       contextInfo: {
-        externalAdReply: {
-          title: 'Hu Tao AI',
-          body: 'Genshin Impact',
-          thumbnailUrl: 'https://files.catbox.moe/72kpvd.jpg',
-          sourceUrl: 'https://github.com/himanackerman',
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

@@ -81,17 +81,19 @@ let Fruatre = async (m, { conn, command, args }) => {
     try {
         if (/foodshop|buyfood|buydrink/i.test(command)) {
             if (!foodPrices[type]) {
-                await conn.reply(m.chat, caption, m, {
+                await conn.sendMessage(m.chat, {
+                    image: { url: 'https://telegra.ph/file/5cbeb37c4278b29f4fded.jpg' },
+                    caption: caption,
                     contextInfo: {
-                        externalAdReply: {
-                            mediaType: 1,
-                            title: 'ᴢ ᴇ ɴ ᴢ ᴢ - ᴍ ᴅ',
-                            thumbnailUrl: 'https://telegra.ph/file/5cbeb37c4278b29f4fded.jpg',
-                            renderLargerThumbnail: true,
-                            sourceUrl: ''
+                        isForwarded: true,
+                        forwardingScore: 9999,
+                        forwardedNewsletterMessageInfo: {
+                            newsletterJid: "120363400612665352@newsletter",
+                            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                            serverMessageId: -1
                         }
                     }
-                });
+                }, { quoted: m });
                 return;
             }
 
@@ -104,17 +106,19 @@ let Fruatre = async (m, { conn, command, args }) => {
             user[type] += quantity;
             m.reply(`Anda baru saja membeli ${quantity} ${food[type]} seharga Rp${foodPrice.toLocaleString('id-ID')}`);
         } else {
-            await conn.reply(m.chat, caption, m, {
+            await conn.sendMessage(m.chat, {
+                image: { url: 'https://telegra.ph/file/5cbeb37c4278b29f4fded.jpg' },
+                caption: caption,
                 contextInfo: {
-                    externalAdReply: {
-                        mediaType: 1,
-                        title: 'ᴢ ᴇ ɴ ᴢ ᴢ - ᴍ ᴅ',
-                        thumbnailUrl: 'https://telegra.ph/file/5cbeb37c4278b29f4fded.jpg',
-                        renderLargerThumbnail: true,
-                        sourceUrl: ''
+                    isForwarded: true,
+                    forwardingScore: 9999,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterJid: "120363400612665352@newsletter",
+                        newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                        serverMessageId: -1
                     }
                 }
-            });
+            }, { quoted: m });
         }
     } catch (err) {
         m.reply("Error:\n" + err.stack);

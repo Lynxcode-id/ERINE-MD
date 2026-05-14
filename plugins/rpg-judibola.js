@@ -17,7 +17,6 @@ const Fruatre = async (m, { conn, usedPrefix, args, command }) => {
     "Braga", "PSV Eindhoven", "Lazio", "Red Star Belgrade", "FC Copenhagen"
   ];
 
-  // Fungsi untuk mengacak array
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -25,7 +24,6 @@ const Fruatre = async (m, { conn, usedPrefix, args, command }) => {
     }
   };
 
-  // Fungsi untuk menghitung vote
   const countVotes = (votes) => {
     const voteCount = { "1": 0, "2": 0 };
     Object.values(votes).forEach(vote => {
@@ -36,7 +34,6 @@ const Fruatre = async (m, { conn, usedPrefix, args, command }) => {
     return voteCount;
   };
 
-  // Handle perintah tanpa argumen atau dengan argumen 'help'
   if (!args[0] || args[0] === "help") {
     const message = `*❏ JUDI BOLA⚽*
 
@@ -56,25 +53,23 @@ Minimal player yang bergabung untuk memulai game adalah 2 pemain.
 Taruhan: 1000000
 Hadiah: 900000000000`;
     await conn.sendMessage(m.chat, {
-      text: message,
+      image: { url: 'https://telegra.ph/file/3463760976052aeac5f21.jpg' },
+      caption: message,
       contextInfo: {
-        externalAdReply: {
-          title: 'ᴇʀɪɴᴇ-ᴍᴅ',
-          body: 'Ayo ikut dan menangkan hadiahnya!',
-          thumbnailUrl: 'https://telegra.ph/file/3463760976052aeac5f21.jpg',
-          sourceUrl: "",
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     });
     return;
   }
 
-  // Logika berdasarkan argumen pertama
   switch (args[0].toLowerCase()) {
     case 'create':
-      // Logika untuk membuat room
       if (conn.jbRooms[m.chat]) {
         return m.reply('Room sudah ada.');
       }
@@ -82,13 +77,12 @@ Hadiah: 900000000000`;
         players: [],
         gameStarted: false,
         clubs: [],
-        bank: 0 // Inisialisasi bank untuk taruhan
+        bank: 0
       };
       m.reply('Room berhasil dibuat. Pemain sekarang bisa bergabung.');
       break;
 
     case 'join':
-      // Logika agar pemain bergabung ke room
       if (!conn.jbRooms[m.chat]) {
         return m.reply('Belum ada room yang dibuat. Gunakan .jb create untuk membuat room.');
       }
@@ -100,12 +94,11 @@ Hadiah: 900000000000`;
       }
       const playerName = m.pushName || conn.getName(m.sender);
       conn.jbRooms[m.chat].players.push({ id: m.sender, name: playerName });
-      conn.jbRooms[m.chat].bank += 1000000; // Tambahkan taruhan ke bank
+      conn.jbRooms[m.chat].bank += 1000000;
       m.reply(`Anda berhasil bergabung di room. Anda telah memasang taruhan sebesar 1000000. Total taruhan: ${conn.jbRooms[m.chat].bank}`);
       break;
 
     case 'player':
-      // Logika untuk daftar pemain yang bergabung
       if (!conn.jbRooms[m.chat]) {
         return m.reply('Belum ada room yang dibuat. Gunakan .jb create untuk membuat room.');
       }
@@ -114,7 +107,6 @@ Hadiah: 900000000000`;
       break;
 
     case 'mulai':
-      // Logika untuk memulai game
       if (!conn.jbRooms[m.chat]) {
         return m.reply('Belum ada room yang dibuat. Gunakan .jb create untuk membuat room.');
       }
@@ -128,7 +120,6 @@ Hadiah: 900000000000`;
       break;
 
     case 'vote':
-      // Logika untuk vote
       if (!conn.jbRooms[m.chat]) {
         return m.reply('Belum ada room yang dibuat. Gunakan .jb create untuk membuat room.');
       }
@@ -147,34 +138,28 @@ Hadiah: 900000000000`;
       conn.jbVotes[m.sender] = vote;
       m.reply(`Anda memilih klub nomor ${vote}.`);
 
-      // Cek apakah semua pemain sudah melakukan vote
       const voteCount = countVotes(conn.jbVotes);
       if (Object.keys(conn.jbVotes).length === currentRoom.players.length) {
         m.reply('Semua pemain telah vote. Pertandingan akan segera dimulai...');
 
-        // Jeda 25 detik
         setTimeout(() => {
           m.reply('Pertandingan telah dimulai. Mohon tunggu sampai pertandingan selesai...');
 
-          // Jeda untuk simulasi pertandingan
           setTimeout(() => {
-            // Tentukan pemenang berdasarkan vote terbanyak
             const winnerVote = voteCount["1"] > voteCount["2"] ? "1" : "2";
             const winningClub = currentRoom.clubs[winnerVote - 1];
             const winners = currentRoom.players.filter(player => conn.jbVotes[player.id] === winnerVote);
 
             m.reply(`Pertandingan telah selesai.\nPemenang adalah ${winningClub}.\nPemain yang memilih ${winningClub}:\n${winners.map(w => w.name).join('\n')}\n\nSelamat kepada para pemenang mendapatkan 900000000000.`);
 
-            // Bersihkan room dan votes setelah pertandingan selesai
             delete conn.jbRooms[m.chat];
             delete conn.jbVotes[m.chat];
-          }, 25000); // Jeda 25 detik untuk simulasi pertandingan
-        }, 25000); // Jeda 25 detik sebelum pertandingan dimulai
+          }, 25000);
+        }, 25000);
       }
       break;
 
     case 'delete':
-      // Logika untuk menghapus room
       if (!conn.jbRooms[m.chat]) {
         return m.reply('Belum ada room yang dibuat.');
       }

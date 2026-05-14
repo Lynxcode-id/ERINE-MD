@@ -14,21 +14,17 @@ let handler = async (m, { conn, args }) => {
   if (!res.ok) throw 'Gagal mengunduh audio.'
   const audioBuffer = Buffer.from(await res.arrayBuffer())
 
-  const thumbUrl = 'https://files.catbox.moe/y5b7l6.jpg'
-  const thumb = (await axios.get(thumbUrl, { responseType: 'arraybuffer' })).data
-
   await conn.sendMessage(m.chat, {
     audio: audioBuffer,
     mimetype: 'audio/mpeg',
     ptt: false,
     contextInfo: {
-      externalAdReply: {
-        title: "🎧 Sad Music",
-        body: "ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴇʀɪɴᴇ-ᴍᴅ",
-        thumbnail: thumb,
-        sourceUrl: "https://github.com/Rangelofficial/Sad-Music",
-        mediaType: 2,
-        renderLargerThumbnail: false
+      isForwarded: true,
+      forwardingScore: 9999,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: "120363400612665352@newsletter",
+        newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+        serverMessageId: -1
       }
     }
   }, { quoted: m })

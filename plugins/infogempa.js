@@ -3,48 +3,85 @@
 🏷️ Type : Plugin ESM
 🔗 Sumber :  https://whatsapp.com/channel/0029Vb91Rbi2phHGLOfyPd3N
 🔗 Api : https://api.siputzx.my.id/api/info/bmkg
-✍️ Convert By ZenzXD
+✍️ Convert By ZenzXD & Remake by Erine-MD
 */
 
 import fetch from 'node-fetch';
 
 let handler = async (m, { conn }) => {
-  let res = await fetch('https://api.siputzx.my.id/api/info/bmkg');
-  if (!res.ok) throw 'Gagal mengambil data dari API.';
-  
-  let json = await res.json();
-  if (!json.status) throw 'Data tidak ditemukan.';
+  try {
+    await m.react('⏳')
 
-  const gempa = json.data.auto.Infogempa.gempa;
+    let res = await fetch('https://api.siputzx.my.id/api/info/bmkg');
+    if (!res.ok) throw 'Gagal mengambil data dari API.';
+    
+    let json = await res.json();
+    if (!json.status) throw 'Data tidak ditemukan.';
 
-  let teks = `*Info Gempa BMKG Terkini*\n\n` +
-             `*Tanggal:* ${gempa.Tanggal}\n` +
-             `*Jam:* ${gempa.Jam}\n` +
-             `*Magnitudo:* ${gempa.Magnitude}\n` +
-             `*Kedalaman:* ${gempa.Kedalaman}\n` +
-             `*Lokasi:* ${gempa.Wilayah}\n` +
-             `*Koordinat:* ${gempa.Coordinates} (${gempa.Lintang}, ${gempa.Bujur})\n` +
-             `*Potensi:* ${gempa.Potensi}\n` +
-             `*Dirasakan:* ${gempa.Dirasakan}`;
+    const gempa = json.data.auto.Infogempa.gempa;
 
-  await conn.sendMessage(m.chat, {
-    text: teks,
-    contextInfo: {
-      externalAdReply: {
-        title: 'BMKG - Info Gempa Terkini',
-        body: `Magnitude ${gempa.Magnitude} | ${gempa.Wilayah}`,
-        thumbnailUrl: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}`,
-        sourceUrl: 'https://bmkg.go.id',
-        mediaType: 1,
-        renderLargerThumbnail: true,
-        showAdAttribution: true
-      }
+    let teks = `┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴅ │๑˚₊ 🎀
+┇ 🌍 › ɪɴꜰᴏ ɢᴇᴍᴘᴀ ʙᴍᴋɢ
+┇ 🌸 › sᴀꜰᴇ & ᴛʀᴜsᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ
+└˚₊ ๑ ᴅ ᴇ ᴛ ᴀ ɪ ʟ s ๑˚₊ 🍓
+
+┌˚ · ๑୧ ᴅ ᴀ ᴛ ᴀ
+┇ 📅 ⁞ ᴛᴀɴɢɢᴀʟ : ${gempa.Tanggal}
+┇ ⏰ ⁞ ᴊᴀᴍ : ${gempa.Jam}
+┇ 💥 ⁞ ᴍᴀɢɴɪᴛᴜᴅᴏ : ${gempa.Magnitude}
+┇ 🌊 ⁞ ᴋᴇᴅᴀʟᴀᴍᴀɴ : ${gempa.Kedalaman}
+┇ 📍 ⁞ ʟᴏᴋᴀsɪ : ${gempa.Wilayah}
+┇ 🗺️ ⁞ ᴋᴏᴏʀᴅɪɴᴀᴛ : ${gempa.Lintang}, ${gempa.Bujur}
+└˚₊ ๑୧
+
+📝 ⁞ ᴘᴏᴛᴇɴsɪ :
+${gempa.Potensi}
+
+⚠️ ⁞ ᴅɪʀᴀsᴀᴋᴀɴ :
+${gempa.Dirasakan || 'Tidak ada data'}
+
+© ᴇʀɪɴᴇ ᴍᴅ x ᴊᴋᴛ𝟺𝟾 ᴠɪʙᴇ`.trim();
+
+    let wm = global.wm || "Erine System"
+    let senderNumber = m.sender.split('@')[0]
+    let fkontak = {
+        key: {
+            fromMe: false,
+            participant: `0@s.whatsapp.net`
+        },
+        message: {
+            contactMessage: {
+                displayName: wm,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        }
     }
-  }, { quoted: m });
-};
 
-export default handler;
+    await conn.sendMessage(m.chat, {
+      image: { url: `https://data.bmkg.go.id/DataMKG/TEWS/${gempa.Shakemap}` },
+      caption: teks,
+      contextInfo: {
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+            newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+            newsletterJid: "120363400612665352@newsletter"
+        }
+      }
+    }, { quoted: fkontak });
+
+    await m.react('✅')
+
+  } catch (e) {
+    console.error(e)
+    await m.react('❌')
+    m.reply(`❌ *Error:* ${e.message || e}`)
+  }
+};
 
 handler.command = ['infogempa'];
 handler.tags = ['info'];
 handler.help = ['infogempa'];
+handler.limit = true;
+
+export default handler;

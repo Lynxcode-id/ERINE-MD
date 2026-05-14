@@ -10,17 +10,43 @@ function isYoutubeUrl(url) {
 }
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
+  let wm = global.wm || "Erine System"
+  let senderNumber = m.sender.split('@')[0]
+  
+  let fkontak = {
+      key: {
+          fromMe: false,
+          participant: `0@s.whatsapp.net`
+      },
+      message: {
+          contactMessage: {
+              displayName: wm,
+              vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+          }
+      }
+  }
 
-  if (!text) return m.reply(`Contoh:\n${usedPrefix + command} multo`)
+  const contextErine = {
+      forwardingScore: 999,
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+          newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+          newsletterJid: "120363400612665352@newsletter"
+      }
+  }
 
-  // ganti id channel
+  if (!text) {
+      return conn.sendMessage(m.chat, { 
+          text: `Contoh:\n${usedPrefix + command} multo`,
+          contextInfo: contextErine
+      }, { quoted: fkontak })
+  }
+
   const idsal = '120363400612665352@newsletter'
-
   let tempInput, tempOutput
 
   try {
-
-    await m.reply('wait')
+    await m.react('⏳')
 
     let v
 
@@ -34,16 +60,32 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     if (!v) throw 'Lagu tidak ditemukan'
 
+    let caption = `┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴅ │๑˚₊ 🎀
+┇ 🎵 › ʏᴛ ᴛᴏ ᴄʜᴀɴɴᴇʟ
+┇ 🌸 › sᴀꜰᴇ & ᴛʀᴜsᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ
+└˚₊ ๑ ᴛ ʀ ᴀ ᴄ ᴋ  ɪ ɴ ꜰ ᴏ ๑˚₊ 🍓
+
+┌˚ · ๑୧ ᴅ ᴇ ᴛ ᴀ ɪ ʟ s
+┇ 🎧 ⁞ ᴛɪᴛʟᴇ : ${v.title}
+┇ 👤 ⁞ ᴄʜᴀɴɴᴇʟ : ${v.author.name}
+┇ ⏳ ⁞ ᴅᴜʀᴀᴛɪᴏɴ : ${v.timestamp}
+└˚₊ ๑୧
+
+*Tunggu sebentar, audio sedang dikirim ke saluran...* ⏳
+© ᴇʀɪɴᴇ ᴍᴅ x ᴊᴋᴛ𝟺𝟾 ᴠɪʙᴇ`.trim()
+
+    await conn.sendMessage(m.chat, {
+        text: caption,
+        contextInfo: contextErine
+    }, { quoted: fkontak })
+
     const api = `https://api.nexray.web.id/downloader/ytmp3?url=${encodeURIComponent(v.url)}`
     const { data } = await axios.get(api)
 
     if (!data.status) throw 'Audio tidak ditemukan'
 
     const audioUrl = data.result.url
-
-    const audioRes = await axios.get(audioUrl, {
-      responseType: 'arraybuffer'
-    })
+    const audioRes = await axios.get(audioUrl, { responseType: 'arraybuffer' })
 
     tempInput = path.join(os.tmpdir(), `${Date.now()}_input.mp3`)
     tempOutput = path.join(os.tmpdir(), `${Date.now()}_output.opus`)
@@ -73,36 +115,35 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const opusBuffer = fs.readFileSync(tempOutput)
 
-    const newsletterInfo = {
-      newsletterJid: idsal,
-      serverMessageId: 100
-    }
-
     await conn.sendMessage(idsal, {
       audio: opusBuffer,
       mimetype: 'audio/ogg; codecs=opus',
       ptt: true,
       contextInfo: {
         forwardingScore: 999,
-        isForwarded: false,
-        forwardedNewsletterMessageInfo: newsletterInfo,
-        externalAdReply: {
-          title: v.title,
-          body: v.author.name,
-          thumbnailUrl: v.thumbnail,
-          sourceUrl: v.url,
-          mediaType: 1,
-          renderLargerThumbnail: true,
-          showAdAttribution: false
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+            newsletterJid: idsal,
+            newsletterName: "ᴇʀɪɴᴇ-ᴍᴅ",
+            serverMessageId: 100
         }
       }
-    }, { quoted: null })
+    })
 
-    await m.reply(`Berhasil kirim ke channel\n\n${v.title}`)
+    await conn.sendMessage(m.chat, {
+        text: `✅ Berhasil mengirim *${v.title}* ke channel!`,
+        contextInfo: contextErine
+    }, { quoted: fkontak })
+
+    await m.react('✅')
 
   } catch (e) {
     console.error(e)
-    m.reply('Gagal mengambil audio')
+    await m.react('❌')
+    await conn.sendMessage(m.chat, {
+        text: '❌ Gagal mengambil atau mengirim audio.',
+        contextInfo: contextErine
+    }, { quoted: fkontak })
   } finally {
     if (tempInput && fs.existsSync(tempInput)) fs.unlinkSync(tempInput)
     if (tempOutput && fs.existsSync(tempOutput)) fs.unlinkSync(tempOutput)

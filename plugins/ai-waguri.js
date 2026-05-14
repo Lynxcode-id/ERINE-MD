@@ -105,19 +105,33 @@ User adalah orang yang cukup dekat dan bikin kamu penasaran.
       expire: Date.now() + 86400000
     }
 
+    let wm = global.wm || "Erine System"
+    let senderNumber = m.sender.split('@')[0]
+    let fkontak = {
+        key: {
+            fromMe: false,
+            participant: `0@s.whatsapp.net`
+        },
+        message: {
+            contactMessage: {
+                displayName: wm,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        }
+    }
+
     await conn.sendMessage(m.chat, {
-      text: result.text,
+      image: { url: "https://files.catbox.moe/urhewo.jpg" },
+      caption: result.text,
       contextInfo: {
-        externalAdReply: {
-          title: "Waguri AI",
-          body: "Kaoruko Wuguri sedang mendengarkanmu",
-          thumbnailUrl: "https://files.catbox.moe/urhewo.jpg",
-          sourceUrl: "https://github.com/himanackerman",
-          mediaType: 1,
-          renderLargerThumbnail: true
+        forwardingScore: 999,
+        isForwarded: true,
+        forwardedNewsletterMessageInfo: {
+            newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+            newsletterJid: "120363400612665352@newsletter"
         }
       }
-    }, { quoted: m })
+    }, { quoted: fkontak })
 
   } catch (err) {
     await conn.reply(m.chat, `Error: ${err.message}`, m)

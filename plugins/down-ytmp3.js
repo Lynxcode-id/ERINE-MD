@@ -1,86 +1,96 @@
-import fetch from "node-fetch"
+import axios from 'axios'
 
-let handler = async (m, { conn, args, usedPrefix, command }) => {
-  await m.react('⏳')
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    if (!text) return m.reply(`Masukan URL YouTube!\n\nContoh: *${usedPrefix + command}* https://youtube.com/watch?v=8AeG7hbXFE4`)
 
-  const url = args[0]
-  if (!url) {
-    return m.reply(`Mana linknya Lex?\n*Contoh:* ${usedPrefix + command} https://youtube.com/watch?v=JoMTMEA2WMY`)
-  }
+    let msg = await conn.sendMessage(m.chat, { text: '🎬 [ 0% ] Menyiapkan permintaan...' }, { quoted: m })
+    let key = msg.key
 
-  if (!/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\//.test(url)) {
-    return m.reply('❌ Linknya harus dari YouTube yang valid.')
-  }
-
-  try {
-    // 🔥 MASUKIN LINK API ZENNXD LU DI SINI 🔥
-    // Copas aja seadanya, gausah takut salah atau kepanjangan
-    let baseApi = "https://api.zenzxz.my.id/download/youtube?url=https%3A%2F%2Fyoutube.com%2Fwatch%3Fv%3DpYrTbquWuCg"
-    
-    // --- SYSTEM CORE : AUTO CLEANER ---
-    // Script ini bakal otomatis motong link lu kalau ada parameter nyangkut
-    // Jadi dijamin 100% ga bakal ada error tanda tanya (?) tabrakan lagi
-    baseApi = baseApi.split('?')[0]
-    
-    // Ngerakit URL yang udah pasti valid dan rapi
-    const apiUrl = `${baseApi}?url=${encodeURIComponent(url)}&format=mp3`
-    
-    const res = await fetch(apiUrl)
-    
-    const contentType = res.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-        const textError = await res.text();
-        throw new Error(`API gak ngirim JSON cuy! Status: ${res.status}\nRespon: ${textError.substring(0, 150)}...`);
+    const loadingAnimation = async () => {
+        const steps = [
+            { t: '📡 [ 20% ] Menghubungkan ke API Ryzumi...' },
+            { t: '📥 [ 45% ] Mengambil metadata YouTube...' },
+            { t: '⚙️ [ 70% ] Mengunduh stream audio ke buffer...' },
+            { t: '📦 [ 90% ] Membungkus paket audio...' },
+            { t: '✅ [ 100% ] Siap dikirim!' }
+        ]
+        for (let step of steps) {
+            await new Promise(resolve => setTimeout(resolve, 800))
+            await conn.sendMessage(m.chat, { text: step.t, edit: key }).catch(() => {}) 
+        }
     }
 
-    const json = await res.json()
+    const fetchAndDownload = async () => {
+        const endpoint = 'https://api.ryzumi.net/api/downloader/ytmp3'
 
-    if (!json.status) {
-        throw new Error(`Status false dari API! Pesan: ${JSON.stringify(json)}`);
+        const res = await axios.get(endpoint, {
+            params: { url: text },
+            headers: { 'accept': 'application/json' }
+        })
+
+        const yt = res.data
+
+        if (!yt || !yt.url) throw new Error('Data atau link audio gak ditemuin dari server Ryzumi.')
+
+        try {
+            const audioRes = await axios.get(yt.url, {
+                responseType: 'arraybuffer',
+                headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                }
+            })
+            yt.audioBuffer = Buffer.from(audioRes.data)
+            return yt
+        } catch (err) {
+            console.log('Error Download Buffer Ryzumi:', err.message)
+            throw new Error('Gagal mengunduh file audio ke buffer. Kemungkinan server pengunduh lagi sibuk/limit.')
+        }
     }
-    
-    const result = json.result
-    if (!result?.download) {
-        throw new Error("Data JSON sukses, tapi 'result.download' kosong / ga ketemu!");
+
+    try {
+        const [_, yt] = await Promise.all([loadingAnimation(), fetchAndDownload()])
+
+        let caption = `
+乂  *Y O U T U B E  -  M P 3*
+
+    ◦  *Judul* : ${yt.title || 'Tidak diketahui'}
+    ◦  *Channel* : ${yt.author || '-'}
+    ◦  *Durasi* : ${yt.lengthSeconds ? yt.lengthSeconds + ' detik' : '-'}
+    ◦  *Views* : ${yt.views ? yt.views.toLocaleString('id-ID') : '-'}
+    ◦  *Upload* : ${yt.uploadDate || '-'}
+    ◦  *Kualitas* : ${yt.quality || '128kbps'}
+
+_Audio sedang dikirim ke chat ini..._`
+
+        await conn.sendMessage(m.chat, { text: caption, edit: key })
+
+        await conn.sendMessage(m.chat, { 
+            audio: yt.audioBuffer, 
+            mimetype: 'audio/mpeg', 
+            fileName: `${yt.title}.mp3`,
+            contextInfo: {
+                isForwarded: true,
+                forwardingScore: 9999,
+                forwardedNewsletterMessageInfo: {
+                    newsletterJid: "120363400612665352@newsletter",
+                    newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+                    serverMessageId: -1
+                }
+            }
+        }, { quoted: m })
+
+    } catch (e) {
+        console.error(e)
+        try {
+            await conn.sendMessage(m.chat, { text: `❌ Gagal: ${e.message}`, edit: key })
+        } catch (err) {
+            m.reply(`❌ Gagal: ${e.message}`)
+        }
     }
-
-    // Convert detik ke menit:detik buat UI estetik
-    let durationText = '-'
-    if (result.duration) {
-        let mnt = Math.floor(result.duration / 60)
-        let dtk = (result.duration % 60).toString().padStart(2, '0')
-        durationText = `${mnt}:${dtk}`
-    }
-
-    // Teks info cyber-tech murni, polosan biar Jemima & Erine aman ngebacanya
-    let info = `*乂  Y O U T U B E  -  A U D I O*\n\n`
-    info += `  ∘ *Title:* ${result.title || 'Unknown'}\n`
-    info += `  ∘ *Format:* MP3\n`
-    info += `  ∘ *Duration:* ${durationText}\n`
-    info += `\n*Sistem sedang mengirim file, tunggu sebentar...* 🚀`
-
-    await m.reply(info)
-
-    // Eksekusi kirim audio murni
-    await conn.sendMessage(m.chat, {
-      audio: { url: result.download },
-      mimetype: 'audio/mpeg',
-      fileName: `${result.title || 'audio'}.mp3`,
-      ptt: false
-    }, { quoted: m })
-
-    await m.react('✅')
-
-  } catch (err) {
-    console.error('[YTMP3 DEBUG]', err)
-    await m.react('❌')
-    m.reply(`❌ *SYSTEM ERROR*\n\nGagal narik data dari API.\n\n*Diagnosa Log:*\n${err.message}`)
-  }
 }
 
-handler.help = ['ytmp3 <url>']
+handler.help = ['ytmp3']
 handler.tags = ['downloader']
-handler.command = /^(ytmp3|youtubemp3|ytaudio)$/i
-handler.limit = true
+handler.command = /^(ytmp3|yta)$/i
 
 export default handler

@@ -113,15 +113,15 @@ User adalah cowok yang bikin Hoshino nyaman ngobrol.
     }
 
     await conn.sendMessage(m.chat, {
-      text: res.text,
+      image: { url: 'https://files.catbox.moe/spq2io.jpg' },
+      caption: res.text,
       contextInfo: {
-        externalAdReply: {
-          title: 'Hoshino AI',
-          body: 'Blue Archive',
-          thumbnailUrl: 'https://files.catbox.moe/spq2io.jpg',
-          sourceUrl: 'https://github.com/himanackerman',
-          mediaType: 1,
-          renderLargerThumbnail: true
+        isForwarded: true,
+        forwardingScore: 9999,
+        forwardedNewsletterMessageInfo: {
+          newsletterJid: "120363400612665352@newsletter",
+          newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
+          serverMessageId: -1
         }
       }
     }, { quoted: m })

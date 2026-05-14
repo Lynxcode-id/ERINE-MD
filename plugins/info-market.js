@@ -12,16 +12,13 @@
 
 let handler = async (m, { conn, text }) => {
     try {
-        await conn.sendMessage(m.chat, { react: { text: "⏳", key: m.key } });
+        await m.react('⏳')
 
         let res = await fetch("https://zelapioffciall.koyeb.app/live/market");
         if (!res.ok) throw new Error("Fetch failed");
 
         let json = await res.json();
         if (!json.status || !Array.isArray(json.data)) throw new Error("Invalid response");
-
-        let output = `*📈 MARKET CRYPTO UPDATE*\n`;
-        output += `*🌍 Total Market:* ${json.total}\n\n`;
 
         let data;
 
@@ -33,46 +30,74 @@ let handler = async (m, { conn, text }) => {
                 throw new Error("Invalid rank");
 
             data = json.data.filter(v => v.market_cap_rank === rank);
-            if (!data.length)
+            if (!data.length) {
+                await m.react('❌')
                 return m.reply(`🍂 *Market rank #${rank} tidak ditemukan.*`);
+            }
         }
+
+        let output = `┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴅ │๑˚₊ 🎀
+┇ 📈 › ᴄʀʏᴘᴛᴏ ᴍᴀʀᴋᴇᴛ
+┇ 🌸 › sᴀꜰᴇ & ᴛʀᴜsᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ
+└˚₊ ๑ ᴜ ᴘ ᴅ ᴀ ᴛ ᴇ s ๑˚₊ 🍓
+
+🌍 *Total Market:* ${json.total}\n\n`;
 
         for (let c of data) {
             let trend =
                 c.price_change_percentage_24h > 0 ? "🟢" :
                 c.price_change_percentage_24h < 0 ? "🔴" : "⚪";
 
-            output += `*#${c.market_cap_rank} ${c.name} (${c.symbol})*\n`;
-            output += `💰 *Harga:* $${c.current_price}\n`;
-            output += `${trend} *24 Jam:* ${c.price_change_percentage_24h.toFixed(2)}%\n`;
-            output += `🏦 *Market Cap:* $${c.market_cap.toLocaleString()}\n`;
-            output += `🔄 *Volume:* $${c.total_volume.toLocaleString()}\n`;
-            output += `📦 *Supply:* ${c.circulating_supply.toLocaleString()}\n\n`;
+            output += `┌˚ · ๑୧ #${c.market_cap_rank} ${c.name} (${c.symbol})\n`;
+            output += `┇ 💰 ⁞ ʜᴀʀɢᴀ : $${c.current_price}\n`;
+            output += `┇ ${trend} ⁞ 𝟸𝟺 ᴊᴀᴍ : ${c.price_change_percentage_24h.toFixed(2)}%\n`;
+            output += `┇ 🏦 ⁞ ᴍᴀʀᴋᴇᴛ ᴄᴀᴘ : $${c.market_cap.toLocaleString()}\n`;
+            output += `┇ 🔄 ⁞ ᴠᴏʟᴜᴍᴇ : $${c.total_volume.toLocaleString()}\n`;
+            output += `┇ 📦 ⁞ sᴜᴘᴘʟʏ : ${c.circulating_supply.toLocaleString()}\n`;
+            output += `└˚₊ ๑୧\n\n`;
         }
 
-        output += `✨ *Update terakhir:* ${new Date(json.data[0].last_updated).toLocaleString()}`;
+        output += `✨ *Update terakhir:* ${new Date(json.data[0].last_updated).toLocaleString()}\n`;
+        output += `© ᴇʀɪɴᴇ ᴍᴅ x ᴊᴋᴛ𝟺𝟾 ᴠɪʙᴇ`;
+
+        let wm = global.wm || "Erine System"
+        let senderNumber = m.sender.split('@')[0]
+        let fkontak = {
+            key: {
+                fromMe: false,
+                participant: `0@s.whatsapp.net`
+            },
+            message: {
+                contactMessage: {
+                    displayName: wm,
+                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+                }
+            }
+        }
 
         await conn.sendMessage(
             m.chat,
             {
-                text: output,
+                image: { url: "https://files.cloudkuimages.guru/images/9f291dfe14a8.jpg" },
+                caption: output,
                 contextInfo: {
-                    externalAdReply: {
-                        title: "Market Crypto Update",
-                        body: "Realtime Global Crypto Market",
-                        mediaType: 1,
-                        thumbnailUrl: "https://files.cloudkuimages.guru/images/9f291dfe14a8.jpg",
-                        renderLargerThumbnail: true,
-                        sourceUrl: "https://zelapioffciall.koyeb.app/live/market"
+                    forwardingScore: 999,
+                    isForwarded: true,
+                    forwardedNewsletterMessageInfo: {
+                        newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+                        newsletterJid: "120363400612665352@newsletter"
                     }
                 }
             },
-            { quoted: m }
+            { quoted: fkontak }
         );
+
+        await m.react('✅')
+
     } catch (e) {
+        console.error(e)
+        await m.react('❌')
         await m.reply(`🍂 *Gagal mengambil data market crypto.*`);
-    } finally {
-        await conn.sendMessage(m.chat, { react: { text: "", key: m.key } });
     }
 };
 

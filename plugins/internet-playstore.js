@@ -42,32 +42,61 @@ const handler = async (m, { conn, text }) => {
     if (!search) return m.reply('Masukkan query pencarian!')
     
     try {
+        await m.react('⏳')
         const results = await PlayStore(search)
-        if (results.mess) return m.reply(results.mess)
+        if (results.mess) {
+            await m.react('❌')
+            return m.reply(results.mess)
+        }
         
-        let txt = `*🔎 Hasil Pencarian Play Store untuk "${search}"*\n\n`
+        let txt = `┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴅ │๑˚₊ 🎀
+┇ 🔍 › ᴘʟᴀʏsᴛᴏʀᴇ sᴇᴀʀᴄʜ
+┇ 🌸 › sᴀꜰᴇ & ᴛʀᴜsᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ
+└˚₊ ๑ ʀ ᴇ s ᴜ ʟ ᴛ s ๑˚₊ 🍓\n\n`
+
         for (let app of results) {
-            txt += `▢ *Nama:* ${app.nama}\n`
-            txt += `▢ *Developer:* ${app.developer}\n`
-            txt += `▢ *Rating:* ${app.rate2} (${app.rate})\n`
-            txt += `▢ *Link:* ${app.link}\n`
-            txt += `▢ *Developer Link:* ${app.link_dev}\n\n`
+            txt += `┌˚ · ๑୧ ᴀ ᴘ ᴘ  ɪ ɴ ꜰ ᴏ\n`
+            txt += `┇ 📱 ⁞ ɴᴀᴍᴀ : ${app.nama}\n`
+            txt += `┇ 👤 ⁞ ᴅᴇᴠᴇʟᴏᴘᴇʀ : ${app.developer}\n`
+            txt += `┇ ⭐ ⁞ ʀᴀᴛɪɴɢ : ${app.rate2} (${app.rate})\n`
+            txt += `┇ 🔗 ⁞ ʟɪɴᴋ : ${app.link}\n`
+            txt += `└˚₊ ๑୧\n\n`
+        }
+        
+        txt += `© ᴇʀɪɴᴇ ᴍᴅ x ᴊᴋᴛ𝟺𝟾 ᴠɪʙᴇ`
+
+        let wm = global.wm || "Erine System"
+        let senderNumber = m.sender.split('@')[0]
+        let fkontak = {
+            key: {
+                fromMe: false,
+                participant: `0@s.whatsapp.net`
+            },
+            message: {
+                contactMessage: {
+                    displayName: wm,
+                    vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+                }
+            }
         }
         
         await conn.sendMessage(m.chat, { 
-            text: txt,
+            image: { url: 'https://files.catbox.moe/dklg5y.jpg' },
+            caption: txt,
             contextInfo: {
-                externalAdReply: {
-                    title: results[0].nama,
-                    body: `Play Store Search Result - ${search}`,
-                    thumbnailUrl: 'https://files.catbox.moe/dklg5y.jpg',
-                    sourceUrl: results[0].link,
-                    mediaType: 1,
-                    renderLargerThumbnail: true
+                forwardingScore: 999,
+                isForwarded: true,
+                forwardedNewsletterMessageInfo: {
+                    newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
+                    newsletterJid: "120363400612665352@newsletter"
                 }
             }
-        })
+        }, { quoted: fkontak })
+        
+        await m.react('✅')
     } catch (e) {
+        console.error(e)
+        await m.react('❌')
         m.reply('Terjadi kesalahan saat melakukan pencarian')
     }
 }
