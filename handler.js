@@ -10,10 +10,9 @@ import chalk from 'chalk'
 import fetch from 'node-fetch'
 
 /**
- * @type {import('@whiskeysocket/baileys')}
+ * @type {import('@whiskeysockets/baileys')}
  */
-import pkg from '@whiskeysocket/baileys'
-const { proto } = pkg
+import { proto } from '@whiskeysockets/baileys'
 
 const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
@@ -82,24 +81,17 @@ export async function handler(chatUpdate) {
         m = chatUpdate;
     } else {
         if (!chatUpdate || !chatUpdate.messages) return 
-        this.pushMessage(chatUpdate.messages).catch(console.error)
+        try {
+            await this.pushMessage(chatUpdate.messages)
+        } catch (err) {
+            console.error('Failed to push message in handler:', err)
+        }
         m = chatUpdate.messages[chatUpdate.messages.length - 1]
     }
     
     if (!m) return
 
     const conn = this
-    
-    // 🔥 [FIX] Sistem Anti Double Respon (Message Deduplicator)
-    conn.msgCache = conn.msgCache || new Set();
-    if (m.key && m.key.id) {
-        if (conn.msgCache.has(m.key.id)) {
-            return; // Kalo ID pesan udah ada di cache, abaikan (Anti double respon)
-        }
-        conn.msgCache.add(m.key.id);
-        // Clear cache setelah 3 menit biar RAM ngga bengkak
-        setTimeout(() => conn.msgCache.delete(m.key.id), 180000);
-    }
     
     const DB = conn.db || global.db
     
@@ -198,14 +190,13 @@ export async function handler(chatUpdate) {
         const botId = conn.user?.id ? conn.decodeJid(conn.user.id) : ''
         const mainBotId = global.conn?.user?.id ? conn.decodeJid(global.conn.user.id) : botId
         
-        let ownerList = global.owner || []
-        let flatOwners = ownerList.map(v => (Array.isArray(v) ? v[0] : v)).map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net')
-
-        const isROwner = [mainBotId, botId, ...flatOwners].includes(m.sender)
-        const isOwner = isROwner || m.fromMe
-        const isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
-        const isPrems = isROwner || DB.data.users[m.sender].premiumTime > 0
+        let ownerArray = (global.owner || []).map(v => Array.isArray(v) ? v[0] : v);
+        if (global.nomorown) ownerArray.push(global.nomorown); 
         
+        const isROwner = [mainBotId, botId, ...ownerArray].map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+        const isOwner = isROwner || m.fromMe
+        const isMods = isOwner || (global.mods || []).map(v => v?.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+        const isPrems = isROwner || DB.data.users[m.sender].premiumTime > 0
         const isSelf = conn.self !== undefined ? conn.self : opts['self']
         if (!isOwner && !m.fromMe && isSelf) return
 
@@ -224,18 +215,26 @@ export async function handler(chatUpdate) {
             m.exp += Math.ceil(Math.random() * 10)
         }
 
-        const groupMetadata = m.isGroup ? await conn.groupMetadata(m.chat).catch(e => ({})) : {}
-        const participants = m.isGroup ? (groupMetadata.participants || []) : [] 
+        // Pake sistem cache metadata dari Takina biar respon cepet dan ga ke-block Baileys
+        const groupMetadata = (m.isGroup ? ((conn.chats[m.chat] || {}).metadata || await conn.groupMetadata(m.chat).catch(_ => ({}))) : {}) || {}
+        const participants = (m.isGroup ? groupMetadata.participants : []) || []
         
-        let groupUser = {}, bot = {}
-        if (m.isGroup && participants?.length > 0) {
-            groupUser = findParticipant(participants, m.sender)
-            bot = findParticipant(participants, botId || conn.user?.id || '')
-        }
+        let groupUser = (m.isGroup ? participants.find(u => {
+            const jid = conn.decodeJid ? conn.decodeJid(String(u.id || u.jid || '')) : String(u.id || u.jid || '')
+            const pn = u.phoneNumber ? (String(u.phoneNumber).replace(/[^0-9]/g, '') + '@s.whatsapp.net') : null
+            return jid === m.sender || pn === m.sender
+        }) : {}) || {} 
+        
+        let bot = (m.isGroup ? participants.find(u => {
+            const jid = conn.decodeJid ? conn.decodeJid(String(u.id || u.jid || '')) : String(u.id || u.jid || '')
+            const pn = u.phoneNumber ? (String(u.phoneNumber).replace(/[^0-9]/g, '') + '@s.whatsapp.net') : null
+            const selfJid = conn.user?.jid || conn.decodeJid?.(conn.user?.id) || ''
+            return jid === selfJid || pn === selfJid || jid.includes(selfJid.split('@')[0])
+        }) : {}) || {} 
 
-        const isRAdmin = getParticipantAdmin(groupUser) === 'superadmin'
-        const isAdmin = !!getParticipantAdmin(groupUser)
-        const isBotAdmin = !!getParticipantAdmin(bot)
+        const isRAdmin = groupUser?.admin === 'superadmin' || false
+        const isAdmin = isRAdmin || groupUser?.admin === 'admin' || false
+        const isBotAdmin = bot?.admin === 'superadmin' || bot?.admin === 'admin' || false
         const ___dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), './plugins')
 
         let user = DB.data.users[m.sender]
@@ -381,7 +380,7 @@ export async function handler(chatUpdate) {
         }
         
         const opts = global.opts || {}
-        if (opts['autoread']) await conn.readMessages([m.key])
+        if (opts['autoread']) await conn.readMessages([m.key]).catch(() => {})
     }
 }
 
@@ -395,14 +394,13 @@ export async function participantsUpdate({ id, participants, action }) {
     if (isSelf) return 
     
     if (DB.data == null) await global.loadDatabase()
-
     if (!DB.data.chats[id]) {
         DB.data.chats[id] = {
             isBanned: false, welcome: false, detect: false, sWelcome: '', sBye: '', sPromote: '', sDemote: '',
             delete: false, antiLink: false, viewonce: false, antiToxic: false, simi: false, autogpt: false, autoSticker: false, premium: false, premiumTime: false, nsfw: false, menu: true, rpgs: true, expired: 0
         }
     }
-
+    
     if (action === 'promote' || action === 'demote') {
         try {
             const newMetadata = await conn.groupMetadata(id)
@@ -430,16 +428,28 @@ export async function participantsUpdate({ id, participants, action }) {
     const memberCount = Array.isArray(groupMetadata.participants) ? groupMetadata.participants.length : 0
 
     for (let participant of (participants || [])) {
-        const user = participant?.id || participant?.jid || participant?.lid || participant
+        const user = typeof participant === 'string' ? participant : (participant?.id || participant?.jid || participant);
         if (!user) continue
+
+        let jidNum = user.split('@')[0];
+        let displayNum = jidNum;
+        
+        if (jidNum.startsWith('62') || jidNum.startsWith('08')) {
+            let match = jidNum.match(/^(62|08)(\d{2,4})(\d{4})(\d{3,5})$/);
+            if (match) {
+                displayNum = `+${match[1]} ${match[2]}-${match[3]}-${match[4]}`;
+            } else {
+                displayNum = `+${jidNum}`;
+            }
+        }
 
         let pushName = '';
         try {
             if (conn.getName) pushName = await conn.getName(user);
         } catch (e) {}
 
-        if (!pushName || pushName === user.split('@')[0]) {
-            pushName = user.split('@')[0]
+        if (!pushName || pushName === jidNum) {
+            pushName = jidNum
         }
 
         let pp = 'https://i.ibb.co/1s8T3sY/48f7ce63c7aa.jpg'
@@ -452,14 +462,15 @@ export async function participantsUpdate({ id, participants, action }) {
             let text = chat.sWelcome && chat.sWelcome.trim() ? chat.sWelcome : defaultWelcome
 
             text = text
-                .replace('@user', '@' + user.split('@')[0])
+                .replace('@user', '@' + jidNum)
                 .replace('@subject', groupName)
                 .replace('@desc', groupMetadata.desc || '')
                 .replace(/@rawUName/gi, pushName)
                 .replace(/@rawGName/gi, groupName)
 
             let bgImage = global.welcomeBg || 'https://i.ibb.co/4YBNyvP/mountain-sunset.jpg'
-            let api = `https://api.siputzx.my.id/api/canvas/welcomev5?username=${encodeURIComponent(pushName)}&guildName=${encodeURIComponent(groupName)}&memberCount=${memberCount + 1}&avatar=${encodeURIComponent(pp)}&background=${encodeURIComponent(bgImage)}&quality=90`
+            
+            let api = `https://api.siputzx.my.id/api/canvas/welcomev5?username=Welcome&guildName=${encodeURIComponent(displayNum)}&memberCount=${memberCount + 1}&avatar=${encodeURIComponent(pp)}&background=${encodeURIComponent(bgImage)}&quality=90`
 
             let buffer = null
             try {
@@ -492,7 +503,7 @@ export async function participantsUpdate({ id, participants, action }) {
             let text = chat.sBye && chat.sBye.trim() ? chat.sBye : defaultBye
 
             text = text
-                .replace('@user', '@' + user.split('@')[0])
+                .replace('@user', '@' + jidNum) 
                 .replace('@subject', groupName)
                 .replace('@desc', groupMetadata.desc || '')
                 .replace(/@rawUName/gi, pushName)
@@ -500,7 +511,7 @@ export async function participantsUpdate({ id, participants, action }) {
 
             let bgImage = global.goodbyeBg || 'https://i.ibb.co/4YBNyvP/images-76.jpg'
             let titleText = 'Goodbye'
-            let descText = `Sampai jumpa lagi, ${pushName} 👋`
+            let descText = displayNum 
 
             let api = `https://api.siputzx.my.id/api/canvas/goodbyev4?avatar=${encodeURIComponent(pp)}&background=${encodeURIComponent(bgImage)}&title=${encodeURIComponent(titleText)}&description=${encodeURIComponent(descText)}&border=%232a2e35&avatarBorder=%232a2e35&overlayOpacity=0.3`
 
@@ -512,6 +523,7 @@ export async function participantsUpdate({ id, participants, action }) {
                 console.error('GOODBYE API ERROR:', e)
             }
 
+            // MENGIRIM PESAN FOTO TANPA ADREPLY
             if (buffer) {
                 await this.sendMessage(id, {
                     image: buffer,

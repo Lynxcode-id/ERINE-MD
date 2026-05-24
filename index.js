@@ -4,7 +4,7 @@ import { hideBin } from 'yargs/helpers';
 const argv = yargs(hideBin(process.argv)).argv;
 
 import cfonts from 'cfonts';
-import chalk from 'chalk'; // 🔥 Tambahin chalk buat warna warni teks console
+import chalk from 'chalk';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
 import { createRequire } from 'module';
@@ -19,13 +19,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(__dirname);
 const { name, author } = require(join(__dirname, './package.json'));
 
-console.clear(); // Bersihin terminal dulu biar rapi pas start
+console.clear();
 
-// 🔥 Tampilan Judul Super Neon & Futuristic
 say('ERINE-MD\nPROJECT', { 
     font: 'block', 
     align: 'center', 
-    gradient: ['#00FFFF', '#FF00FF'], // Neon Cyan ke Neon Magenta
+    gradient: ['#00FFFF', '#FF00FF'],
     transitionGradient: true 
 });
 
@@ -53,8 +52,7 @@ function start(file) {
 
   let args = [join(__dirname, file), ...process.argv.slice(2)];
   
-  // Custom log pas ngebuka main.js
-  console.log(chalk.hex('#00FFCC')(`[ 💻 ] Spawning Node Worker: `) + chalk.white(args.join(' ')));
+  console.log(chalk.hex('#00FFCC')(`[ ⚡ ] Spawning Node Worker: `) + chalk.white(args.join(' ')));
   
   cluster.setupPrimary({ exec: args[0], args: args.slice(1) });
   let p = cluster.fork();

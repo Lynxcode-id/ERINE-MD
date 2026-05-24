@@ -1,13 +1,12 @@
 /**
- * 85% NO ENC - 100 FREE
+ * 85% NO ENC - 100% FREE
  * Yang jual mental miskin + moga rejekinya seret
  * Mau riview script atau rename ulang script ini?
  * Tag yt : @lynxpresetkechee | Github : Lynxcode-id
  * Script akan selalu di kembangkan, ketemu bug/error
  * Ketik .lapor penanganan fix 24j kelar!!
- * Based on Nao ESM
- * Base Script : Hlman Ryo
- * Dev - Pengembang² :  Erine MD - Lynx code
+ * Base : nao-md esm ---- ryo yamada
+ * Dev - Pengembang sc ini : Erine MD - Lynx decode
  * Ikuti saluran kami untuk info update project ini
  * https://chat.whatsapp.com/CSMhBRB2DoICQwyy61txr0
  * https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
@@ -46,8 +45,8 @@ global.prems = [] // Bebas
 global.nomorbot = '6285185681661' // No Bot
 global.nomorown = '6288258041396'// No Utama
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
-global.version = '18.2.5' // Versi Script Ini
-global.autotyping = true // Default : true
+global.version = '19.9.8' // Versi Script Ini
+global.autotyping = false // Default : false
 global.autorecording = false // Default : false
 
 // BOT SETTING WATERMARK
@@ -92,16 +91,11 @@ global.psaweria = 'https://saweria.co/LynxPreset'
 
 global.welcomeBg = 'https://c.termai.cc/i136/U9UWxB.jpg'
 global.goodbyeBg = 'https://c.termai.cc/i166/lWwS.jpg'
-global.menuThumb = 'https://c.termai.cc/i166/wRqFO.png'
+global.menuThumb = 'https://c.termai.cc/i177/YPu.jpg'
 global.videothumb = 'https://c.termai.cc/v188/CHBtAz.mp4'
 global.menuAudio = [
-    'https://c.termai.cc/a182/V6Q4nmh.mp3',
-    'https://c.termai.cc/a190/JTA7.mp3',
-    'https://c.termai.cc/a178/OJgl41.mp3',
-    'https://c.termai.cc/a177/DG05K.mp3',
-    'https://c.termai.cc/a175/sFlTd.mp3',
-    'https://c.termai.cc/a103/gGHRuet.mp3',
-    'https://c.termai.cc/a148/kJfl.mp3'
+    'https://c.termai.cc/a142/FRQ.mp3'
+
 ]
 
 // SET IDN - SHOWROOM 
