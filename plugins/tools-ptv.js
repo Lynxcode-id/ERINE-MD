@@ -1,4 +1,4 @@
-// © INF PROJECT - Erine-MD 
+// © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
 import pkg from '@whiskeysockets/baileys'
