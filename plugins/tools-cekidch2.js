@@ -1,7 +1,7 @@
-// © INF PROJECT - Erine-MD
+// © INF PROJECT - Erine-MD 
 // Developed by INF PROJECT
 
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const { proto } = pkg
 
 let handler = async (m, { conn, text, command }) => {

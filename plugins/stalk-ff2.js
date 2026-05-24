@@ -1,4 +1,4 @@
-/*
+/* 
 ---------------------------------------------------------------
 
 • Fitur Stalk Free Fire
@@ -32,8 +32,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         const pet = extraData.petInfo
         const social = extraData.socialInfo
         
-        const createDate = new Date(basic.createAt * 1000).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
-        const lastLogin = new Date(basic.lastLoginAt * 1000).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
+        const createDate = new Date(basic.createAt * 1000).toLocaleString('id-ID', { timeZone: 'Asia/Makassar' })
+        const lastLogin = new Date(basic.lastLoginAt * 1000).toLocaleString('id-ID', { timeZone: 'Asia/Makassar' })
 
         const hasilStalk = `
 🎮 *FREE FIRE ACCOUNT STALK* 🎮
