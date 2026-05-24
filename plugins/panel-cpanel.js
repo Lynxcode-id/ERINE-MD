@@ -6,7 +6,7 @@
 */
 
 import fetch from 'node-fetch';
-import pkg from '@whiskeysocket/baileys';
+import pkg from '@whiskeysockets/baileys';
 const { proto } = pkg;
 import '../config.js';
 

@@ -3,7 +3,7 @@
 
 import axios from "axios"
 import PDFDocument from "pdfkit"
-import pkg from "@whiskeysocket/baileys"
+import pkg from "@whiskeysockets/baileys"
 const { extractImageThumb } = pkg
 import fetch from "node-fetch"
 

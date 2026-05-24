@@ -1,7 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const { areJidsSameUser } = pkg
 
 let handler = async (m, { conn, participants }) => {

@@ -1,9 +1,4 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-// FIX: Panggil default export-nya dulu biar Node nggak marah
-import jimp from 'jimp';
-const { Jimp } = jimp; 
+import * as Jimp from "jimp";
 import axios from 'axios';
 
 class SnakeAndLadderGame {

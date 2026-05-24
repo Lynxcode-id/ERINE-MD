@@ -1,10 +1,9 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const { S_WHATSAPP_NET } = pkg
-import jimp from 'jimp'
-const { Jimp } = jimp
+import * as Jimp from "jimp"
 
 let handler = async (m, { conn, command, usedPrefix }) => {
 	let q = m.quoted ? m.quoted : m

@@ -1,11 +1,5 @@
-/*• Nama Fitur : Pinterest Search
-• Type : Plugin ESM
-• Developed for : Erine-MD | INF PROJECT
-• Author : Agas (Converted by Lynx Decode)
-*/
-
 import axios from 'axios'
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const {
   proto,
   generateWAMessageFromContent,
@@ -40,7 +34,6 @@ let handler = async (m, { conn, text }) => {
   if (!text) return m.reply('Mau cari apa, Bang?')
   
   await m.react('🔍')
-  // Hapus m.reply pencarian biar chat nggak penuh, cukup react aja
 
   try {
     let results = await pinterestApi(text)
@@ -108,7 +101,7 @@ let handler = async (m, { conn, text }) => {
       }
     }, { quoted: m })
 
-    await conn.relayMessage(m.chat, msg.message, { messageId: m.key.id })
+    await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
     await m.react('✅')
 
   } catch (e) {

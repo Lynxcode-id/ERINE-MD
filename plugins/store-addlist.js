@@ -1,141 +1,121 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from "@whiskeysocket/baileys";
-const { proto } = pkg;
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, text, command, usedPrefix, isAdmin, isOwner }) => {
-  // Inisialisasi database store jika belum ada
   global.db.data.msgs = global.db.data.msgs || {}
   let msgs = global.db.data.msgs
 
   let cmd = command.toLowerCase()
+  if (cmd === 'addlist') {
+    if (!isOwner) return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Ditolak, fitur ini khusus Owner.`)
 
-  // ================= ADD STORE =================
-  if (cmd === 'addstore') {
-    if (!isOwner) return m.reply("❌ Fitur ini khusus Owner, Bang.")
+    let [key, ...value] = text.split('|')
+    key = key.trim().toLowerCase()
+    value = value.join('|').trim()
 
-    if (!text) {
-      return m.reply(
-        `Gunakan:\n*${usedPrefix + command} <nama>*\n\nContoh:\n${usedPrefix + command} pricelist`
-      )
+    if (!key) {
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Gunakan Format:*\n*${usedPrefix + command} <nama>*\nAtau\n*${usedPrefix + command} <nama>|<isi teks>*\n\n*Contoh:*\n${usedPrefix + command} rules\n${usedPrefix + command} rules | Dilarang spam!`)
     }
 
-    let key = text.trim().toLowerCase()
     if (key in msgs) {
-      return m.reply(`❌ Nama *"${text}"* sudah ada di Store. Gunakan nama lain atau hapus dulu yang lama.`)
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Gagal, nama *"${key}"* sudah ada di List.`)
     }
 
     await m.react('⏳')
 
     if (m.quoted) {
       try {
-        // Mengambil objek pesan yang di-reply
         const quoted = await m.getQuotedObj()
         if (!quoted) throw "Pesan yang direply tidak ditemukan."
         
-        // Convert ke JSON untuk disimpan di database
-        const msg = proto.WebMessageInfo.fromObject(quoted).toJSON()
+        const msg = JSON.parse(JSON.stringify(quoted.vM))
         msgs[key] = msg
         
         await m.react('✅')
-        return m.reply(`✅ Berhasil menambahkan *"${text}"* ke Store (Media/Reply).`)
+        return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Berhasil menambahkan *"${key}"* ke List (Media/Reply).`)
       } catch (e) {
         console.error(e)
         await m.react('❌')
-        return m.reply("❌ Gagal menyimpan pesan media.")
+        return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Gagal menyimpan pesan media.`)
       }
     } else {
-      // Jika tidak reply, simpan sebagai teks biasa
-      msgs[key] = { text: text.trim() }
+      if (!value) return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Gagal!\n\nHarap reply pesan atau gunakan pemisah '|' untuk menyimpan teks.\n*Contoh:* ${usedPrefix + command} infogrup | Ini adalah info...`)
+      
+      msgs[key] = { text: value }
       await m.react('✅')
-      return m.reply(`✅ Berhasil menambahkan *"${text}"* ke Store (Teks).`)
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Berhasil menambahkan *"${key}"* ke List (Teks).`)
     }
   }
 
-  // ================= LIST STORE =================
-  if (cmd === 'liststore') {
+  if (cmd === 'list') {
     let keys = Object.keys(msgs)
 
     if (!keys.length) {
-      return m.reply(
-        `Belum ada daftar Store.\nKetik *${usedPrefix}addstore <nama>* untuk mulai jualan.`
-      )
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 Belum ada daftar List.\n\nKetik *${usedPrefix}addlist <nama>* untuk membuat list baru.`)
     }
 
-    let list = keys.map((v, i) => `│ ${i + 1}. ${v}`).join('\n')
+    let listItems = keys.map((v, i) => `│ ${i + 1}. ${v}`).join('\n')
 
-    let caption = `乂  *L I S T  S T O R E*\n\n`
-    caption += `┌───\n${list}\n└───\n\n`
-    caption += `Gunakan *${usedPrefix}getstore <nama>* untuk mengambil data.`
+    let caption = `╭─ ✦ *D A F T A R  L I S T* ✦\n`
+    caption += `${listItems}\n`
+    caption += `╰───────────⭓\n\n`
+    caption += `Gunakan *${usedPrefix}getlist <nama>* untuk mengambil data.`
 
     return conn.reply(m.chat, caption.trim(), m)
   }
 
-  // ================= GET STORE =================
-  if (cmd === 'getstore' || cmd === 'getmsg') {
+  if (cmd === 'getlist' || cmd === 'getmsg') {
     if (!text) {
-      return m.reply(
-        `Gunakan:\n*${usedPrefix}${cmd} <nama>*\n\nContoh:\n${usedPrefix}${cmd} pricelist`
-      )
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Gunakan Format:*\n*${usedPrefix}${cmd} <nama>*\n\n*Contoh:*\n${usedPrefix}${cmd} rules`)
     }
 
     let key = text.trim().toLowerCase()
     if (!(key in msgs)) {
-      return m.reply(`❌ Data Store *"${text}"* tidak ditemukan. Cek daftar dengan *${usedPrefix}liststore*`)
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Gagal, list *"${text}"* tidak ditemukan.\n\nCek daftar dengan *${usedPrefix}list*`)
     }
 
     try {
       let data = msgs[key]
 
-      // Jika cuma teks (tanpa object message)
       if (data.text && !data.message) {
         return m.reply(data.text)
       }
 
-      // Restore Buffer yang hilang karena penyimpanan JSON (Penting di Node 22)
       let messageData = JSON.parse(JSON.stringify(data), (_, v) => {
-        if (
-          v !== null &&
-          typeof v === 'object' &&
-          v.type === 'Buffer' &&
-          Array.isArray(v.data)
-        ) {
+        if (v !== null && typeof v === 'object' && v.type === 'Buffer' && Array.isArray(v.data)) {
           return Buffer.from(v.data)
         }
         return v
       })
 
-      // Kirim balik pesannya
       await conn.copyNForward(m.chat, conn.serializeM(messageData), false)
       
     } catch (e) {
       console.error(e)
-      return m.reply("❌ Gagal mengambil data Store. Database mungkin corrupt.")
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Gagal mengambil data List. Database mungkin corrupt.`)
     }
   }
 
-  // ================= DELETE STORE =================
-  if (cmd === 'delstore') {
-    if (!(isAdmin || isOwner)) return m.reply("❌ Khusus Admin atau Owner, Bang.")
+  if (cmd === 'dellist') {
+    if (!(isAdmin || isOwner)) return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Ditolak, khusus Admin atau Owner.`)
 
     if (!text) {
-      return m.reply(`Gunakan:\n*${usedPrefix}delstore <nama>*`)
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Gunakan Format:*\n*${usedPrefix}dellist <nama>*`)
     }
 
     let key = text.trim().toLowerCase()
     if (!(key in msgs)) {
-      return m.reply(`❌ Nama *"${text}"* tidak terdaftar di Store.`)
+      return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Gagal, nama *"${text}"* tidak terdaftar di List.`)
     }
 
     delete msgs[key]
     await m.react('✅')
-    return m.reply(`✅ Berhasil menghapus *"${text}"* dari daftar Store.`)
+    return m.reply(`\`ᴇʀɪɴᴇ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ\`\n乂 *Status* : Berhasil menghapus *"${text}"* dari daftar List.`)
   }
 }
 
-handler.help = ['addstore', 'liststore', 'getstore', 'delstore']
-handler.tags = ['store']
-handler.command = /^(addstore|liststore|getstore|getmsg|delstore)$/i
+handler.help = ['addlist', 'list', 'getlist', 'dellist']
+handler.tags = ['group']
+handler.command = /^(addlist|list|getlist|getmsg|dellist)$/i
+handler.group = true
 
 export default handler

@@ -1,10 +1,10 @@
-import { generateWAMessage, areJidsSameUser } from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
+const { generateWAMessage, areJidsSameUser, proto } = pkg
 
 export async function before(m, { conn, chatUpdate }) {
   if (!m || m.isBaileys) return false
   if (!m.message) return false
 
-  const msg = m.msg || m.message?.conversation
   if (!m.msg) return false
   if (!m.msg.fileSha256) return false
 
@@ -25,17 +25,24 @@ export async function before(m, { conn, chatUpdate }) {
     { text, mentions: mentionedJid },
     {
       userJid: conn.user.id,
-      quoted: m.quoted?.fakeObj
+      quoted: m.quoted && m.quoted.fakeObj
     }
   )
 
+  messages.key.remoteJid = m.chat
   messages.key.fromMe = areJidsSameUser(m.sender, conn.user.id)
   messages.key.id = m.key.id
-  messages.pushName = m.pushName
-  if (m.isGroup) messages.participant = m.sender
+  messages.pushName = m.name || m.pushName
+  if (m.isGroup) messages.key.participant = m.sender
 
-  m.text = text
-  chatUpdate.messages = [messages]
+  const plainMsg = JSON.parse(JSON.stringify(messages))
+  let msgData = {
+    ...chatUpdate,
+    messages: [proto.WebMessageInfo.fromObject(plainMsg)].map(v => ((v.conn = conn), v)),
+    type: 'append'
+  }
+
+  conn.ev.emit('messages.upsert', msgData)
 
   return true 
 }

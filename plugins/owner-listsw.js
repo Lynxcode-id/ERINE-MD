@@ -1,10 +1,3 @@
-/*
-wa.me/6282285357346
-github: https://github.com/sadxzyq
-Instagram: https://instagram.com/tulisan.ku.id
-ini wm gw cok jan di hapus
-*/
-
 const handler = async (m, {
     conn
 }) => {
@@ -39,8 +32,8 @@ const handler = async (m, {
         `👁️‍🗨️ Daftar Story:\n\n${formattedMessages}\n\nBalas pesan ini dengan nomor cerita yang ingin ditampilkan.`,
         m, {
             contextInfo: {
-                    mentionedJid: [m.sender]
-                }
+                mentionedJid: [m.sender]
+            }
         }
     );
     conn.storyData[m.chat] = {

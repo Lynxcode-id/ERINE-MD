@@ -5,7 +5,7 @@
 # Api : lokal / database.json
 */
 
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const { areJidsSameUser } = pkg
 
 const getRandom = (list) => list[Math.floor(Math.random() * list.length)]

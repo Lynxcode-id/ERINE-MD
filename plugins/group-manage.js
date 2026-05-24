@@ -109,7 +109,7 @@ handler.tags = ['group'];
 handler.command = /^(add|kick|promote|demote|mute|unmute|closegc|opengc)$/i;
 handler.group = true;
 
-handler.admin = false;
-handler.botAdmin = false;
+handler.admin = true;
+handler.botAdmin = true;
 
 export default handler;

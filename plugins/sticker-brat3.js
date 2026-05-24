@@ -1,6 +1,5 @@
 import { createCanvas } from 'canvas';
-import jimp from 'jimp';
-const { Jimp } = jimp;
+import * as Jimp from "jimp";
 import { Sticker } from 'wa-sticker-formatter';
 
 async function BratGenerator(teks) {

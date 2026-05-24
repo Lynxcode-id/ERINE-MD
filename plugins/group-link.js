@@ -18,9 +18,9 @@ let handler = async (m, { conn }) => {
     }
 }
 
-handler.help = ['linkgrup']
+handler.help = ['linkgrup', 'linkgc']
 handler.tags = ['group']
-handler.command = /^linkgrup$/i
+handler.command = /^linkgrup|linkgc$/i
 handler.group = true 
 handler.botAdmin = true
 

@@ -1,8 +1,4 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysocket/baileys'
-const { generateWAMessageFromContent, proto, prepareWAMessageMedia } = pkg
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 import fs from 'fs'
 
 let handler = async (m, { conn, usedPrefix, command, text }) => {
@@ -80,7 +76,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 ➞ ᴛʀᴀsʜ: ${trash * 4}${potion ? '\n➞ ᴘᴏᴛɪᴏɴ: ' + (potion * 4) : ''}${diamond ? '\n➞ ᴅɪᴀᴍᴏɴᴅ: ' + (diamond * 4) : ''}${common ? '\n➞ ᴄᴏᴍᴍᴏɴ: ' + (common * 4) : ''}
 `.trim()
 
-                // Update Data Semua Player
                 for (let p of players) {
                     let u = users[p]
                     u.health -= health

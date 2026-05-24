@@ -1,13 +1,12 @@
 import axios from 'axios'
 
+import { generateWAMessageFromContent, proto, prepareWAMessageMedia } from '@whiskeysockets/baileys'
+
 async function searchTikTok(query) {
   const { data } = await axios.get(
     'https://tikwm.com/api/feed/search',
     {
-      params: {
-        keywords: query,
-        count: 1
-      },
+      params: { keywords: query, count: 1 },
       timeout: 20000
     }
   )
@@ -30,21 +29,21 @@ async function getTikTok(url) {
   )
 
   if (!data || data.code !== 0) {
-    throw 'Gagal mengambil data TikTok'
+    throw 'ɢᴀɢᴀʟ ᴍᴇɴɢᴀᴍʙɪʟ ᴅᴀᴛᴀ ᴠɪᴅɪᴏ ᴛɪᴋᴛᴏᴋ ᴛᴇʀsᴇʙᴜᴛ'
   }
 
   return data.data
 }
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  await m.react('✨')
+  await m.react('🔥')
 
   const input = m.quoted ? m.quoted.text : text
   if (!input) {
     return m.reply(
-      `Contoh:\n` +
+      `ᴄᴏɴᴛᴏʜ:\n` +
       `${usedPrefix + command} https://vt.tiktok.com/xxxx\n` +
-      `${usedPrefix + command} elaina edit`
+      `${usedPrefix + command} ᴇʀɪɴᴇ ᴊᴋᴛ48 ᴇᴅɪᴛ`
     )
   }
 
@@ -62,14 +61,25 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     const duration = formatDuration(res.duration)
     const views = formatNumber(res.play_count || res.play || res.views || 0)
 
-    const caption = `
-# *TIKTOK VIDEO*
+    const caption = `ᐖ *ᴛɪᴋᴛᴏᴋ ᴠɪᴅᴇᴏ ɪɴғᴏʀᴍᴀᴛɪᴏɴ*\n\n> *ᴊᴜᴅᴜʟ ᴠɪᴅɪᴏ* :\n${title}\n> *ᴜᴘʟᴏᴀᴅᴇʀ - ᴘᴇᴍʙᴜᴀᴛ* :\n${uploader}\n> *ᴅᴜʀᴀsɪ ᴠɪᴅɪᴏ* :\n${duration}\n> *ᴠɪᴇᴡs* :\n${views}\n\n> *ᴅᴏᴡɴʟᴏᴀᴅ ʙʏ ᴇʀɪɴᴇ ᴍᴅ - ʙᴏᴛ ᴡʜᴀᴛsᴀᴘᴘ*`.trim()
 
-> *Judul*: ${title}
-> *Uploader*: ${uploader}
-> *Durasi*: ${duration}
-> *Views*: ${views}
-    `.trim()
+    const buttons = [
+      {
+        name: "cta_url",
+        buttonParamsJson: JSON.stringify({
+          display_text: "⚡ Buka di TikTok",
+          url: url,
+          merchant_url: url
+        })
+      },
+      {
+        name: "quick_reply",
+        buttonParamsJson: JSON.stringify({
+          display_text: "🎵 Ambil Audio",
+          id: `${usedPrefix}ttmp3 ${url}`
+        })
+      }
+    ]
 
     if (Array.isArray(res.images) && res.images.length > 0) {
       let total = res.images.length
@@ -87,53 +97,58 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         index++
       }
 
-      if (res.music) {
-        await conn.sendMessage(
-          m.chat,
-          {
-            audio: { url: res.music },
-            mimetype: 'audio/mpeg'
-          },
-          { quoted: m }
-        )
-      }
+      let msgSlide = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+          message: {
+            messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
+            interactiveMessage: proto.Message.InteractiveMessage.create({
+              body: proto.Message.InteractiveMessage.Body.create({ text: "Gunakan tombol di bawah untuk mengunduh audio atau membuka postingan asli." }),
+              footer: proto.Message.InteractiveMessage.Footer.create({ text: "ᴇʀɪɴᴇ-ᴍᴅ" }),
+              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({ buttons: buttons })
+            })
+          }
+        }
+      }, { quoted: m })
+      await conn.relayMessage(m.chat, msgSlide.message, { messageId: msgSlide.key.id })
 
-      await m.react('✅')
+      await m.react('😈')
       return
     }
 
     if (res.play) {
-      await conn.sendMessage(
-        m.chat,
-        {
-          video: { url: res.play },
-          caption
-        },
-        { quoted: m }
-      )
+      let media = await prepareWAMessageMedia({ video: { url: res.play } }, { upload: conn.waUploadToServer })
+      
+      let msgVideo = generateWAMessageFromContent(m.chat, {
+        viewOnceMessage: {
+          message: {
+            messageContextInfo: { deviceListMetadata: {}, deviceListMetadataVersion: 2 },
+            interactiveMessage: proto.Message.InteractiveMessage.create({
+              body: proto.Message.InteractiveMessage.Body.create({ text: caption }),
+              footer: proto.Message.InteractiveMessage.Footer.create({ text: "ᴊᴇᴍɪᴍᴀ ᴍᴅ" }),
+              header: proto.Message.InteractiveMessage.Header.create({
+                title: "",
+                hasMediaAttachment: true,
+                videoMessage: media.videoMessage
+              }),
+              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({ buttons: buttons })
+            })
+          }
+        }
+      }, { quoted: m })
+      
+      await conn.relayMessage(m.chat, msgVideo.message, { messageId: msgVideo.key.id })
     }
 
-    if (res.music) {
-      await conn.sendMessage(
-        m.chat,
-        {
-          audio: { url: res.music },
-          mimetype: 'audio/mpeg'
-        },
-        { quoted: m }
-      )
-    }
-
-    await m.react('✅')
+    await m.react('😎')
   } catch (e) {
     await m.react('❌')
     throw String(e)
   }
 }
 
-handler.help = ['tt', 'tiktok']
+handler.help = ['tt', 'tiktok', 'ttsearch']
 handler.tags = ['downloader']
-handler.command = /^(tt|tiktok)$/i
+handler.command = /^(tt|tiktok|ttsearch)$/i
 handler.limit = true
 handler.register = true
 

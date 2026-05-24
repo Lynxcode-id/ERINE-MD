@@ -1,7 +1,4 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const { generateWAMessageFromContent, proto } = pkg
 
 function pickRandom(list) {
@@ -10,13 +7,11 @@ function pickRandom(list) {
 
 let handler = async (m, { conn, usedPrefix, command }) => {
   try {
-    // Inisialisasi monster jika belum ada
     global.db.data.monsters = global.db.data.monsters || ['Wither', 'Ender Dragon', 'Warden', 'Giant']
 
     let user = global.db.data.users[m.sender]
     if (!user) user = global.db.data.users[m.sender] = {}
 
-    // Default stats (Anti-Crash)
     user.health = user.health ?? 100
     user.maxHealth = user.maxHealth ?? 100
     user.exp = user.exp ?? 0
@@ -40,7 +35,6 @@ let handler = async (m, { conn, usedPrefix, command }) => {
 
     await m.react('⚔️')
 
-    // Logic Pertarungan
     while (user.health > 0 && bossHealth > 0 && round <= 15) {
       let userAttack = Math.floor(Math.random() * 30) + 15
       bossHealth -= userAttack

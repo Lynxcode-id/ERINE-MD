@@ -1,13 +1,10 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from "@whiskeysocket/baileys";
+import pkg from "@whiskeysockets/baileys";
 const { generateWAMessageContent, generateWAMessageFromContent } = pkg;
 import crypto from "node:crypto";
 import { PassThrough } from 'node:stream';
 import ffmpeg from 'fluent-ffmpeg';
 
-let handler = async (m, { conn, text }) => {
+let handler = async (m, { conn, text, usedPrefix, command }) => {
   let [textInput, warna, url] = text ? text.split('|') : [];
 
   let id;
@@ -32,7 +29,6 @@ let handler = async (m, { conn, text }) => {
   await m.react('⏳');
 
   try {
-    // --- CASE: IMAGE ---
     if (/image/.test(mime)) {
       const buffer = await quoted.download();
       const sta = await sendGroupStatus(conn, id, {
@@ -42,7 +38,6 @@ let handler = async (m, { conn, text }) => {
       return m.reply('✅ Sukses Upload Status Gambar ke Grup!', null, { quoted: sta });
     } 
     
-    // --- CASE: VIDEO ---
     else if (/video/.test(mime)) {
       const buffer = await quoted.download();
       const sta = await sendGroupStatus(conn, id, {
@@ -52,7 +47,6 @@ let handler = async (m, { conn, text }) => {
       return m.reply('✅ Sukses Upload Status Video ke Grup!', null, { quoted: sta });
     } 
     
-    // --- CASE: AUDIO ---
     else if (/audio/.test(mime)) {
       const buffer = await quoted.download();
       const audioVn = await toVN(buffer);
@@ -67,7 +61,6 @@ let handler = async (m, { conn, text }) => {
       return m.reply('✅ Sukses Upload Status Audio ke Grup!', null, { quoted: sta });
     } 
     
-    // --- CASE: TEXT BERWARNA ---
     else if (warna || textInput) {
       const warnaStatusWA = {
         'biru': '#34B7F1', 'hijau': '#25D366', 'kuning': '#FFD700',
@@ -75,13 +68,13 @@ let handler = async (m, { conn, text }) => {
         'abu': '#9E9E9E', 'hitam': '#000000', 'putih': '#FFFFFF', 'cyan': '#00BCD4'
       };
 
-      let color = warnaStatusWA[warna?.toLowerCase()] || '#25D366'; // Default Hijau
+      let color = warnaStatusWA[warna?.toLowerCase()] || '#25D366';
       if (!cap) return m.reply('⚠️ Masukkan teks untuk status!');
 
       const sta = await sendGroupStatus(conn, id, {
         text: cap,
         backgroundColor: color,
-        font: 1 // SANS_SERIF
+        font: 1
       });
       return m.reply('✅ Sukses Upload Status Teks ke Grup!', null, { quoted: sta });
     } 
@@ -97,9 +90,6 @@ let handler = async (m, { conn, text }) => {
   }
 };
 
-/**
- * Core Function Status Grup V2
- */
 async function sendGroupStatus(conn, jid, content) {
   const { backgroundColor, font } = content;
   delete content.backgroundColor;
@@ -111,7 +101,6 @@ async function sendGroupStatus(conn, jid, content) {
 
   const messageSecret = crypto.randomBytes(32);
   
-  // Konstruksi Status V2
   const statusMsg = generateWAMessageFromContent(jid, {
     messageContextInfo: { messageSecret },
     groupStatusMessageV2: {
@@ -131,8 +120,6 @@ async function sendGroupStatus(conn, jid, content) {
   await conn.relayMessage(jid, statusMsg.message, { messageId: statusMsg.key.id });
   return statusMsg;
 }
-
-// --- FFMPEG HELPERS ---
 
 async function toVN(inputBuffer) {
   return new Promise((resolve, reject) => {

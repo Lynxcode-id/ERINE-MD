@@ -1,7 +1,7 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const { downloadContentFromMessage } = pkg
 
 let handler = async (m, { conn }) => {
@@ -43,9 +43,9 @@ let handler = async (m, { conn }) => {
     }
 }
 
-handler.help = ['readviewonce', 'readvo']
+handler.help = ['readviewonce', 'rvo']
 handler.tags = ['tools']
-handler.command = /^(readviewonce|readvo|read|rvvo)$/i
+handler.command = /^(readviewonce|rvo)$/i
 
 handler.register = true
 handler.limit = true

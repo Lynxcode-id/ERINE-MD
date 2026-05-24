@@ -1,8 +1,4 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysocket/baileys'
-const { generateWAMessageFromContent, proto } = pkg
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn }) => {
     let info = `*ᴏʀᴀɴɢ ʏᴀɴɢ ᴍᴇɴɢᴜᴄᴀᴘᴋᴀɴ ꜱᴀʟᴀᴍ ꜱᴇᴘᴇʀᴛɪ ɪɴɪ ᴍᴀᴋᴀ ɪɑ ᴍᴇɴᴅᴀᴘᴛᴋᴀɴ 30 ᴘᴀʜᴀʟᴀ, ᴋᴇᴍᴜᴅɪᴀɴ, ᴏʀᴀɴɢ ʏᴀɴɢ ᴅɪʜᴀᴅᴀᴘᴀɴ ᴀᴛᴀᴜ ᴍᴇɴᴅᴇɴɢᴀʀɴʏᴀ ᴍᴇᴍʙᴀʟᴀꜱ ᴅᴇɴɢᴀɴ ᴋᴀʟɪᴍᴀᴛ ʏᴀɴɢ ꜱᴀᴍᴀ ʏᴀɪᴛᴜ ᴡᴀᴀʟᴀɪᴋᴜᴍᴜsꜱᴀʟᴀᴍ ᴡᴀʀᴀʜᴍᴀᴛᴜʟʟᴀʜɪ ᴡᴀʙᴀʀᴀᴋᴀᴛᴜʜ” ᴀᴛᴀᴜ ᴅɪᴛᴀᴍʙᴀʜ ᴅᴇɴɢᴀɴ ʏᴀɴɢ ʟᴀɪɴ (ᴡᴀʀɪᴅʜᴡᴀᴀɴᴀ). ᴀʀᴛɪɴʏᴀ ꜱᴇʟᴀɪɴ ᴅᴀʀɪᴘᴀᴅᴀ ᴅᴏ'ᴀ ꜱᴇʟᴀᴍᴀᴛ ᴊᴜɢᴀ ᴍᴇᴍɪɴᴛᴀ ᴘᴀᴅᴀ ᴀʟʟᴀʜ ꜱᴡᴛ*\n\nSumber: _Rumaysho.com_`
@@ -19,15 +15,14 @@ let handler = async (m, { conn }) => {
     await conn.reply(m.chat, waalaikumsalam, m)
     
     let prep = generateWAMessageFromContent(m.chat, { 
-        liveLocationMessage: { 
+        liveLocationMessage: proto.Message.LiveLocationMessage.fromObject({ 
             degreesLatitude: -6.200000,
             degreesLongitude: 106.816666,
             caption: info,
             sequenceNumber: 1656662972682001, 
-            timeOffset: 8600, 
-            jpegThumbnail: null
-        }
-    }, { quoted: m })
+            timeOffset: 8600
+        })
+    }, { userJid: conn.user.id, quoted: m })
 
     return conn.relayMessage(m.chat, prep.message, { messageId: prep.key.id })
 }

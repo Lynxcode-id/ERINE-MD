@@ -1,9 +1,5 @@
-// © INF PROJECT - Jemima-MD
-// Developed by INF PROJECT
-
 import yts from 'yt-search'
-import pkg from '@whiskeysocket/baileys'
-const { generateWAMessageFromContent, prepareWAMessageMedia, proto } = pkg
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 function formatNumber(num) {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -40,18 +36,14 @@ Silakan pilih format yang ingin diunduh atau cek liriknya melalui tombol di bawa
               deviceListMetadata: {},
               deviceListMetadataVersion: 2
             },
-            interactiveMessage: proto.Message.InteractiveMessage.create({
-              body: proto.Message.InteractiveMessage.Body.create({
-                text: caption
-              }),
-              footer: proto.Message.InteractiveMessage.Footer.create({
-                text: "© INF PROJECT | ERINE-MD"
-              }),
-              header: proto.Message.InteractiveMessage.Header.create({
+            interactiveMessage: proto.Message.InteractiveMessage.fromObject({
+              body: { text: caption },
+              footer: { text: "© INF PROJECT | ERINE-MD" },
+              header: {
                 hasMediaAttachment: true,
                 ...media
-              }),
-              nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+              },
+              nativeFlowMessage: {
                 buttons: [
                   {
                     name: "single_select",
@@ -99,7 +91,7 @@ Silakan pilih format yang ingin diunduh atau cek liriknya melalui tombol di bawa
                     })
                   }
                 ]
-              })
+              }
             })
         }
       }

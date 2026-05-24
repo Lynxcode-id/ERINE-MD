@@ -1,35 +1,33 @@
 import { createHash } from 'crypto'
 import moment from 'moment-timezone'
-import pkg from '@whiskeysocket/baileys'
-const { generateWAMessageFromContent, proto } = pkg
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 async function sendInteractive(conn, jid, title, text, footer, buttons, quoted) {
+    // Definisi tombol native flow
+    const buttonsMap = buttons.map(b => ({
+        name: "quick_reply",
+        buttonParamsJson: JSON.stringify({ display_text: b.text, id: b.id })
+    }));
+
     let msg = generateWAMessageFromContent(jid, {
         viewOnceMessage: {
             message: {
-                interactiveMessage: proto.Message.InteractiveMessage.fromObject({
-                    body: { text },
+                messageContextInfo: {
+                    deviceListMetadata: {},
+                    deviceListMetadataVersion: 2
+                },
+                interactiveMessage: {
+                    body: { text: text },
                     footer: { text: footer },
                     header: { title: title, hasMediaAttachment: false },
                     nativeFlowMessage: {
-                        buttons: buttons.map(b => ({
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({ display_text: b.text, id: b.id })
-                        }))
-                    },
-                    contextInfo: {
-                        isForwarded: true,
-                        forwardingScore: 9999,
-                        forwardedNewsletterMessageInfo: {
-                            newsletterJid: "120363400612665352@newsletter",
-                            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
-                            serverMessageId: -1
-                        }
+                        buttons: buttonsMap
                     }
-                })
+                }
             }
         }
     }, { quoted });
+
     return await conn.relayMessage(jid, msg.message, { messageId: msg.key.id });
 }
 
@@ -42,14 +40,11 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
     
     let sn = createHash('md5').update(m.sender).digest('hex')
     let name = m.name || m.pushName || conn.getName(m.sender) || 'User'
-    
     let wm = global.wm || "Erine System"
     let senderNumber = m.sender.split('@')[0]
+    
     let fkontak = {
-        key: {
-            fromMe: false,
-            participant: `0@s.whatsapp.net`
-        },
+        key: { fromMe: false, participant: `0@s.whatsapp.net` },
         message: {
             contactMessage: {
                 displayName: wm,
@@ -58,16 +53,8 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
         }
     }
 
-    // =========================================
-    // 1. TANGKAP TOMBOL "SALIN SN"
-    // =========================================
-    if (command === 'copysn_luu') {
-        return m.reply(text) // Text isinya adalah kode SN dari button
-    }
+    if (command === 'copysn_luu') return m.reply(text)
 
-    // =========================================
-    // 2. LOGIC COMMAND: .sn
-    // =========================================
     if (command === 'sn') {
         if (!user.registered) return m.reply(`⚠️ Daftar dulu cuy! Ketik: *${usedPrefix}daftar*`)
         let capSN = `╭───╼「 *SERIAL NUMBER* 」\n│\n│ 👤 *User:* ${user.name}\n│ 🔐 *SN:* \`${sn}\`\n│\n╰─────────────────────────╼`
@@ -77,9 +64,6 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
         ], fkontak)
     }
 
-    // =========================================
-    // 3. CEK SUDAH DAFTAR
-    // =========================================
     if (user.registered) {
         let jokes = ["BPJS sekalian? 🏥", "Mau daftar nikah? 🙄", "Udah terdaftar bos, mau ngapain lagi? 😂"]
         return m.reply(`✅ Kamu sudah terdaftar sebagai *${user.name}*.\n\n${jokes[Math.floor(Math.random() * jokes.length)]}`)
@@ -91,7 +75,7 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
                      `2. *Jalur Anomali (Cepat):*\nKlik tombol di bawah.`
         
         return await sendInteractive(conn, m.chat, "📝 REGISTRATION MENU", capReg, "» ᴇʀɪɴᴇ-ᴍᴅ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ «", [
-            { text: '🚀 Daftar Cepat (Anomali)', id: `${usedPrefix}daftar_anomali ${name.replace(/[^\w\s]/g, '')}` }
+            { text: '🚀 Daftar Cepat', id: `${usedPrefix}daftar_anomali ${name.replace(/[^\w\s]/g, '')}` }
         ], fkontak)
     }
 
@@ -103,21 +87,12 @@ let handler = async function (m, { text, usedPrefix, command, conn }) {
     user.registered = true
     user.regTime = +new Date()
 
-    let successCap = `╭───╼「 *REGISTRATION* 」\n│\n` +
-                     `│ ✅ *Status:* Terdaftar\n` +
-                     `│ ✨ *Nama:* ${user.name}\n` +
-                     `│ 🔐 *SN:* \`${sn}\`\n│\n` +
-                     `│ _Pendaftaran sukses via Jalur_\n` +
-                     `│ _Anomali malas ERINE-MD._\n│\n` +
-                     `╰─────────────────────────╼`
+    let successCap = `╭───╼「 *REGISTRATION* 」\n│\n│ ✅ *Status:* Terdaftar\n│ ✨ *Nama:* ${user.name}\n│ 🔐 *SN:* \`${sn}\`\n│\n│ _Pendaftaran sukses via Jalur_\n│ _Cepat - Fast_\n│\n╰─────────────────────────╼`
 
-    return await sendInteractive(
-        conn, m.chat, "🎉 REGISTER SUCCESS", successCap, "Selamat datang di Erine MD System!", 
-        [
-            { text: '📂 Buka Menu Utama', id: `.menu` },
-            { text: '🔐 Cek SN', id: `${usedPrefix}sn` }
-        ], fkontak
-    )
+    return await sendInteractive(conn, m.chat, "🎉 REGISTER SUCCESS", successCap, "Selamat datang di Erine MD System!", [
+        { text: '📂 Buka Menu Utama', id: `.menu` },
+        { text: '🔐 Cek SN', id: `${usedPrefix}sn` }
+    ], fkontak)
 }
 
 handler.help = ['daftar', 'sn']

@@ -1,9 +1,3 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysocket/baileys'
-const { MessageType } = pkg 
-
 function pickRandom(list) {
   return list[Math.floor(Math.random() * list.length)]
 }
@@ -29,9 +23,8 @@ let handler = async (m, { conn }) => {
 
     let user = global.db.data.users[m.sender]
     if (!user) global.db.data.users[m.sender] = {}
-    user = global.db.data.users[m.sender] // Re-assign biar dapet object-nya
+    user = global.db.data.users[m.sender]
 
-    // Inisialisasi properti user RPG
     user.health = user.health ?? 100
     user.maxHealth = user.maxHealth ?? 100
     user.exp = user.exp ?? 0
@@ -53,7 +46,6 @@ let handler = async (m, { conn }) => {
 
     await m.react('⚔️')
 
-    // Pertarungan
     while (user.health > 0 && monsterHealth > 0 && round <= 10) {
       let userAttack = Math.floor(Math.random() * 20) + 5
       monsterHealth -= userAttack

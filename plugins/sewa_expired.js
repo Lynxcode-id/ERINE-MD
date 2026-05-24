@@ -14,14 +14,16 @@ const perpisahan = [
 
 let lastCheck = 0;
 
-export async function all(m, { conn }) {
+let handler = m => m;
+
+handler.before = async function (m, { conn }) {
     let now = Date.now();
     
     // Cek database setiap 15 detik sekali (biar gak bikin bot lag/berat)
-    if (now - lastCheck < 15000) return;
+    if (now - lastCheck < 15000) return true;
     lastCheck = now;
 
-    if (!fs.existsSync(dbPath)) return;
+    if (!fs.existsSync(dbPath)) return true;
     
     try {
         let db = JSON.parse(fs.readFileSync(dbPath));
@@ -45,7 +47,7 @@ export async function all(m, { conn }) {
                 changed = true;
                 
                 // Reset limit di database utama juga
-                if (global.db.data.chats[jid]) global.db.data.chats[jid].expired = 0;
+                if (global.db?.data?.chats?.[jid]) global.db.data.chats[jid].expired = 0;
             }
         }
 
@@ -57,4 +59,8 @@ export async function all(m, { conn }) {
     } catch (e) {
         console.error("Error Auto-Leave Sewa:", e);
     }
+    
+    return true; // Wajib return true biar hook lanjut ke plugin lain
 }
+
+export default handler;

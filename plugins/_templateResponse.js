@@ -1,7 +1,4 @@
-// © INF PROJECT - Jemima-MD (ESM Version)
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysocket/baileys'
+import pkg from '@whiskeysockets/baileys'
 const {
   proto,
   generateWAMessage,
@@ -15,21 +12,23 @@ export async function before(m, { conn, chatUpdate }) {
   let id = ''
   let text = ''
 
-  if (m.message.buttonsResponseMessage) {
-    id = m.message.buttonsResponseMessage.selectedButtonId
-    text = m.message.buttonsResponseMessage.selectedDisplayText
+  const realMsg = m.message?.viewOnceMessage?.message || m.message?.viewOnceMessageV2?.message || m.message?.viewOnceMessageV2Extension?.message || m.message
 
-  } else if (m.message.listResponseMessage) {
-    id = m.message.listResponseMessage.singleSelectReply?.selectedRowId
-    text = m.message.listResponseMessage.title
+  if (realMsg.buttonsResponseMessage) {
+    id = realMsg.buttonsResponseMessage.selectedButtonId
+    text = realMsg.buttonsResponseMessage.selectedDisplayText
 
-  } else if (m.message.templateButtonReplyMessage) {
-    id = m.message.templateButtonReplyMessage.selectedId
-    text = m.message.templateButtonReplyMessage.selectedDisplayText
+  } else if (realMsg.listResponseMessage) {
+    id = realMsg.listResponseMessage.singleSelectReply?.selectedRowId
+    text = realMsg.listResponseMessage.title
 
-  } else if (m.message.interactiveResponseMessage) {
+  } else if (realMsg.templateButtonReplyMessage) {
+    id = realMsg.templateButtonReplyMessage.selectedId
+    text = realMsg.templateButtonReplyMessage.selectedDisplayText
+
+  } else if (realMsg.interactiveResponseMessage) {
     try {
-      const params = m.message.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson
+      const params = realMsg.interactiveResponseMessage?.nativeFlowResponseMessage?.paramsJson
       if (params) {
         const data = JSON.parse(params)
         id = data.id || data.value || ''
@@ -108,12 +107,13 @@ export async function before(m, { conn, chatUpdate }) {
   messages.key.remoteJid = m.chat
   messages.key.fromMe = areJidsSameUser(m.sender, conn.user.id)
   messages.key.id = m.key.id
-  messages.pushName = m.name
+  messages.pushName = m.name || m.pushName || 'User'
   if (m.isGroup) messages.key.participant = m.sender
 
+  const plainMsg = JSON.parse(JSON.stringify(messages))
   let msg = {
     ...chatUpdate,
-    messages: [proto.WebMessageInfo.fromObject(messages)].map(v => ((v.conn = conn), v)),
+    messages: [proto.WebMessageInfo.fromObject(plainMsg)].map(v => ((v.conn = conn), v)),
     type: 'append'
   }
 

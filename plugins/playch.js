@@ -79,13 +79,25 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         contextInfo: contextErine
     }, { quoted: fkontak })
 
-    const api = `https://api.nexray.web.id/downloader/ytmp3?url=${encodeURIComponent(v.url)}`
-    const { data } = await axios.get(api)
+    // Ganti engine ke Ryzumi API
+    const baseUrl = global.APIs?.ryzumi || 'https://api.ryzumi.net'
+    const endpoint = `${baseUrl}/api/downloader/ytmp3` 
 
-    if (!data.status) throw 'Audio tidak ditemukan'
+    const res = await axios.get(endpoint, {
+        params: { url: v.url },
+        headers: { 'accept': 'application/json' }
+    })
 
-    const audioUrl = data.result.url
-    const audioRes = await axios.get(audioUrl, { responseType: 'arraybuffer' })
+    const yt = res.data
+
+    if (!yt || !yt.url) throw 'Audio tidak ditemukan dari server Ryzumi'
+
+    const audioRes = await axios.get(yt.url, { 
+        responseType: 'arraybuffer',
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        }
+    })
 
     tempInput = path.join(os.tmpdir(), `${Date.now()}_input.mp3`)
     tempOutput = path.join(os.tmpdir(), `${Date.now()}_output.opus`)
@@ -115,6 +127,22 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const opusBuffer = fs.readFileSync(tempOutput)
 
+    let infoLagu = `🎧 *${v.title}*\n👤 ${v.author.name}  |  ⏳ ${v.timestamp}\n🔗 ${v.url}`
+    
+    await conn.sendMessage(idsal, {
+        image: { url: v.thumbnail },
+        caption: infoLagu,
+        contextInfo: {
+            forwardingScore: 999,
+            isForwarded: true,
+            forwardedNewsletterMessageInfo: {
+                newsletterJid: idsal,
+                newsletterName: "ᴇʀɪɴᴇ-ᴍᴅ",
+                serverMessageId: -1
+            }
+        }
+    })
+
     await conn.sendMessage(idsal, {
       audio: opusBuffer,
       mimetype: 'audio/ogg; codecs=opus',
@@ -125,7 +153,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         forwardedNewsletterMessageInfo: {
             newsletterJid: idsal,
             newsletterName: "ᴇʀɪɴᴇ-ᴍᴅ",
-            serverMessageId: 100
+            serverMessageId: -1
         }
       }
     })
@@ -141,7 +169,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     console.error(e)
     await m.react('❌')
     await conn.sendMessage(m.chat, {
-        text: '❌ Gagal mengambil atau mengirim audio.',
+        text: `❌ Gagal memproses audio:\n> ${e.message || e}`,
         contextInfo: contextErine
     }, { quoted: fkontak })
   } finally {

@@ -2,8 +2,8 @@
 // Developed by INF PROJECT
 
 import axios from 'axios'
-import pkg from '@whiskeysocket/baileys'
-const { generateWAMessageFromContent } = pkg
+import pkg from '@whiskeysockets/baileys'
+const { generateWAMessageFromContent, proto } = pkg
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) {
@@ -92,7 +92,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             sections: sections
         })
 
-        let interactiveMessage = {
+        let interactiveMessage = proto.Message.InteractiveMessage.fromObject({
             body: { text: `🔍 *TIKTOK IMAGE SEARCH*\n\nMenemukan *${json.result.length}* hasil untuk pencarian "${text}".\n\nSilakan klik tombol di bawah buat milih postingan mana yang mau di-*download* semua fotonya cuy!` },
             footer: { text: "© INF PROJECT | Erine-MD" },
             header: { title: "Hasil Pencarian", hasMediaAttachment: false },
@@ -102,7 +102,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                     buttonParamsJson: buttonParamsJson
                 }]
             }
-        }
+        })
 
         let msg = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {

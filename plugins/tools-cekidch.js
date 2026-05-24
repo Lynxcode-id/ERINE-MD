@@ -1,8 +1,4 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysocket/baileys'
-const { generateWAMessageFromContent, proto } = pkg
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
     if (!text) return m.reply(`❌ Masukkan link channelnya, Bang!\nContoh: *${usedPrefix + command}* https://whatsapp.com/channel/xxxx`)
@@ -24,6 +20,10 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         const msg = generateWAMessageFromContent(m.chat, {
             viewOnceMessage: {
                 message: {
+                    messageContextInfo: {
+                        deviceListMetadata: {},
+                        deviceListMetadataVersion: 2
+                    },
                     interactiveMessage: proto.Message.InteractiveMessage.create({
                         body: proto.Message.InteractiveMessage.Body.create({
                             text: teks
@@ -48,7 +48,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             }
         }, { quoted: m })
 
-        await conn.relayMessage(m.chat, msg.message, { messageId: m.key.id })
+        await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id })
         await m.react('✅')
 
     } catch (error) {

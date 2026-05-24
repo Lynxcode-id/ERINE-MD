@@ -1,5 +1,4 @@
-import pkg from '@whiskeysocket/baileys';
-const { generateWAMessageFromContent, proto } = pkg;
+import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 // --- HELPER UI (Native Flow List) ---
 async function sendInteractive(conn, jid, title, text, footer, buttonText, sections, quoted) {
@@ -31,7 +30,6 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
     let isAll = false
     let isUser = false
 
-    // Emoji Helper
     const getS = (v) => v ? '⚡' : '🌟'
 
     switch (type) {
@@ -110,7 +108,6 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
             break
 
         default:
-            // --- GENERATE DYNAMIC ROWS ---
             let gOptions = [
                 { n: 'welcome', s: chat.welcome },
                 { n: 'detect', s: chat.detect },
@@ -140,8 +137,8 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
             }));
 
             let sections = [
-                { title: "👥 GROUP SETTINGS", rows: gOptions },
-                { title: "👑 OWNER SETTINGS", rows: oOptions }
+                { title: "👥 SETELAN GRUP", rows: gOptions },
+                { title: "👑 SETELAN KHUSUS OWNER", rows: oOptions }
             ];
 
             return await sendInteractive(
@@ -153,16 +150,12 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
             );
     }
 
-    m.reply(`
-╭───╼「 *SUCCESS UPDATE* 」
-│
-│  ✨ *Fitur:* ${type}
-│  ⚙️ *Status:* ${isEnable ? 'AKTIF' : 'NONAKTIF'}
-│  📊 *Scope:* ${isAll ? 'Global Bot' : isUser ? 'User' : 'Chat Group'}
-│  💡 *Indikator:* ${isEnable ? '⚡' : '🌟'}
-│
-╰─────────────────────────╼
-`.trim())
+    m.reply(`*UPDATE INFORMATION*
+
+✨ *Fitur:* ${type}
+⚙️ *Status:* ${isEnable ? 'AKTIF' : 'NONAKTIF'}
+📊 *Scope:* ${isAll ? 'Global Bot' : isUser ? 'User' : 'Chat Group'}
+💡 *Indikator:* ${isEnable ? '⚡' : '🌟'}`.trim())
 }
 
 handler.help = ['enable', 'disable']
