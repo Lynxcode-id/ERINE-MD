@@ -61,7 +61,6 @@ function start(file) {
     switch (data) {
       case 'reset':
         console.log(chalk.bgRed.white.bold('\n 🔄 SYSTEM RESET INITIATED (SIGKILL) 🔄 '));
-        // Eksekusi mati paksa mencegah zombie process sesuai log update lu
         p.process.kill('SIGKILL'); 
         isRunning = false;
         start(file);
