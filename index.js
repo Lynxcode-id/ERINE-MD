@@ -60,8 +60,9 @@ function start(file) {
   p.on('message', data => {
     switch (data) {
       case 'reset':
-        console.log(chalk.bgRed.white.bold('\n 🔄 SYSTEM RESET INITIATED 🔄 '));
-        p.kill();
+        console.log(chalk.bgRed.white.bold('\n 🔄 SYSTEM RESET INITIATED (SIGKILL) 🔄 '));
+        // Eksekusi mati paksa mencegah zombie process sesuai log update lu
+        p.process.kill('SIGKILL'); 
         isRunning = false;
         start(file);
         break;
