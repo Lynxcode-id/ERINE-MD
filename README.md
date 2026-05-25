@@ -26,6 +26,7 @@ Cocok digunakan untuk:
 - 👥 Manajemen grup
 - ✨ AI tools
 - 🖼️ Sticker maker
+- 💰 Berjualan Apapun
 
 ---
 
@@ -120,10 +121,16 @@ Kirim gambar dengan caption:
 - Fix Project ?? tergantung waktu kami biasanya 1-2 harian akan kami fix dan upload ke github
 - Sudah pairing tapi pas ketik command kek .menu di bot ga muncul? restart panel dulu yah !!
 - Selebihnya Tanya Tanya saja
+- Bot ini mungkin agak berat karena full button
+- Kami merencang bot dengan stabilitas/performa tinggi yang tidak mudah delay dan tahan terhadap spam
+- Jangan lupa gift starnya yah di repo
 
 ---
 
 ## ❤️ Thanks
+
+Baileys¹: *@itsliaa/baileys*
+Baileys² : *ourin-baileys*
 
 Base by **Ryo Yamada**
 Base Utama by **ShirokamiRyzen**  
