@@ -1,17 +1,19 @@
 /**
- * 85% NO ENC - 100% FREE
+ * 85% NO ENC - 100 FREE
  * Yang jual mental miskin + moga rejekinya seret
  * Mau riview script atau rename ulang script ini?
  * Tag yt : @lynxpresetkechee | Github : Lynxcode-id
  * Script akan selalu di kembangkan, ketemu bug/error
  * Ketik .lapor penanganan fix 24j kelar!!
- * Base : nao-md esm ---- ryo yamada
- * Dev - Pengembang sc ini : Erine MD - Lynx decode
+ * Based on Nao ESM
+ * Base Script : Hlman Ryo
+ * Dev - Pengembang² :  Erine MD - Lynx code
  * Ikuti saluran kami untuk info update project ini
  * https://chat.whatsapp.com/CSMhBRB2DoICQwyy61txr0
  * https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
 **/
 
+import './readme-guard.js'
 import { watchFile, unwatchFile } from 'fs'
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
@@ -94,7 +96,7 @@ global.goodbyeBg = 'https://c.termai.cc/i166/lWwS.jpg'
 global.menuThumb = 'https://c.termai.cc/i177/YPu.jpg'
 global.videothumb = 'https://c.termai.cc/v188/CHBtAz.mp4'
 global.menuAudio = [
-    'https://c.termai.cc/a142/FRQ.mp3'
+    'https://c.termai.cc/a137/QAn0.mp3'
 
 ]
 
