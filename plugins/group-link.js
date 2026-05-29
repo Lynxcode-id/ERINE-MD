@@ -2,7 +2,6 @@ let handler = async (m, { conn }) => {
     if (!m.isGroup) return m.reply('❌ Fitur ini hanya bisa digunakan di grup!')
 
     try {
-        // Ambil link grup terbaru
         let inviteCode;
         try {
             inviteCode = await conn.groupInviteCode(m.chat)

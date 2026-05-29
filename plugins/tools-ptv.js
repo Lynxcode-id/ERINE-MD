@@ -1,54 +1,59 @@
 // © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
+// Developed by INF PROJECT | Lynx
 
-import pkg from '@whiskeysockets/baileys'
-const { generateWAMessageContent } = pkg
+let handler = async (m, { conn, command, usedPrefix }) => {
+    let video = null
 
-let handler = async (m, { conn, usedPrefix, command }) => {
-  let q = m.quoted ? m.quoted : m
-  let mime = (m.quoted ? m.quoted : m.msg).mimetype || ""
+    try {
+        if (m.quoted && m.quoted.mtype === 'videoMessage') {
+            video = await m.quoted.download()
+        } else if (m.mtype === 'videoMessage') {
+            video = await m.download()
+        }
+    } catch (e) {
+        return m.reply('❌ Gagal mengambil video')
+    }
 
-  if (!/webp|image|video|gif|viewOnce/g.test(mime)) {
-    return m.reply(`*• Contoh :* ${usedPrefix + command} *[reply/send media]*`)
-  }
+    if (!video) {
+        return m.reply(
+            `⚠️ *CARA PAKAI*\n\n` +
+            `Reply atau kirim video lalu ketik:\n` +
+            `*${usedPrefix}ptv* (Untuk kirim di chat)\n` +
+            `*${usedPrefix}ptvch* (Untuk upload ke Channel)`
+        )
+    }
 
-  await m.react('⏳')
+    await m.react('⏳')
+    await m.reply('🕕 Sedang membuat PTV...')
 
-  try {
-    let media = await q.download()
-    if (!media) throw 'Gagal mendownload media.'
-    let msg = await generateWAMessageContent(
-      {
-        video: media,
-      },
-      {
-        upload: conn.waUploadToServer,
-      }
-    )
+    try {
+        let isChannel = command.toLowerCase() === 'ptvch'
+        let targetJid = isChannel ? '120363400612665352@newsletter' : m.chat
 
-    await conn.relayMessage(
-      m.chat,
-      {
-        ptvMessage: msg.videoMessage,
-      },
-      {
-        quoted: m,
-      }
-    )
+        await conn.sendMessage(targetJid, {
+            video: video,
+            mimetype: 'video/mp4',
+            gifPlayback: true,
+            ptv: true
+        }, isChannel ? {} : { quoted: m })
 
-    await m.react('✅')
+        if (isChannel) {
+            await m.reply(`✅ *Sukses mengunggah PTV ke Channel!*\n🔗 *Cek disini:* https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i`)
+        }
 
-  } catch (e) {
-    console.error(e)
-    await m.react('❌')
-    m.reply(`❌ *Gagal Konversi:* Pastikan media yang dikirim adalah video atau gambar yang valid.`)
-  }
+        await m.react('✅')
+
+    } catch (e) {
+        console.error(e)
+        await m.react('❌')
+        return m.reply(`❌ Gagal: ${e.message}`)
+    }
 }
 
-handler.help = ["toptv"]
-handler.tags = ["tools"]
-handler.command = ["toptv"]
-handler.limit = true
+handler.help = ['ptv', 'ptvch']
+handler.tags = ['tools']
+handler.command = /^(ptv|ptvch|pvideo|circlevideo)$/i
+handler.limit = true 
 handler.admin = true
 
 export default handler

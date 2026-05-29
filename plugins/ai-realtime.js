@@ -1,32 +1,54 @@
-import fetch from 'node-fetch'
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx Decode
+ * 📞 WhatsApp  : +62 882-5804-1396
+ * 📢 Channel   : https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
+ * ⚠️ Note      : Keep credit to respect the creator!
+ * ─────────────────────────
+ * 📝 Plugin: AI - Realtime
+ */
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  await m.react('✨')
+    if (!text) {
+        return m.reply(
+            `⚠️ *Format Salah!*\n\n` +
+            `Gunakan format: *${usedPrefix + command} <pertanyaan>*\n\n` +
+            `💡 *Contoh:*\n` +
+            `${usedPrefix + command} sekarang hari apa dan jam berapa?`
+        )
+    }
 
-  if (!text) {
-    return conn.reply(
-      m.chat,
-      `Example : ${usedPrefix + command} Siapa bahlil`,
-      m
-    )
-  }
+    await m.react('⏳')
 
-  try {
-    let url = `${global.APIs.faa}/faa/ai-realtime?text=${encodeURIComponent(text)}`
-    let res = await fetch(url)
-    let json = await res.json()
+    try {
+        let apiUrl = `https://api-faa.my.id/faa/ai-realtime?text=${encodeURIComponent(text.trim())}`
+        
+        let res = await fetch(apiUrl)
+        let json = await res.json()
 
-    if (!json.status) throw 'Gagal mengambil jawaban.'
+        if (!json.status || !json.result) {
+            throw new Error('Gagal mendapatkan respon dari AI.')
+        }
 
-    conn.reply(m.chat, json.result.trim(), m)
-  } catch (e) {
-    conn.reply(m.chat, 'Terjadi kesalahan saat mengambil data.', m)
-  }
+        let caption = `🤖 *AI REALTIME*\n\n` +
+            `${json.result}\n\n` +
+            `> © INF PROJECT`
+
+        await conn.sendMessage(m.chat, { 
+            text: caption 
+        }, { quoted: m })
+
+        await m.react('✅')
+    } catch (e) {
+        console.error(e)
+        await m.react('❌')
+        m.reply(`❌ *Terjadi Kesalahan:* Gagal menghubungi server AI.`)
+    }
 }
 
 handler.help = ['airealtime <pertanyaan>']
 handler.tags = ['ai']
-handler.command = /^airealtime$/i
+handler.command = /^(ai-realtime|airealtime)$/i
 handler.limit = true
 
 export default handler

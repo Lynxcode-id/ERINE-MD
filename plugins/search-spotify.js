@@ -1,47 +1,58 @@
-import axios from 'axios'
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx Decode
+ * 📞 WhatsApp  : +62 882-5804-1396
+ * 📢 Channel   : https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
+ * ⚠️ Note      : Keep credit to respect the creator!
+ * ─────────────────────────
+ */
+
+import fetch from 'node-fetch';
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-    await m.react('✨')
+    if (!text) return m.reply(`Masukkan judul lagu yang mau dicari cuy!\n\n💡 *Contoh:* ${usedPrefix + command} Duka Last Child`);
 
-    if (!text) {
-        return m.reply(`Contoh penggunaan:
-${usedPrefix + command} swim chase atlantic`)
-    }
+    await m.react('⏳');
 
     try {
-        const url = `${global.APIs.deline}/search/spotify?q=${encodeURIComponent(text)}`
-        const { data } = await axios.get(url)
+        let url = `https://api-xemoz-official.my.id/api/search/spotify.php?q=${encodeURIComponent(text)}`;
+        let res = await fetch(url);
+        let json = await res.json();
 
-        if (!data.status || !data.data.length) {
-            throw 'Lagu tidak ditemukan'
+        if (!json.status || !json.result || json.result.length === 0) {
+            await m.react('❌');
+            return m.reply('❌ Lagu tidak ditemukan cuy, coba judul lain.');
         }
 
-        const list = data.data.slice(0, 5)
+        let data = json.result[0];
+        
+        let teks = `╭───「 🎧 *SPOTIFY SEARCH* 」───\n`;
+        teks += `│ 🎵 *Title:* ${data.title}\n`;
+        teks += `│ 👤 *Artist:* ${data.artist}\n`;
+        teks += `│ 💿 *Album:* ${data.album}\n`;
+        teks += `│ ⏱️ *Duration:* ${data.duration}\n`;
+        teks += `│ 📅 *Released:* ${data.release_date}\n`;
+        teks += `│ 📈 *Popularity:* ${data.popularity}%\n`;
+        teks += `╰─────────────────────────\n\n`;
+        teks += `🔗 *Link:* ${data.url}\n\n`;
+        teks += `_© Erine-MD | INF PROJECT_`;
 
-        let caption = `🎵 *Spotify Search*\n\n`
-        for (let i = 0; i < list.length; i++) {
-            let v = list[i]
-            caption += `${i + 1}. *${v.title}*\n`
-            caption += `👤 ${v.artis}\n`
-            caption += `⏱️ ${v.durasi}\n`
-            caption += `🔗 ${v.url}\n\n`
-        }
+        await conn.sendMessage(m.chat, {
+            image: { url: data.thumbnail },
+            caption: teks
+        }, { quoted: m });
 
-        const img = await axios.get(list[0].image, {
-            responseType: 'arraybuffer'
-        })
-
-        await conn.sendFile(m.chat, img.data, 'spotify.jpg', caption.trim(), m)
-
+        await m.react('✅');
     } catch (e) {
-        console.error(e)
-        m.reply('Gagal mencari lagu Spotify.')
+        console.error(e);
+        await m.react('❌');
+        m.reply('❌ Gagal mengambil data. Server API mungkin sedang error.');
     }
 }
 
-handler.help = ['spotifysearch <judul lagu>']
-handler.tags = ['search']
-handler.command = /^spotifysearch$/i
-handler.limit = true
+handler.help = ['spsearch <judul>', 'spotifysearch <judul>'];
+handler.tags = ['search'];
+handler.command = /^(spsearch|spotifysearch)$/i;
+handler.limit = true;
 
-export default handler
+export default handler;

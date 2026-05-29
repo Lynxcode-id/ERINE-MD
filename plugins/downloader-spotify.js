@@ -1,95 +1,54 @@
-import fetch from 'node-fetch'
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx Decode
+ * ─────────────────────────
+ */
+
+import spotmate from '../scrape/spotmate.js'
+import axios from 'axios'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
-  if (!text) {
-      return conn.reply(
-        m.chat,
-        `Example : ${usedPrefix + command} Untuk apa hindia`,
-        m
-      )
-  }
-
-  try {
-    await m.react('⏳')
-
-    let api = `${global.APIs.faa}/faa/spotify-play?q=${encodeURIComponent(text)}`
-    let res = await fetch(api)
-    let json = await res.json()
-
-    if (!json.status) throw 'API error'
-
-    let info = json.info
-    let dl = json.download.url
-
-    let caption = `┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴅ │๑˚₊ 🎀
-┇ 🎵 › sᴘᴏᴛɪꜰʏ ᴅᴏᴡɴʟᴏᴀᴅᴇʀ
-┇ 🌸 › sᴀꜰᴇ & ᴛʀᴜsᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ
-└˚₊ ๑ ᴛ ʀ ᴀ ᴄ ᴋ  ɪ ɴ ꜰ ᴏ ๑˚₊ 🍓
-
-┌˚ · ๑୧ ᴅ ᴇ ᴛ ᴀ ɪ ʟ s
-┇ 🎧 ⁞ ᴛɪᴛʟᴇ : ${info.title}
-┇ 👤 ⁞ ᴀʀᴛɪsᴛ : ${info.artist}
-┇ 💽 ⁞ ᴀʟʙᴜᴍ : ${info.album}
-└˚₊ ๑୧
-
-*Tunggu sebentar, audio sedang dikirim...* ⏳
-© ᴇʀɪɴᴇ ᴍᴅ x ᴊᴋᴛ𝟺𝟾 ᴠɪʙᴇ`.trim()
-
-    let wm = global.wm || "Erine System"
-    let senderNumber = m.sender.split('@')[0]
-    let fkontak = {
-        key: {
-            fromMe: false,
-            participant: `0@s.whatsapp.net`
-        },
-        message: {
-            contactMessage: {
-                displayName: wm,
-                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:XL;${wm},;;;\nFN:${wm}\nitem1.TEL;waid=${senderNumber}:${senderNumber}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
-            }
-        }
+    if (!text || !/spotify.com/i.test(text)) {
+        return m.reply(`⚠️ *Mana linknya njir?*\n\nContoh: *${usedPrefix + command} https://open.spotify.com/track/...*`)
     }
 
-    // Kirim pesan detail info duluan
-    await conn.sendMessage(m.chat, { 
-        text: caption,
-        contextInfo: {
-            forwardingScore: 999,
-            isForwarded: true,
-            forwardedNewsletterMessageInfo: {
-                newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
-                newsletterJid: "120363400612665352@newsletter"
+    await m.react('⏳')
+
+    try {
+        let res = await spotmate(text.trim())
+        if (!res || !res.download_url) throw new Error('Gagal ngambil data lagu.')
+
+        let { data: audioBuffer } = await axios.get(res.download_url, {
+            responseType: 'arraybuffer',
+            headers: {
+                'user-agent': 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36',
+                'referer': 'https://spotmate.online/',
+                'accept': '*/*'
             }
-        }
-    }, { quoted: fkontak })
+        })
 
-    // Kirim audio
-    await conn.sendMessage(m.chat, {
-      audio: { url: dl },
-      mimetype: 'audio/mpeg',
-      fileName: `${info.title}.mp3`,
-      contextInfo: {
-        forwardingScore: 999,
-        isForwarded: true,
-        forwardedNewsletterMessageInfo: {
-            newsletterName: `「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 🐣 」`,
-            newsletterJid: "120363400612665352@newsletter"
-        }
-      }
-    }, { quoted: fkontak })
+        let caption = `🎧 *SPOTIFY DOWNLOADER*\n\n` +
+            `🎵 *Title:* ${res.title}\n` +
+            `👤 *Artist:* ${res.artist}\n\n` +
+            `> © INF PROJECT`
 
-    await m.react('✅')
-
-  } catch (e) {
-    console.error(e)
-    await m.react('❌')
-    conn.reply(m.chat, '⚠️ Gagal mengambil audio.', m)
-  }
+        await m.reply(caption)
+        await conn.sendMessage(m.chat, {
+            audio: audioBuffer,
+            mimetype: 'audio/mpeg'
+        }, { quoted: m })
+        
+        await m.react('✅')
+    } catch (e) {
+        console.error(e)
+        await m.react('❌')
+        m.reply(`❌ *Error njir:* ${e.message}`)
+    }
 }
 
-handler.help = ['spotify <judul lagu>']
+handler.help = ['spotify <link>']
 handler.tags = ['downloader']
-handler.command = /^spotify$/i
+handler.command = /^(spotify|spotdl)$/i
 handler.limit = true
 
 export default handler

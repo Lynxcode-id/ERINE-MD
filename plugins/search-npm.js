@@ -1,64 +1,65 @@
-import axios from 'axios'
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx Decode
+ * 📢 Channel   : https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
+ * ─────────────────────────
+ * 📝 Plugin: Search - NPM Packages
+ */
 
-let handler = async (m, { conn, text, usedPrefix }) => {
-  if (!text) {
-    return m.reply(
-      `❌ Masukkan nama package\n\nContoh:\n${usedPrefix}npmsearch baileys`
-    )
-  }
+import fetch from 'node-fetch'
 
-  try {
-    const { data } = await axios.get(
-      `https://manzxy.my.id/search/npm?q=${encodeURIComponent(text)}`
-    )
-
-    if (!data?.status || !data.result?.length) {
-      return m.reply('❌ Package tidak ditemukan')
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    if (!text) {
+        return m.reply(
+            `⚠️ *Ngapain lu?*\n\n` +
+            `Ketik nama package-nya njir, formatnya: *${usedPrefix + command} <nama module>*\n\n` +
+            `💡 *Contoh:*\n` +
+            `${usedPrefix + command} axios`
+        )
     }
 
-    const list = data.result.slice(0, 8) // ambil 8 teratas
+    await m.react('⏳')
 
-    let caption = `📦 *NPM SEARCH*\n`
-    caption += `🔍 Query: *${text}*\n`
-    caption += `📊 Total: *${data.result.length} package*\n\n`
+    try {
+        // API NPM dari Faa udah bener nih
+        let apiUrl = `https://api-faa.my.id/faa/npmjs?name=${encodeURIComponent(text.trim())}`
+        
+        let res = await fetch(apiUrl)
+        let json = await res.json()
 
-    for (let i = 0; i < list.length; i++) {
-      const v = list[i]
-      caption +=
-`*${i + 1}. ${v.title}*
-👤 Author   : ${v.author || '-'}
-⬇️ Download : ${v.download.weekly} / minggu
-📅 Update   : ${new Date(v.update).toLocaleDateString()}
-🌐 NPM      : ${v.links?.npm || '-'}
-
-`
-    }
-
-    await conn.sendMessage(
-      m.chat,
-      {
-        text: caption.trim(),
-        contextInfo: {
-          isForwarded: true,
-          forwardingScore: 9999,
-          forwardedNewsletterMessageInfo: {
-            newsletterJid: "120363400612665352@newsletter",
-            newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
-            serverMessageId: -1
-          }
+        if (!json.status || !json.result || json.result.length === 0) {
+            throw new Error('Data kosong.')
         }
-      },
-      { quoted: m }
-    )
 
-  } catch (e) {
-    console.error(e)
-    m.reply('❌ Gagal mengambil data NPM')
-  }
+        let caption = `📦 *NPM SEARCH RESULT*\n\n`
+        caption += `🔍 *Pencarian:* ${text}\n`
+        caption += `━━━━━━━━━━━━━━━\n\n`
+        let limit = json.result.length > 10 ? 10 : json.result.length
+        
+        for (let i = 0; i < limit; i++) {
+            let v = json.result[i]
+            caption += `*${i + 1}. ${v.name}* (v${v.version})\n`
+            caption += `🔗 *Link:* ${v.link}\n`
+            caption += `📝 *Desc:* ${v.description || 'Tidak ada deskripsi'}\n\n`
+        }
+        
+        caption += `> © INF PROJECT`
+
+        await conn.sendMessage(m.chat, { 
+            text: caption.trim() 
+        }, { quoted: m })
+
+        await m.react('✅')
+    } catch (e) {
+        console.error(e)
+        await m.react('❌')
+        m.reply(`❌ *Error njir:* Gagal nyari data NPM, cek API-nya idup apa kaga.`)
+    }
 }
 
-handler.help = ['npmsearch <query>']
+handler.help = ['npmsearch <package>']
 handler.tags = ['search']
-handler.command = /^npm(search)?$/i
+handler.command = /^(npmsearch)$/i
+handler.limit = true
 
 export default handler

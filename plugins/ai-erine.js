@@ -121,7 +121,7 @@ User adalah orang yang cukup dekat dan menarik perhatianmu.
 
 handler.help = ['erine <teks>', 'rin <teks>', 'erineai <teks>']
 handler.tags = ['ai']
-handler.command = /^(erine|rin|erineai)$/i
+handler.command = /^(erine|erineai)$/i
 handler.limit = true
 
 export default handler
