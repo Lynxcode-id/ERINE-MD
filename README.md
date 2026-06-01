@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/file_00000000b5d471faa4c5c8b876d8ca6f.png" width="380"/>
+  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/c1bfb70786a1d1b86b03e12cd71d5549.jpg" width="380"/>
 </p>
 
 <h1 align="center">ERINE MD</h1>
@@ -26,7 +26,6 @@ Cocok digunakan untuk:
 - 👥 Manajemen grup
 - ✨ AI tools
 - 🖼️ Sticker maker
-- 💰 Berjualan Apapun
 
 ---
 
@@ -116,21 +115,10 @@ Kirim gambar dengan caption:
 - Jangan spam command.
 - Beberapa fitur hanya bisa digunakan admin atau owner.
 - Jika bot tidak merespon, tunggu beberapa saat.
-- Jangan merename tanpa seizin pengembang script ini, tolong hargai kami agar kami terus melanjutkan project bot whatsapp ini sekian, terima kasih 🙏🏻
-- Contact Dev/Pengembang ada di config.js jika kalian belum merenamenya, jika ada fitur yang error segera ketik .lapor agar secepatnya saya fix
-- Fix Project ?? tergantung waktu kami biasanya 1-2 harian akan kami fix dan upload ke github
-- Sudah pairing tapi pas ketik command kek .menu di bot ga muncul? restart panel dulu yah !!
-- Selebihnya Tanya Tanya saja
-- Bot ini mungkin agak berat karena full button
-- Kami merencang bot dengan stabilitas/performa tinggi yang tidak mudah delay dan tahan terhadap spam
-- Jangan lupa gift starnya yah di repo
 
 ---
 
 ## ❤️ Thanks
-
-Baileys¹: *@itsliaa/baileys*
-Baileys² : *ourin-baileys*
 
 Base by **Ryo Yamada**
 Base Utama by **ShirokamiRyzen**  

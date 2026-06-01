@@ -1,1 +1,103 @@
-const _0x310552=_0x1f5c;(function(_0x27e680,_0x61427c){const _0x31013a=_0x1f5c,_0x5646ea=_0x27e680();while(!![]){try{const _0x2ea7b9=parseInt(_0x31013a(0x13e))/(-0x20*0x130+-0x16b5+-0x199*-0x26)+parseInt(_0x31013a(0x117))/(-0x487+0x53b*-0x1+0x9c4)+parseInt(_0x31013a(0x137))/(0xeca*0x1+0xec0+0x1*-0x1d87)*(-parseInt(_0x31013a(0x111))/(-0x900*-0x2+0xa2e+0x5*-0x5a2))+parseInt(_0x31013a(0x15c))/(0x163d+0x4af*-0x7+0xa91*0x1)+parseInt(_0x31013a(0x116))/(0x586+-0x1e*-0x10e+-0x949*0x4)*(-parseInt(_0x31013a(0x128))/(-0x119f+0x1*0x16d9+0x1*-0x533))+parseInt(_0x31013a(0x109))/(0x685+0x1*0x1bdf+0x1*-0x225c)+-parseInt(_0x31013a(0x156))/(0x119*0x1+-0x171f+0x160f)*(parseInt(_0x31013a(0x163))/(-0xc5d+0x2693+-0x1a2c));if(_0x2ea7b9===_0x61427c)break;else _0x5646ea['push'](_0x5646ea['shift']());}catch(_0x1a069b){_0x5646ea['push'](_0x5646ea['shift']());}}}(_0x2eb1,-0x13d*-0x6a+-0x46*-0x37a8+-0x1639a));function _0x1f5c(_0x54457f,_0x31475a){_0x54457f=_0x54457f-(-0x44f+-0x248a+-0x14e9*-0x2);const _0x3c2b7c=_0x2eb1();let _0x5ba9d9=_0x3c2b7c[_0x54457f];return _0x5ba9d9;}import'./readme-guard.js';import{startReadmeWatchdog}from'./lib/bootlock.js';import _0x4e4b8c from'yargs';import{hideBin}from'yargs/helpers';const argv=_0x4e4b8c(hideBin(process[_0x310552(0x153)]))[_0x310552(0x153)];import _0x725cd3 from'cfonts';import _0x2e823c from'chalk';function _0x2eb1(){const _0x38ee4e=['\x20RESET\x20INI','EfWgD','cyan','viving\x20Sys','join','bgRed','gtIDk','index.js','[\x20⚡\x20]\x20Spaw','test','jcYyf','\x0a\x20❗\x20WORKER','\x20📨\x20SIGNAL\x20','🚀\x20CORE\x20SYS','log','9943568DhVymi','──────╮','\x0a\x20🔄\x20SYSTEM','TcSSo','bgHex','AzhSy','LIZATION\x20🚀','╰─────────','4aVwKZb','exit','unt','bold','message','5091588FnMTTA','1754262Zviwxv','hex','Worker:\x20','╭─────────','exitProces','GKILL)\x20🔄\x20','error','setupPrima','ning\x20Node\x20','SbebE','name','repeat','fork','tQucY','erzsh','E:\x20','slice','14VSCham','IATED...','center','#00FFFF','UxOCW','SIGKILL','yellowBrig','gress...','KSQct','tEhnY',')\x20❗\x20','ERINE-MD\x0aP','reset','#9b5cff','console','2414631POHyNm','#00FFCC','block','UKnAh','stdin','UENCE\x20INIT','\x20DOWN\x20(COD','1800382XSscJx','stdout','TEM\x20INITIA','clear','TIATED\x20(SI','dGdUJ','./package.','nwCip','uptime','json','#b92b27','trim','QMDgr','cyanBright','hjQYz','send','──────────','line','main.js','process','tem\x20in\x20pro','argv','IdelS','qcOAC','5506821bONkmL','#FF00FF','KRmXa','⚡\x20BOOT\x20SEQ','iSgvw','\x0aBy:\x20@','667055pZyojW','⚠️\x20\x20Auto-Re','kill','emit','white','listenerCo','taPrN','10lgrvmi','parse','ROJECT','──────╯\x0a'];_0x2eb1=function(){return _0x38ee4e;};return _0x2eb1();}import{fileURLToPath}from'url';import{join,dirname}from'path';import{createRequire}from'module';import{createInterface}from'readline';import _0x51a3b1 from'cluster';import{watchFile,unwatchFile}from'fs';import{checkVersionUpdate}from'./lib/plugin-utils.js';const {say}=_0x725cd3,rl=createInterface(process[_0x310552(0x13b)],process[_0x310552(0x13f)]),__dirname=dirname(fileURLToPath(import.meta.url)),require=createRequire(__dirname),{name,author}=require(join(__dirname,_0x310552(0x144)+_0x310552(0x147)));console[_0x310552(0x141)](),startReadmeWatchdog(_0x310552(0x101)),say(_0x310552(0x133)+_0x310552(0x165),{'font':_0x310552(0x139),'align':_0x310552(0x12a),'gradient':[_0x310552(0x12b),_0x310552(0x157)],'transitionGradient':!![]}),say(_0x310552(0x107)+_0x310552(0x140)+_0x310552(0x10f)+_0x310552(0x15b)+(author[_0x310552(0x121)]||author),{'font':_0x310552(0x136),'align':_0x310552(0x12a),'gradient':[_0x310552(0x138),_0x310552(0x148)]}),console[_0x310552(0x108)](_0x2e823c[_0x310552(0x14b)](_0x310552(0x11a)+_0x310552(0x14e)+_0x310552(0x14e)+_0x310552(0x14e)+_0x310552(0x14e)+_0x310552(0x10a))),console[_0x310552(0x108)](_0x2e823c[_0x310552(0x14b)]('│\x20')+_0x2e823c[_0x310552(0x114)][_0x310552(0x118)](_0x310552(0x157))(_0x310552(0x159)+_0x310552(0x13c)+_0x310552(0x129))+'\x20'[_0x310552(0x122)](-0x133d+0xd24+0x633)+_0x2e823c[_0x310552(0x14b)]('│')),console[_0x310552(0x108)](_0x2e823c[_0x310552(0x14b)](_0x310552(0x110)+_0x310552(0x14e)+_0x310552(0x14e)+_0x310552(0x14e)+_0x310552(0x14e)+_0x310552(0xf9))),await checkVersionUpdate();var isRunning=![];function start(_0x155abc){const _0x2e2973=_0x310552,_0x1b9ec1={'tQucY':_0x2e2973(0x134),'UxOCW':_0x2e2973(0x10b)+_0x2e2973(0xfa)+_0x2e2973(0x142)+_0x2e2973(0x11c),'SbebE':_0x2e2973(0x12d),'dGdUJ':function(_0x41946c,_0xccf623){return _0x41946c(_0xccf623);},'AzhSy':_0x2e2973(0x146),'gtIDk':function(_0x32bac2,_0x5b4ee3){return _0x32bac2+_0x5b4ee3;},'QMDgr':function(_0x1d7e27,_0x30d6c6){return _0x1d7e27+_0x30d6c6;},'UKnAh':_0x2e2973(0x135),'iSgvw':_0x2e2973(0x106),'taPrN':function(_0x5f4c72,_0x3b0a93){return _0x5f4c72(_0x3b0a93);},'IdelS':function(_0x196346,_0x5b80d6){return _0x196346!==_0x5b80d6;},'nwCip':_0x2e2973(0x15d)+_0x2e2973(0xfd)+_0x2e2973(0x152)+_0x2e2973(0x12f),'KRmXa':function(_0x1f1e8f,_0x344963,_0x4b3fc9){return _0x1f1e8f(_0x344963,_0x4b3fc9);},'tEhnY':_0x2e2973(0x115),'erzsh':function(_0x4d1aff,_0x49afe9){return _0x4d1aff+_0x49afe9;},'EfWgD':_0x2e2973(0x138),'hjQYz':_0x2e2973(0x112),'TcSSo':function(_0x399d0e,_0x57b639){return _0x399d0e(_0x57b639);},'qcOAC':_0x2e2973(0x103),'jcYyf':_0x2e2973(0x14f)};if(isRunning)return;isRunning=!![];let _0x2594ba=[_0x1b9ec1[_0x2e2973(0x158)](join,__dirname,_0x155abc),...process[_0x2e2973(0x153)][_0x2e2973(0x127)](-0x5*-0x36+-0xb99+0xa8d)];console[_0x2e2973(0x108)](_0x1b9ec1[_0x2e2973(0x125)](_0x2e823c[_0x2e2973(0x118)](_0x1b9ec1[_0x2e2973(0xfb)])(_0x2e2973(0x102)+_0x2e2973(0x11f)+_0x2e2973(0x119)),_0x2e823c[_0x2e2973(0x160)](_0x2594ba[_0x2e2973(0xfe)]('\x20')))),_0x51a3b1[_0x2e2973(0x11e)+'ry']({'exec':_0x2594ba[0x11c*-0x8+-0x2304+0x6a*0x6a],'args':_0x2594ba[_0x2e2973(0x127)](-0x1a40+0x1*0x3e6+0x165b)});let _0x4be049=_0x51a3b1[_0x2e2973(0x123)]();_0x4be049['on'](_0x1b9ec1[_0x2e2973(0x131)],_0x490796=>{const _0x49d769=_0x2e2973;switch(_0x490796){case _0x1b9ec1[_0x49d769(0x124)]:console[_0x49d769(0x108)](_0x2e823c[_0x49d769(0xff)][_0x49d769(0x160)][_0x49d769(0x114)](_0x1b9ec1[_0x49d769(0x12c)])),_0x4be049[_0x49d769(0x151)][_0x49d769(0x15e)](_0x1b9ec1[_0x49d769(0x120)]),isRunning=![],_0x1b9ec1[_0x49d769(0x143)](start,_0x155abc);break;case _0x1b9ec1[_0x49d769(0x10e)]:_0x4be049[_0x49d769(0x14d)](process[_0x49d769(0x146)]());break;default:console[_0x49d769(0x108)](_0x1b9ec1[_0x49d769(0x100)](_0x1b9ec1[_0x49d769(0x14a)](_0x2e823c[_0x49d769(0x10d)](_0x1b9ec1[_0x49d769(0x13a)])[_0x49d769(0x160)][_0x49d769(0x114)](_0x1b9ec1[_0x49d769(0x15a)]),'\x20'),_0x2e823c[_0x49d769(0xfc)](_0x490796)));}}),_0x4be049['on'](_0x1b9ec1[_0x2e2973(0x14c)],(_0xd55791,_0x1908e6)=>{const _0x416eba=_0x2e2973,_0x3890cf={'KSQct':function(_0x3b95f4,_0x5d419b){const _0x588e85=_0x1f5c;return _0x1b9ec1[_0x588e85(0x162)](_0x3b95f4,_0x5d419b);}};isRunning=![],console[_0x416eba(0x11d)](_0x2e823c[_0x416eba(0xff)][_0x416eba(0x160)][_0x416eba(0x114)](_0x416eba(0x105)+_0x416eba(0x13d)+_0x416eba(0x126)+_0x1908e6+_0x416eba(0x132)));if(_0x1b9ec1[_0x416eba(0x154)](_0x1908e6,0x1567*0x1+-0x581*0x3+-0x4e4))return console[_0x416eba(0x108)](_0x2e823c[_0x416eba(0x12e)+'ht'](_0x1b9ec1[_0x416eba(0x145)])),_0x1b9ec1[_0x416eba(0x162)](start,_0x155abc);_0x1b9ec1[_0x416eba(0x158)](watchFile,_0x2594ba[-0x5*-0x5e7+-0x163a+0x1*-0x749],()=>{const _0x5784ca=_0x416eba;_0x3890cf[_0x5784ca(0x130)](unwatchFile,_0x2594ba[-0x1*-0x1463+-0x134b+-0x118]),_0x3890cf[_0x5784ca(0x130)](start,_0x155abc);});});let _0x1a57d1=_0x1b9ec1[_0x2e2973(0x10c)](_0x4e4b8c,process[_0x2e2973(0x153)][_0x2e2973(0x127)](-0x119e+-0xb76+0x1d16))[_0x2e2973(0x11b)+'s'](![])[_0x2e2973(0x164)]();!_0x1a57d1[_0x1b9ec1[_0x2e2973(0x155)]]&&(!rl[_0x2e2973(0x161)+_0x2e2973(0x113)]()&&rl['on'](_0x1b9ec1[_0x2e2973(0x104)],_0x3b8ca2=>{const _0x270e0a=_0x2e2973;_0x4be049[_0x270e0a(0x15f)](_0x1b9ec1[_0x270e0a(0x131)],_0x3b8ca2[_0x270e0a(0x149)]());}));}start(_0x310552(0x150));
+import './readme-guard.js'
+import { startReadmeWatchdog } from './lib/bootlock.js'
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+
+const argv = yargs(hideBin(process.argv)).argv;
+
+import cfonts from 'cfonts';
+import chalk from 'chalk';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
+import { createRequire } from 'module';
+import { createInterface } from 'readline';
+import cluster from 'cluster';
+import { watchFile, unwatchFile } from 'fs';
+import { checkVersionUpdate } from './lib/plugin-utils.js';
+
+const { say } = cfonts;
+const rl = createInterface(process.stdin, process.stdout);
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const require = createRequire(__dirname);
+const { name, author } = require(join(__dirname, './package.json'));
+
+console.clear();
+
+say('ERINE-MD\nPROJECT', { 
+    font: 'block', 
+    align: 'center', 
+    gradient: ['#00FFFF', '#FF00FF'],
+    transitionGradient: true 
+});
+
+say(`🚀 CORE SYSTEM INITIALIZATION 🚀\nBy: @${author.name || author}`, { 
+    font: 'console', 
+    align: 'center', 
+    gradient: ['#00FFCC', '#b92b27'] 
+});
+
+console.log(chalk.cyanBright('╭───────────────────────────────────────────────────────╮'));
+console.log(chalk.cyanBright('│ ') + chalk.bold.hex('#FF00FF')('⚡ BOOT SEQUENCE INITIATED...') + ' '.repeat(26) + chalk.cyanBright('│'));
+console.log(chalk.cyanBright('╰───────────────────────────────────────────────────────╯\n'));
+
+await checkVersionUpdate();
+
+var isRunning = false;
+
+/**
+ * Start a js file
+ * @param {String} file `path/to/file`
+ */
+function start(file) {
+  if (isRunning) return;
+  isRunning = true;
+
+  let args = [join(__dirname, file), ...process.argv.slice(2)];
+  
+  console.log(chalk.hex('#00FFCC')(`[ ⚡ ] Spawning Node Worker: `) + chalk.white(args.join(' ')));
+  
+  cluster.setupPrimary({ exec: args[0], args: args.slice(1) });
+  let p = cluster.fork();
+
+  p.on('message', data => {
+    switch (data) {
+      case 'reset':
+        console.log(chalk.bgRed.white.bold('\n 🔄 SYSTEM RESET INITIATED (SIGKILL) 🔄 '));
+        p.process.kill('SIGKILL'); 
+        isRunning = false;
+        start(file);
+        break;
+      case 'uptime':
+        p.send(process.uptime());
+        break;
+      default:
+        console.log(chalk.bgHex('#9b5cff').white.bold(' 📨 SIGNAL ') + ' ' + chalk.cyan(data));
+    }
+  });
+
+  p.on('exit', (_, code) => {
+    isRunning = false;
+    console.error(chalk.bgRed.white.bold(`\n ❗ WORKER DOWN (CODE: ${code}) ❗ `));
+    if (code !== 0) {
+      console.log(chalk.yellowBright('⚠️  Auto-Reviving System in progress...'));
+      return start(file);
+    }
+    
+    watchFile(args[0], () => {
+      unwatchFile(args[0]);
+      start(file);
+    });
+  });
+
+  let opts = yargs(process.argv.slice(2)).exitProcess(false).parse();
+  
+  if (!opts['test']) {
+    if (!rl.listenerCount()) {
+      rl.on('line', line => {
+        p.emit('message', line.trim());
+      });
+    }
+  }
+}
+
+start('main.js');

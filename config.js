@@ -13,7 +13,6 @@
  * https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
 **/
 
-import './readme-guard.js'
 import { watchFile, unwatchFile } from 'fs'
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
@@ -47,7 +46,7 @@ global.prems = [] // Bebas
 global.nomorbot = '6285185681661' // No Bot
 global.nomorown = '6288258041396'// No Utama
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
-global.version = '20.2.4' // Versi Script Ini
+global.version = '20.0.5' // Versi Script Ini
 global.autotyping = false // Default : false
 global.autorecording = false // Default : false
 
@@ -96,7 +95,10 @@ global.goodbyeBg = 'https://c.termai.cc/i166/lWwS.jpg'
 global.menuThumb = 'https://c.termai.cc/i177/YPu.jpg'
 global.videothumb = 'https://c.termai.cc/v188/CHBtAz.mp4'
 global.menuAudio = [
-    'https://c.termai.cc/a137/QAn0.mp3'
+    'https://c.termai.cc/a137/QAn0.mp3',
+    'https://files.catbox.moe/0kcx57.mp3',
+    'https://files.catbox.moe/ek9cli.mp3',
+    'https://files.catbox.moe/8rwp6j.mp3'
 
 ]
 
