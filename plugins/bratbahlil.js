@@ -6,7 +6,7 @@
  * Source : https://whatsapp.com/channel/0029VbAYjQgKrWQulDTYcg2K
  */
 
-import { createCanvas, loadImage } from "canvas"
+import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fetch from "node-fetch"
 import { createSticker, StickerTypes } from "wa-sticker-formatter"
 

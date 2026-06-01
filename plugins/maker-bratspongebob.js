@@ -3,7 +3,7 @@
  * Command: .bratspongebob / .spongebob
  */
 
-import { createCanvas, loadImage } from "canvas"
+import { createCanvas, loadImage } from '@napi-rs/canvas'
 import fetch from "node-fetch"
 
 let handler = async (m, { text, conn, usedPrefix, command }) => {

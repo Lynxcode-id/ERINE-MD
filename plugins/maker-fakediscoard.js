@@ -1,5 +1,3 @@
-
-
 /*
 
 # Fitur : Fake Discord Chat
@@ -12,7 +10,7 @@ jangan hapus wm ini banggg
 
 */
 
-import { createCanvas, loadImage } from 'canvas'
+import { createCanvas, loadImage } from '@napi-rs/canvas'
 import moment from 'moment-timezone'
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {

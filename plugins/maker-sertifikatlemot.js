@@ -1,4 +1,4 @@
-import { createCanvas } from 'canvas'
+import { createCanvas } from '@napi-rs/canvas'
 
 let handler = async (m, { text, conn }) => {
   const nama = text || m.pushName || 'Orang Lemot'

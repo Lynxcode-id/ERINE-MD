@@ -1,5 +1,5 @@
-import { createCanvas, loadImage, registerFont } from 'canvas'
-import fs from 'fs'
+import pkg from '@napi-rs/canvas'; const { createCanvas, loadImage, registerFont } = pkg;
+import fs from 'fs';
 
 let handler = async (m, { conn, args }) => {
   try {

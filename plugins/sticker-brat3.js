@@ -1,4 +1,4 @@
-import { createCanvas } from 'canvas';
+import { createCanvas } from '@napi-rs/canvas';
 import * as Jimp from "jimp";
 import { Sticker } from 'wa-sticker-formatter';
 

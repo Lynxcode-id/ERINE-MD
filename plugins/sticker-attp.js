@@ -10,7 +10,7 @@ https://whatsapp.com/channel/0029Vb3u2awADTOCXVsvia28
 Lupa Dapat Dimana Yang Merasa Punya Skrep Nya Pm Aja 🗿
 */
 
-import { createCanvas } from 'canvas';
+import { createCanvas } from '@napi-rs/canvas';
 import { exec } from 'child_process';
 import fs from 'fs';
 import path from 'path';
