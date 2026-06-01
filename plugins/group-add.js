@@ -1,95 +1,95 @@
 // © INF PROJECT - Erine-MD
 // Developed by INF PROJECT
 
-import fetch from 'node-fetch'
-import pkg from '@whiskeysockets/baileys' 
-const { getBinaryNodeChild, getBinaryNodeChildren } = pkg
+const normalizeJid = (conn, jid = '') => {
+  jid = String(jid || '').trim()
+  if (!jid) return ''
+  jid = typeof conn?.decodeJid === 'function' ? conn.decodeJid(jid) : jid
+  if (jid.endsWith('@lid') && typeof conn?.getJid === 'function') {
+    const resolved = conn.getJid(jid)
+    if (resolved && !resolved.endsWith('@lid')) jid = resolved
+  }
+  if (/^\d+$/.test(jid)) jid = `${jid}@s.whatsapp.net`
+  return jid
+}
 
 let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
   if (!text) throw `⚠️ Masukkan nomor yang ingin ditambahkan!\n\n📌 Contoh:\n${usedPrefix + command} 628xxxx`
 
   await m.react('⏳')
 
-  let _participants = participants.map(user => user.id)
-  let users = (await Promise.all(
-    text.split(',')
-      .map(v => v.replace(/[^0-9]/g, ''))
-      .filter(v => v.length > 4 && v.length < 20 && !_participants.includes(v + '@s.whatsapp.net'))
-      .map(async v => [v, await conn.onWhatsApp(v + '@s.whatsapp.net')])
-  )).filter(v => v[1][0]?.exists).map(v => v[0] + '@c.us')
+  let input = text.split(',')
+    .map(v => v.replace(/[^0-9]/g, ''))
+    .filter(v => v.length > 4 && v.length < 20)
 
-  if (!users.length) {
+  if (input.length === 0) {
     await m.react('❌')
-    return m.reply('❌ Nomor tidak valid, sudah ada di grup, atau privasi nomor tersebut tidak mengizinkan.')
+    return m.reply('❌ Nomor tidak valid.')
   }
 
-  const response = await conn.query({
-    tag: 'iq',
-    attrs: {
-      type: 'set',
-      xmlns: 'w:g2',
-      to: m.chat,
-    },
-    content: users.map(jid => ({
-      tag: 'add',
-      attrs: {},
-      content: [{ tag: 'participant', attrs: { jid } }]
-    }))
-  })
+  const participantJids = new Set((participants || []).map(user => normalizeJid(conn, user?.id || user?.jid || user?.lid || user?.participant || user?.phoneNumber)))
 
-  const pp = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null)
-  let jpegThumbnail = Buffer.alloc(0)
-  if (pp) {
+  let usersToInvite = []
+  for (let num of input) {
+    let jid = normalizeJid(conn, `${num}@s.whatsapp.net`)
+    let onWa = await conn.onWhatsApp(jid)
+    if (onWa[0]?.exists && !participantJids.has(jid)) {
+      usersToInvite.push(jid)
+    }
+  }
+
+  if (usersToInvite.length === 0) {
+    await m.react('❌')
+    return m.reply('❌ Nomor tidak terdaftar di WhatsApp atau sudah ada di dalam grup.')
+  }
+
+  let successCount = 0
+  let failedCount = 0
+  let inviteList = []
+
+  for (let jid of usersToInvite) {
     try {
-        const res = await fetch(pp)
-        jpegThumbnail = Buffer.from(await res.arrayBuffer())
+      const response = await conn.groupParticipantsUpdate(m.chat, [jid], 'add')
+      let status = response?.[0]?.status
+
+      if (status === '403') {
+        inviteList.push(jid)
+      } else if (status === '408') {
+        await conn.reply(m.chat, `⚠️ Tidak dapat menambahkan @${jid.split('@')[0]} karena dia baru saja keluar atau di-kick dari grup ini.`, m, { mentions: [jid] })
+        failedCount++
+      } else if (status === '200' || !status) {
+        successCount++
+      }
     } catch (e) {
-        console.error('Gagal fetch thumbnail:', e)
+      console.error(`Gagal menambahkan ${jid}:`, e)
+      failedCount++
     }
   }
 
-  const add = getBinaryNodeChild(response, 'add')
-  const participant = getBinaryNodeChildren(add, 'participant')
-
-  if (!participant?.length) {
-    await m.react('❌')
-    return m.reply('❌ Gagal mendapatkan respon dari server WhatsApp.')
-  }
-
-  let gagal408 = participant.filter(v => v.attrs.error == '408')
-  if (gagal408.length) {
-    for (const gagal of gagal408) {
-      let nomor = gagal.attrs.jid.split('@')[0]
-      await conn.reply(m.chat, `⚠️ Tidak dapat menambahkan @${nomor} karena dia baru saja keluar atau di-kick dari grup ini.`, m, {
-        mentions: [gagal.attrs.jid]
-      })
+  if (inviteList.length > 0) {
+    let txt = `📨 Mengundang ${inviteList.length} pengguna menggunakan link undangan karena privasi akun mereka...\n\n`
+    for (let jid of inviteList) {
+      txt += `• @${jid.split('@')[0]}\n`
     }
-  }
+    await m.reply(txt, null, { mentions: inviteList })
 
-  let undang403 = participant.filter(v => v.attrs.error == '403')
-  if (undang403.length) {
-    for (const user of undang403) {
-      const jid = user.attrs.jid
-      const content = getBinaryNodeChild(user, 'add_request')
-      const invite_code = content.attrs.code
-      const invite_code_exp = content.attrs.expiration
-      
-      let txt = `📨 Mengundang @${jid.split('@')[0]} menggunakan link undangan karena privasi akunnya...`
-      await m.reply(txt, null, { mentions: [jid] })
-      
-      await conn.sendGroupV4Invite(
-        m.chat,
-        jid,
-        invite_code,
-        invite_code_exp,
-        await conn.getName(m.chat),
-        'Undangan untuk bergabung ke Erine-MD Project',
-        jpegThumbnail
-      )
+    try {
+      let code = await conn.groupInviteCode(m.chat)
+      let link = `https://chat.whatsapp.com/${code}`
+
+      for (let jid of inviteList) {
+        await conn.sendMessage(jid, {
+          text: `Halo!\nKamu diundang untuk bergabung ke grup *${await conn.getName(m.chat)}*.\n\nKlik link di bawah untuk bergabung:\n${link}`
+        })
+      }
+      successCount += inviteList.length
+    } catch (e) {
+      console.log('Gagal bikin/kirim link invite:', e)
     }
   }
 
   await m.react('✅')
+  m.reply(`🎯 *Selesai!*\n\n✔️ Berhasil diproses: ${successCount}\n❌ Gagal: ${failedCount}`)
 }
 
 handler.help = ['add', '+'].map(v => v + ' <nomor>')

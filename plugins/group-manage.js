@@ -5,111 +5,140 @@
  * ────────────────────────✧
  */
 
-const handler = async (m, { conn, text, command, participants, isOwner }) => {
-    // --- AMBIL DATA GRUP ---
-    let prtps = participants;
-    if (!prtps || prtps.length === 0) {
-        const meta = await conn.groupMetadata(m.chat).catch(e => {}) || {};
-        prtps = meta.participants || [];
+const normalizeJid = (conn, jid = '') => {
+    jid = String(jid || '').trim()
+    if (!jid) return ''
+
+    jid = typeof conn?.decodeJid === 'function' ? conn.decodeJid(jid) : jid
+    if (jid.endsWith('@lid') && typeof conn?.getJid === 'function') {
+        const resolved = conn.getJid(jid)
+        if (resolved && !resolved.endsWith('@lid')) jid = resolved
     }
 
-    // 🔥 FIX: Potong kode device dari nomor si pengirim (m.sender)
-    const senderNumber = m.sender.split(':')[0].split('@')[0];
+    if (/^\d+$/.test(jid)) jid = `${jid}@s.whatsapp.net`
+    return jid
+}
 
-    // Cek admin dengan mencocokkan angka murninya saja!
-    const isUserAdmin = prtps.some(p => p.id.includes(senderNumber) && (p.admin === 'admin' || p.admin === 'superadmin'));
-    const isBotOwner = isOwner || (global.owner && global.owner.includes(senderNumber));
+const sameUser = (conn, a, b) => {
+    const jidA = normalizeJid(conn, a)
+    const jidB = normalizeJid(conn, b)
+    if (!jidA || !jidB) return false
+    if (typeof globalThis.areJidsSameUser === 'function') return globalThis.areJidsSameUser(jidA, jidB)
+    return jidA.replace(/[^0-9]/g, '') === jidB.replace(/[^0-9]/g, '')
+}
 
-    // Kalau bukan admin dan bukan owner, tendang!
-    if (!isUserAdmin && !isBotOwner) return m.reply('❌ HANYA ADMIN YANG DAPAT MENGAKSES FITUR INI');
-    
-    // -------------------------------------------
+const getParticipantJid = (conn, p = {}) => normalizeJid(conn, p?.id || p?.jid || p?.participant || p?.lid || p?.phoneNumber)
 
-    const target = m.quoted ? m.quoted.sender : m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null;
-    const cmdWithTarget = ['add', 'kick', 'promote', 'demote'];
+const handler = async (m, { conn, text, command, participants, isOwner }) => {
+    let prtps = Array.isArray(participants) ? participants : []
+    if (!prtps.length) {
+        const meta = await conn.groupMetadata(m.chat).catch(() => ({})) || {}
+        prtps = meta.participants || []
+    }
 
-    if (cmdWithTarget.includes(command) && !target) return m.reply('❌ Reply/tag siapa yang ingin di proses.');
+    const senderJid = normalizeJid(conn, m.sender)
+    const senderNumber = senderJid.split('@')[0].split(':')[0].replace(/[^0-9]/g, '')
+    const ownerNumbers = (global.owner || [])
+        .map(v => Array.isArray(v) ? v[0] : v)
+        .map(v => String(v).replace(/[^0-9]/g, ''))
+        .filter(Boolean)
 
-    const inGc = prtps.some((v) => target && v.id.includes(target.split('@')[0]));
-    
-    let botJid = conn.user?.id?.split(':')[0] || conn.user?.jid?.split(':')[0] || conn.user?.id?.split('@')[0] || '';
-    botJid = botJid.replace(/[^0-9]/g, '');
+    const isUserAdmin = prtps.some(p => {
+        const jid = getParticipantJid(conn, p)
+        const role = String(p?.admin || '').toLowerCase()
+        return sameUser(conn, jid, senderJid) && (role === 'admin' || role === 'superadmin')
+    })
 
-    // EKSEKUSI LANGSUNG (TRY-CATCH)
+    const isBotOwner = isOwner || ownerNumbers.includes(senderNumber)
+    if (!isUserAdmin && !isBotOwner) return m.reply('❌ HANYA ADMIN YANG DAPAT MENGAKSES FITUR INI')
+
+    const rawTarget = m.quoted?.sender || m.mentionedJid?.[0] || (text ? `${text.replace(/[^0-9]/g, '')}@s.whatsapp.net` : '')
+    const target = normalizeJid(conn, rawTarget)
+    const cmdWithTarget = ['add', 'kick', 'promote', 'demote']
+
+    if (cmdWithTarget.includes(command) && !target) return m.reply('❌ Reply/tag siapa yang ingin di proses.')
+
+    const findGroupParticipant = jid => {
+        if (!jid) return null
+        return prtps.find(p => sameUser(conn, getParticipantJid(conn, p), jid)) || null
+    }
+
+    const inGc = !!findGroupParticipant(target)
+    const botJid = normalizeJid(conn, conn.user?.jid || conn.user?.id || '')
+
     try {
         switch (command) {
-            case 'add':
-                {
-                    if (inGc) return m.reply('❌ User sudah ada didalam grup!');
-                    const response = await conn.groupParticipantsUpdate(m.chat, [target], 'add');
-                    const jpegThumbnail = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null);
+            case 'add': {
+                if (inGc) return m.reply('❌ User sudah ada didalam grup!')
+                const response = await conn.groupParticipantsUpdate(m.chat, [target], 'add')
+                const jpegThumbnail = await conn.profilePictureUrl(m.chat, 'image').catch(_ => null)
 
-                    for (const participant of response) {
-                        const jid = participant.content?.attrs?.phone_number || participant.content?.attrs?.jid || target;
-                        const status = participant.status;
+                for (const participant of response || []) {
+                    const jid = normalizeJid(conn, participant.content?.attrs?.phone_number || participant.content?.attrs?.jid || target)
+                    const status = participant.status
 
-                        if (status === '408') {
-                            m.reply(`❌ Tidak dapat menambahkan @${jid.split('@')[0]}!\nMungkin dia baru keluar dari grup ini atau dikick.`);
-                        } else if (status === '403') {
-                            const inviteCode = participant.content?.content?.[0]?.attrs?.code;
-                            const inviteExp = participant.content?.content?.[0]?.attrs?.expiration;
-                            if (inviteCode) {
-                                await m.reply(`⏳ Mengundang @${jid.split('@')[0]} menggunakan link invite...`);
-                                await conn.sendGroupV4Invite(m.chat, jid, inviteCode, inviteExp, 'Grup', 'Undangan untuk bergabung ke grup WhatsApp', jpegThumbnail);
-                            }
-                        } else {
-                            m.reply(`✅ Berhasil menambahkan @${jid.split('@')[0]}`);
+                    if (status === '408') {
+                        m.reply(`❌ Tidak dapat menambahkan @${jid.split('@')[0]}!\nMungkin dia baru keluar dari grup ini atau dikick.`)
+                    } else if (status === '403') {
+                        const inviteCode = participant.content?.content?.[0]?.attrs?.code
+                        const inviteExp = participant.content?.content?.[0]?.attrs?.expiration
+                        if (inviteCode) {
+                            await m.reply(`⏳ Mengundang @${jid.split('@')[0]} menggunakan link invite...`)
+                            await conn.sendGroupV4Invite(m.chat, jid, inviteCode, inviteExp, 'Grup', 'Undangan untuk bergabung ke grup WhatsApp', jpegThumbnail)
                         }
+                    } else {
+                        m.reply(`✅ Berhasil menambahkan @${jid.split('@')[0]}`)
                     }
                 }
-                break;
+                break
+            }
 
-            case 'kick':
-                if (!inGc) return m.reply('❌ User tidak ada dalam grup.');
-                if (target.includes(botJid)) return m.reply('❌ Gak bisa kick bot sendiri anjir!');
-                await conn.groupParticipantsUpdate(m.chat, [target], 'remove');
-                m.reply(`✅ Berhasil kick: @${target.split('@')[0]}`);
-                break;
+            case 'kick': {
+                if (!inGc) return m.reply('❌ User tidak ada dalam grup.')
+                if (sameUser(conn, target, botJid)) return m.reply('❌ Gak bisa kick bot sendiri anjir!')
+                await conn.groupParticipantsUpdate(m.chat, [findGroupParticipant(target)?.id || target], 'remove')
+                m.reply(`✅ Berhasil kick: @${target.split('@')[0]}`, null, { mentions: [target] })
+                break
+            }
 
-            case 'promote':
-                if (!inGc) return m.reply('❌ User tidak berada dalam grup!');
-                await conn.groupParticipantsUpdate(m.chat, [target], 'promote');
-                m.reply(`✅ Promote: @${target.split('@')[0]}`);
-                break;
+            case 'promote': {
+                if (!inGc) return m.reply('❌ User tidak berada dalam grup!')
+                await conn.groupParticipantsUpdate(m.chat, [findGroupParticipant(target)?.id || target], 'promote')
+                m.reply(`✅ Promote: @${target.split('@')[0]}`, null, { mentions: [target] })
+                break
+            }
 
-            case 'demote':
-                if (!inGc) return m.reply('❌ User tidak berada dalam grup!');
-                await conn.groupParticipantsUpdate(m.chat, [target], 'demote');
-                m.reply(`✅ Demote: @${target.split('@')[0]}`);
-                break;
+            case 'demote': {
+                if (!inGc) return m.reply('❌ User tidak berada dalam grup!')
+                await conn.groupParticipantsUpdate(m.chat, [findGroupParticipant(target)?.id || target], 'demote')
+                m.reply(`✅ Demote: @${target.split('@')[0]}`, null, { mentions: [target] })
+                break
+            }
 
             case 'closegc':
-            case 'mute':
-                await conn.groupSettingUpdate(m.chat, 'announcement');
-                m.reply('✅ Grup berhasil ditutup (hanya admin yang bisa chat).');
-                break;
+                await conn.groupSettingUpdate(m.chat, 'announcement')
+                m.reply('✅ Grup berhasil ditutup (hanya admin yang bisa chat).')
+                break
 
             case 'opengc':
-            case 'unmute':
-                await conn.groupSettingUpdate(m.chat, 'not_announcement');
-                m.reply('✅ Grup berhasil dibuka (semua member bisa chat).');
-                break;
+                await conn.groupSettingUpdate(m.chat, 'not_announcement')
+                m.reply('✅ Grup berhasil dibuka (semua member bisa chat).')
+                break
 
             default:
-                return m.reply('Perintah tidak dikenal.');
+                return m.reply('Perintah tidak dikenal.')
         }
     } catch (error) {
-        console.error(error);
-        m.reply('❌ Gagal mengeksekusi perintah!\n\n_Pastikan bot sudah diangkat menjadi Admin Grup._');
+        console.error(error)
+        m.reply('❌ Gagal mengeksekusi perintah!\n\n_Pastikan bot sudah diangkat menjadi Admin Grup._')
     }
-};
+}
 
-handler.help = ['add', 'kick', 'promote', 'demote', 'closegc', 'opengc'];
-handler.tags = ['group'];
-handler.command = /^(add|kick|promote|demote|mute|unmute|closegc|opengc)$/i;
-handler.group = true;
+handler.help = ['add', 'kick', 'promote', 'demote', 'closegc', 'opengc']
+handler.tags = ['group']
+handler.command = /^(add|kick|promote|demote|closegc|opengc)$/i
+handler.group = true
+handler.admin = true
+handler.botAdmin = true
 
-handler.admin = true;
-handler.botAdmin = true;
-
-export default handler;
+export default handler

@@ -49,19 +49,31 @@ const getFormattedDate = (date) => {
 let handler = async (m, { conn }) => {
     let chatData = loadChatData();
     const messages = conn.chats[m.chat]?.messages || {};
-    const participants = (await conn.groupMetadata(m.chat)).participants;
+    const participants = (await conn.groupMetadata(m.chat)).participants || [];
+    const resolveJid = (jid = '') => {
+        jid = String(jid || '')
+        if (!jid) return ''
+        jid = typeof conn?.decodeJid === 'function' ? conn.decodeJid(jid) : (jid.decodeJid?.() || jid)
+        if (jid.endsWith('@lid') && typeof conn?.getJid === 'function') {
+            const resolved = conn.getJid(jid)
+            if (resolved && !resolved.endsWith('@lid')) jid = resolved
+        }
+        if (/^\d+$/.test(jid)) jid = `${jid}@s.whatsapp.net`
+        return jid
+    };
     const participantCounts = chatData[m.chat] || {};
 
     // Menghitung jumlah pesan dari setiap peserta
     Object.values(messages).forEach(({ key }) => {
-        const sender = key.participant || key.remoteJid;
+        const sender = resolveJid(key.participant || key.remoteJid);
         participantCounts[sender] = (participantCounts[sender] || 0) + 1;
     });
 
     // Pastikan semua peserta grup ada dalam daftar, meskipun tidak mengirim pesan
-    participants.forEach(({ id }) => {
-        if (!participantCounts[id]) {
-            participantCounts[id] = 0;
+    participants.forEach(({ id, jid, lid }) => {
+        const pid = resolveJid(id || jid || lid);
+        if (!participantCounts[pid]) {
+            participantCounts[pid] = 0;
         }
     });
 
@@ -74,7 +86,7 @@ let handler = async (m, { conn }) => {
     const totalMessages = sortedData.reduce((acc, [, total]) => acc + total, 0);
 
     const pesan = sortedData
-        .map(([jid, total], index) => `*${index + 1}.* ${jid.replace(/(\d+)@.+/, '@$1')}: *${total}* pesan`)
+        .map(([jid, total], index) => `*${index + 1}.* ${resolveJid(jid).replace(/(\d+)@.+/, '@$1')}: *${total}* pesan`)
         .join('\n');
 
     // Mendapatkan tanggal dan hari
@@ -89,7 +101,7 @@ let handler = async (m, { conn }) => {
         null,
         {
             contextInfo: {
-                mentionedJid: sortedData.map(([jid]) => jid),
+                mentionedJid: sortedData.map(([jid]) => resolveJid(jid)),
             },
         }
     );
@@ -101,3 +113,4 @@ handler.command = /^(totalpesan)$/i;
 handler.group = true;
 
 export default handler;
+
