@@ -1,6 +1,6 @@
 {
   "name": "ERINE-MD BY LYNX",
-  "version": "20.2.8",
+  "version": "20.3.6",
   "description": "Erine Project MD - WhatsApp Multi-Device Bot",
   "main": "index.js",
   "type": "module",
