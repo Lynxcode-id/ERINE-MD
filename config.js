@@ -98,8 +98,17 @@ global.menuAudio = [
     'https://c.termai.cc/a137/QAn0.mp3',
     'https://files.catbox.moe/0kcx57.mp3',
     'https://files.catbox.moe/ek9cli.mp3',
-    'https://files.catbox.moe/8rwp6j.mp3'
-
+    'https://files.catbox.moe/8rwp6j.mp3',
+    'https://files.catbox.moe/pgdu4c.mp3',
+    'https://files.catbox.moe/hc9hrb.mp3',
+    'https://files.catbox.moe/2ut7m8.mp3',
+    'https://files.catbox.moe/oxzh73.mp3',
+    'https://files.catbox.moe/mjpkdf.mp3',
+    'https://files.catbox.moe/9tq80c.mp3',
+    'https://files.catbox.moe/1cw079.mp3',
+    'https://files.catbox.moe/2ptm0q.mp3',
+    'https://files.catbox.moe/ubb9ge.mp3',
+    'https://files.catbox.moe/hc9hrb.mp3'
 ]
 
 // SET IDN - SHOWROOM 
