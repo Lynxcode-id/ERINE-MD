@@ -1,49 +1,51 @@
-import { areJidsSameUser } from '@whiskeysockets/baileys'
-
 let handler = async (m, { conn, text, participants }) => {
-  if (!m.isGroup) return m.reply('❌ Perintah ini hanya bisa digunakan di grup.')
+  if (!m.isGroup)
+    return m.reply('❌ Perintah ini hanya bisa digunakan di grup.')
 
-  const rawWho =
-    m.quoted?.sender ||
-    m.mentionedJid?.[0] ||
-    (text ? `${text.replace(/\D/g, '')}@s.whatsapp.net` : '')
+  let target = m.mentionedJid?.[0] 
+    ? m.mentionedJid[0] 
+    : m.quoted 
+      ? m.quoted.sender 
+      : text 
+        ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' 
+        : false
 
-  if (!rawWho) return m.reply('❌ Reply, tag, atau ketik nomor target yang ingin di kick.')
-
-  const who = typeof conn.getJid === 'function'
-    ? conn.getJid(rawWho)
-    : (conn.decodeJid?.(rawWho) || rawWho)
-
-  const botJid = typeof conn.getJid === 'function'
-    ? conn.getJid(conn.user?.jid || conn.user?.id || '')
-    : (conn.decodeJid?.(conn.user?.jid || conn.user?.id || '') || '')
-
-  if (areJidsSameUser(who, m.sender)) {
-    return m.reply('❌ Tidak bisa mengeluarkan diri sendiri.')
+  if (!target) {
+    return m.reply(
+      '❌ Tag, reply, atau ketik nomor orang yang ingin dikeluarkan.\n\n' +
+      'Contoh:\n' +
+      '.kick @user\n' +
+      '.kick (reply pesan)\n' +
+      '.kick 628xxx'
+    )
   }
 
-  if (botJid && areJidsSameUser(who, botJid)) {
+  let botJid = conn.decodeJid(conn.user.id)
+  if (target === botJid)
     return m.reply('❌ Tidak bisa mengeluarkan bot.')
-  }
 
-  const parts = (participants || [])
-    .map(p => p?.id || p?.jid || p?.participant || p?.lid)
-    .filter(Boolean)
-    .map(raw => ({
-      raw,
-      norm: typeof conn.getJid === 'function'
-        ? conn.getJid(raw)
-        : (conn.decodeJid?.(raw) || raw)
-    }))
+  let isTargetAdmin = participants.find(
+    p => p.id === target && (p.admin === 'admin' || p.admin === 'superadmin')
+  )
 
-  const matched = parts.find(p => areJidsSameUser(p.norm, who))
-  if (!matched) return m.reply('❌ Target tidak berada dalam grup.')
-
-  const target = matched.norm || matched.raw
+  if (isTargetAdmin)
+    return m.reply('❌ Tidak bisa mengeluarkan admin grup.')
 
   try {
-    await conn.groupParticipantsUpdate(m.chat, [target], 'remove')
-    m.reply(`✅ Berhasil kick: @${target.split('@')[0]}`, null, { mentions: [target] })
+    await conn.groupParticipantsUpdate(
+      m.chat,
+      [target],
+      'remove'
+    )
+    
+    try {
+      await conn.sendMessage(m.chat, {
+        sticker: { url: 'https://files.catbox.moe/h4q4hq.webp' }
+      }, { quoted: m })
+    } catch (e) {
+      m.reply('✅ Anggota berhasil dikeluarkan.')
+    }
+
   } catch (err) {
     console.error('[KICK ERROR]', err)
     m.reply('❌ Gagal mengeluarkan anggota. Pastikan bot adalah admin.')
@@ -52,7 +54,7 @@ let handler = async (m, { conn, text, participants }) => {
 
 handler.help = ['kick @user', 'kick (reply pesan)', 'kick <nomor>']
 handler.tags = ['group']
-handler.command = /^(kick)$/i
+handler.command = ['kick']
 
 handler.admin = true
 handler.botAdmin = true

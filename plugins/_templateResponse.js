@@ -34,7 +34,7 @@ export async function before(m, { conn, chatUpdate }) {
   if (!id) return false
 
   m.isBypassed = true
-  
+
   let messages = await generateWAMessage(
     m.chat,
     { text: id, mentions: m.mentionedJid || [] },
@@ -51,6 +51,7 @@ export async function before(m, { conn, chatUpdate }) {
   if (m.isGroup) messages.key.participant = m.sender
   
   const plainMsg = JSON.parse(JSON.stringify(messages))
+  
   let msg = {
     ...chatUpdate,
     messages: [proto.WebMessageInfo.fromObject(plainMsg)].map(v => ((v.conn = conn), v)),

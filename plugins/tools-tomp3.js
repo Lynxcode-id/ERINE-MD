@@ -15,6 +15,7 @@ import { randomBytes } from 'crypto'
 import ffmpeg from 'fluent-ffmpeg'
 import ffmpegInstaller from '@ffmpeg-installer/ffmpeg'
 
+// Paksa fluent-ffmpeg buat pake binary lokal dari NPM
 ffmpeg.setFfmpegPath(ffmpegInstaller.path)
 
 let handler = async (m, { conn, usedPrefix, command }) => {
@@ -30,11 +31,15 @@ let handler = async (m, { conn, usedPrefix, command }) => {
     try {
         let media = await q.download()
         if (!media) throw new Error('Gagal mendownload media.')
+
+        // Bikin nama file acak di direktori temp (biar ga numpuk & support semua panel)
         let ran = randomBytes(5).toString('hex')
         let tmpIn = path.join(os.tmpdir(), `${ran}_in.mp4`)
         let tmpOut = path.join(os.tmpdir(), `${ran}_out.mp3`)
 
         fs.writeFileSync(tmpIn, media)
+
+        // Proses convert audio
         await new Promise((resolve, reject) => {
             ffmpeg(tmpIn)
                 .toFormat('mp3')
@@ -48,11 +53,12 @@ let handler = async (m, { conn, usedPrefix, command }) => {
         await conn.sendMessage(m.chat, { 
             audio: audio, 
             mimetype: 'audio/mpeg', 
-            ptt: false,
+            ptt: false, // Ubah ke true kalo mau jadi bentuk Voice Note
             fileName: `Convert-${m.sender.split('@')[0]}.mp3`,
             caption: '> © INF PROJECT'
         }, { quoted: m })
 
+        // Auto hapus file temp setelah berhasil
         if (fs.existsSync(tmpIn)) fs.unlinkSync(tmpIn)
         if (fs.existsSync(tmpOut)) fs.unlinkSync(tmpOut)
 

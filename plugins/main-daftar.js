@@ -3,6 +3,7 @@ import moment from 'moment-timezone'
 import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
 async function sendInteractive(conn, jid, title, text, footer, buttons, quoted) {
+    // Definisi tombol native flow
     const buttonsMap = buttons.map(b => ({
         name: "quick_reply",
         buttonParamsJson: JSON.stringify({ display_text: b.text, id: b.id })

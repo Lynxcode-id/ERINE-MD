@@ -53,8 +53,8 @@ let handler = async (m, {
     });
 };
 
-handler.command = ["delsesi", "clearsesi", "deletesesi"];
-handler.help = ["delsesi", "clearsesi", "deletesesi"];
+handler.command = ["delsesi", "clearsesi", "deletesesi", "clearsession"];
+handler.help = ["delsesi", "clearsesi", "deletesesi", "clearsession"];
 handler.tags = ["owner"];
 handler.owner = true;
 

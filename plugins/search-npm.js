@@ -34,6 +34,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
         let caption = `📦 *NPM SEARCH RESULT*\n\n`
         caption += `🔍 *Pencarian:* ${text}\n`
         caption += `━━━━━━━━━━━━━━━\n\n`
+        
+        // Gua batesin 10 aja njir biar ga kepanjangan menuhin chat
         let limit = json.result.length > 10 ? 10 : json.result.length
         
         for (let i = 0; i < limit; i++) {

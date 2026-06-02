@@ -1,50 +1,51 @@
-let handler = async (m, { text, usedPrefix }) => {
-    let salah = `Pilihan Yang Tersedia\n\nGunting, Kertas, Batu\n\n${usedPrefix}suit gunting\n\nKasih Spasi!`
-    if (!text) throw salah
-    var astro = Math.random()
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx
+ * ─────────────────────────
+ * 📝 Plugin: Game Suit (Gunting, Batu, Kertas)
+ */
 
-    if (astro < 0.34) {
-        astro = 'batu' 
-    } else if (astro > 0.34 && astro < 0.67) {
-        astro = 'gunting' 
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    let wrongFormat = `⚠️ *Format Salah Cuk!*\n\nPilih salah satu:\n*${usedPrefix + command} gunting*\n*${usedPrefix + command} batu*\n*${usedPrefix + command} kertas*`
+    
+    if (!text) return m.reply(wrongFormat)
+    
+    let pilihanUser = text.toLowerCase().trim()
+    let pilihanValid = ['gunting', 'batu', 'kertas']
+    
+    if (!pilihanValid.includes(pilihanUser)) return m.reply(wrongFormat)
+    
+    let pilihanBot = pilihanValid[Math.floor(Math.random() * pilihanValid.length)]
+    
+    let hasil = ''
+    if (pilihanUser === pilihanBot) {
+        hasil = 'S E R I 🗿'
+    } else if (
+        (pilihanUser === 'batu' && pilihanBot === 'gunting') ||
+        (pilihanUser === 'gunting' && pilihanBot === 'kertas') ||
+        (pilihanUser === 'kertas' && pilihanBot === 'batu')
+    ) {
+        hasil = 'M E N A N G 🎉'
     } else {
-        astro = 'kertas'
+        hasil = 'K A L A H 💀'
     }
 
-    //menentukan rules
-    if (text == astro) {
-        m.reply(`Seri!\nkamu: ${text}\nBot: ${astro}`)
-    } else if (text == 'batu') {
-        if (astro == 'gunting') {
-            global.db.data.users[m.sender].money += 1000
-            m.reply(`Kamu Menang!\n+1000 Money\nKamu: ${text}\n Bot: ${astro}`)
-        } else {
-            m.reply(`Kamu Kalah!\nKamu: ${text}\nBot: ${astro}`)
-        }
-    } else if (text == 'gunting') {
-        if (astro == 'kertas') {
-            global.db.data.users[m.sender].money += 1000
-            m.reply(`Kamu Menang!\n+1000 Money\nKamu: ${text}\nFangz Bot: ${astro}`)
-        } else {
-            m.reply(`Kamu Kalah!\nKamu: ${text}\nBot: ${astro}`)
-        }
-    } else if (text == 'kertas') {
-        if (astro == 'batu') {
-            global.db.data.users[m.sender].money += 1000
-            m.reply(`Kamu Menang! \n+1000 Money\nKamu: ${text}\nFangz Bot: ${astro}`)
-        } else {
-            m.reply(`Kamu Kalah!\nKamu: ${text}\nBot: ${astro}`)
-        }
-    } else {
-        throw salah
-    }
+    let emojiBot = pilihanBot === 'batu' ? '✊' : pilihanBot === 'gunting' ? '✌️' : '🖐️'
+    let emojiUser = pilihanUser === 'batu' ? '✊' : pilihanUser === 'gunting' ? '✌️' : '🖐️'
+
+    let caption = `🎮 *S U I T   G A M E* 🎮\n\n`
+    caption += `👤 *Lu:* ${pilihanUser.toUpperCase()} ${emojiUser}\n`
+    caption += `🤖 *Bot:* ${pilihanBot.toUpperCase()} ${emojiBot}\n\n`
+    caption += `*Hasil:* ${hasil}\n\n`
+    caption += `> © INF PROJECT`
+
+    await m.react(emojiUser)
+    await conn.sendMessage(m.chat, { text: caption }, { quoted: m })
 }
-handler.help = ['suit']
+
+handler.help = ['suit <gunting/batu/kertas>']
 handler.tags = ['game']
-handler.command = /^(suit)$/i
-handler.group = false
-handler.register = true
-handler.private = false
+handler.command = /^(suit|suwit)$/i
 handler.limit = true
 
 export default handler

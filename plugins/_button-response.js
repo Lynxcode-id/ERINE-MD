@@ -6,6 +6,7 @@ import chalk from 'chalk'
 export async function before(m) {
   if (m.isBaileys) return false
   if (!m.message) return false
+  if (m.isBypassed) return false 
 
   let id = ''
   let msg = m.message
@@ -31,6 +32,7 @@ export async function before(m) {
 
   if (id) {
     m.text = id
+    m.isBypassed = true
     
     console.log(chalk.bgGreen.black(` 🔥 [BYPASS BUTTON] Payload berhasil ditangkep -> ${id} `))
   }
