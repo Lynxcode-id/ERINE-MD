@@ -1,53 +1,51 @@
-// © INF PROJECT - Erine-MD
-// Developed by INF PROJECT
-
-import pkg from '@whiskeysockets/baileys'
-const { downloadContentFromMessage } = pkg
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx Decode
+ * ─────────────────────────
+ * 📝 Plugin: Read View Once (Anti-1x)
+ */
 
 let handler = async (m, { conn }) => {
-    if (!m.quoted) throw '⚠️ Reply pesan *View Once* (Sekali Lihat) yang mau dibuka, Bang!'
-    
-    const isViewOnce = m.quoted.mtype === 'viewOnceMessageV2' || m.quoted.mtype === 'viewOnceMessageV2Extension'
-    if (!isViewOnce) throw '❌ Ini bukan pesan *View Once*.'
+    if (!m.quoted) return m.reply('❌ Reply ke pesan media (View Once)!')
+
+    const q = m.quoted
+    const mime = q.mimetype || ''
+    if (!mime) {
+        return m.reply('❌ Pesan yang dibalas tidak mengandung media!')
+    }
 
     await m.react('⏳')
 
     try {
-        let msg = m.quoted.message
-        let type = Object.keys(msg)[0]
-        let mediaData = msg[type]
-        let media = await downloadContentFromMessage(
-            mediaData, 
-            type === 'imageMessage' ? 'image' : 'video'
-        )
-
-        let buffer = Buffer.from([])
-        for await (const chunk of media) {
-            buffer = Buffer.concat([buffer, chunk])
-        }
-
-        const caption = mediaData.caption || ''
+        const media = await q.download()
         
-        if (/video/.test(type)) {
-            await conn.sendFile(m.chat, buffer, 'media.mp4', caption, m)
-        } else if (/image/.test(type)) {
-            await conn.sendFile(m.chat, buffer, 'media.jpg', caption, m)
+        if (!media) throw new Error('Gagal mendownload media.')
+
+        let txt = q.text ? `\n\n» *Caption:* ${q.text}` : ''
+        let caption = `⚡ *A N T I - V I E W O N C E* ⚡${txt}\n\n> _Berhasil diekstrak oleh sistem_`
+
+        if (/video/.test(mime)) {
+            await conn.sendMessage(m.chat, { video: media, caption: caption }, { quoted: m })
+        } else if (/image/.test(mime)) {
+            await conn.sendMessage(m.chat, { image: media, caption: caption }, { quoted: m })
+        } else if (/audio/.test(mime)) {
+            await conn.sendMessage(m.chat, { audio: media, mimetype: mime, ptt: false }, { quoted: m })
+        } else {
+            await conn.sendFile(m.chat, media, 'media', caption, m)
         }
 
         await m.react('✅')
-
     } catch (e) {
-        console.error(e)
+        console.error('[RVO ERROR]', e)
         await m.react('❌')
-        m.reply('❌ Gagal mendownload media. Mungkin versinya nggak cocok atau file sudah kadaluarsa.')
+        m.reply(`⚠️ *System Error:*\n${e.message || 'Gagal mengekstrak media.'}`)
     }
 }
 
-handler.help = ['readviewonce', 'rvo']
+handler.help = ['rvo']
 handler.tags = ['tools']
-handler.command = /^(readviewonce|rvo)$/i
-
-handler.register = true
+handler.command = /^(rvo|readviewonce)$/i
 handler.limit = true
+handler.admin = true
 
 export default handler

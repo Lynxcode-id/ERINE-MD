@@ -6,36 +6,42 @@
  */
 
 const handler = async (m, { conn, text, command, participants, isOwner }) => {
-    // --- AMBIL DATA GRUP ---
     let prtps = participants;
     if (!prtps || prtps.length === 0) {
         const meta = await conn.groupMetadata(m.chat).catch(e => {}) || {};
         prtps = meta.participants || [];
     }
 
-    // 🔥 FIX: Potong kode device dari nomor si pengirim (m.sender)
     const senderNumber = m.sender.split(':')[0].split('@')[0];
-
-    // Cek admin dengan mencocokkan angka murninya saja!
     const isUserAdmin = prtps.some(p => p.id.includes(senderNumber) && (p.admin === 'admin' || p.admin === 'superadmin'));
     const isBotOwner = isOwner || (global.owner && global.owner.includes(senderNumber));
 
-    // Kalau bukan admin dan bukan owner, tendang!
     if (!isUserAdmin && !isBotOwner) return m.reply('❌ HANYA ADMIN YANG DAPAT MENGAKSES FITUR INI');
-    
-    // -------------------------------------------
 
-    const target = m.quoted ? m.quoted.sender : m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null;
+    let target = m.quoted ? m.quoted.sender : m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : null;
+    if (target === '@s.whatsapp.net') target = null;
+
     const cmdWithTarget = ['add', 'kick', 'promote', 'demote'];
 
     if (cmdWithTarget.includes(command) && !target) return m.reply('❌ Reply/tag siapa yang ingin di proses.');
 
-    const inGc = prtps.some((v) => target && v.id.includes(target.split('@')[0]));
+    const inGc = target ? prtps.some((v) => {
+        let targetNum = target.split('@')[0].split(':')[0];
+        let pId = v.id || v.jid || '';
+        
+        if (pId.includes(targetNum)) return true;
+        
+        if (typeof conn.getJid === 'function') {
+            let resolved = conn.getJid(pId);
+            if (resolved && resolved.includes(targetNum)) return true;
+        }
+        
+        return false;
+    }) : false;
     
     let botJid = conn.user?.id?.split(':')[0] || conn.user?.jid?.split(':')[0] || conn.user?.id?.split('@')[0] || '';
     botJid = botJid.replace(/[^0-9]/g, '');
 
-    // EKSEKUSI LANGSUNG (TRY-CATCH)
     try {
         switch (command) {
             case 'add':
@@ -79,18 +85,17 @@ const handler = async (m, { conn, text, command, participants, isOwner }) => {
 
             case 'demote':
                 if (!inGc) return m.reply('❌ User tidak berada dalam grup!');
+                // 🔥 Udah gua balikin ke 'demote' sesuai dengan script yang lu tes jalan
                 await conn.groupParticipantsUpdate(m.chat, [target], 'demote');
                 m.reply(`✅ Demote: @${target.split('@')[0]}`);
                 break;
 
             case 'closegc':
-            case 'mute':
                 await conn.groupSettingUpdate(m.chat, 'announcement');
                 m.reply('✅ Grup berhasil ditutup (hanya admin yang bisa chat).');
                 break;
 
             case 'opengc':
-            case 'unmute':
                 await conn.groupSettingUpdate(m.chat, 'not_announcement');
                 m.reply('✅ Grup berhasil dibuka (semua member bisa chat).');
                 break;
@@ -106,7 +111,7 @@ const handler = async (m, { conn, text, command, participants, isOwner }) => {
 
 handler.help = ['add', 'kick', 'promote', 'demote', 'closegc', 'opengc'];
 handler.tags = ['group'];
-handler.command = /^(add|kick|promote|demote|mute|unmute|closegc|opengc)$/i;
+handler.command = /^(add|kick|promote|demote|closegc|opengc)$/i;
 handler.group = true;
 
 handler.admin = true;

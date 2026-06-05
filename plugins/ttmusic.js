@@ -52,24 +52,24 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             return m.reply('❌ Audio MP3 tidak ditemukan.')
         }
 
-        await conn.sendMessage(m.chat, {
-            audio: { url: carivideotanpawm.url },
-            mimetype: 'audio/mpeg',
-            fileName: `TikTok_Audio_${Date.now()}.mp3`,
-            contextInfo: {
-                isForwarded: true,
-                forwardingScore: 9999,
-                forwardedNewsletterMessageInfo: {
-                    newsletterJid: "120363400612665352@newsletter",
-                    newsletterName: "🌟 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ",
-                    serverMessageId: -1
-                }
+        let audioRes = await axios.get(carivideotanpawm.url, {
+            responseType: 'arraybuffer',
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
             }
+        })
+        let audioBuffer = Buffer.from(audioRes.data)
+
+        await conn.sendMessage(m.chat, {
+            audio: audioBuffer,
+            mimetype: 'audio/mpeg',
+            ptt: false,
+            fileName: `TikTok_Audio_${Date.now()}.mp3`
+            // ❌ contextInfo saluran sengaja dihapus biar gak dibaca WA sebagai VN Channel
         }, { quoted: m })
 
         if (m.react) m.react('✅')
 
-        // cleanup
         setTimeout(() => {
             if (result.file && fs.existsSync(result.file)) {
                 fs.unlinkSync(result.file)
