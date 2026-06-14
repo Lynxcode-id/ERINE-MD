@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/file_00000000b5d471faa4c5c8b876d8ca6f.png" width="380"/>
+  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/c1bfb70786a1d1b86b03e12cd71d5549.jpg" width="380"/>
 </p>
 
-<h1 align="center">𝐄𝐑𝐈𝐍𝐄-𝐀𝐈 | 𝐄𝐑𝐈𝐍𝐄-𝐌𝐃</h1>
+<h1 align="center">ERINE MD</h1>
 <p align="center"><b>WhatsApp Multi-Device Bot</b></p>
 
 <p align="center">
@@ -26,9 +26,6 @@ Cocok digunakan untuk:
 - 👥 Manajemen grup
 - ✨ AI tools
 - 🖼️ Sticker maker
-- 💰 Berjualan Apapun
-- 🔥 Open jadibot
-- ✨ Sewabot
 
 ---
 
@@ -72,22 +69,20 @@ Kirim gambar dengan caption:
 ### ▶️ Download Video TikTok
 ```
 .tiktok https://vt.tiktok.com/xxxx
-.ttmp3
-.ttslide
+.tthd
+.tt
 ```
 
 ### ▶️ Download Video Instagram
 ```
 .ig https://www.instagram.com/p/xxxx
-.ig story
-.ig reels
+.ig story 
 ```
 
 ### ▶️ Download Lagu
 ```
-.play
-.play3
-.spplay
+.play judul lagu
+.play3 <- versi full button 
 ```
 
 ### ▶️ Chat AI
@@ -95,8 +90,6 @@ Kirim gambar dengan caption:
 .ai rekomendasi anime romance
 .gpt
 .gemini
-.erineai
-.rine
 ```
 
 ### ▶️ Game & Fun
@@ -104,40 +97,28 @@ Kirim gambar dengan caption:
 .truth
 .dare
 .tebakgambar
-.dll
 ```
 
 ### ▶️ Menampilkan Menu
 ```
 .menu
 .menu all
-.help
+.menu tags
 ```
 
 ---
 
 ## ⚠️ Catatan
 
-- Script ini enc, jika mau yang versi no enc beli donk cek sendiri harganya memakai command .sc2 lalu pm developer.
-- Run di node.js 20-26, Saran di node 22 lebih stabil
-- Gunakan bot dengan bijak, Jangan spam fitur!.
-- Jika terkena rate limit, hapus session atau cukup restart panel saja itu karena respon bot terlalu cepat.
-- Jangan merename tanpa seizin pengembang script ini, tolong hargai kami agar kami terus melanjutkan project bot whatsapp ini sekian, terima kasih 🙏🏻
-- Contact Dev/Pengembang ada di config.js jika kalian belum merenamenya, jika ada fitur yang error segera ketik .lapor agar secepatnya saya fix
-- Fix Project ?? tergantung waktu kami biasanya 1-2 harian akan kami fix dan upload ke github
-- Selebihnya Tanya Tanya saja
-- Bot ini mungkin agak berat karena full button
-- Support all button, and airich message
-- Kami merencang bot dengan stabilitas/performa tinggi yang tidak mudah delay dan tahan terhadap spam
-- Jangan lupa gift starnya yah di repo
-- Script bot ini sudah di lengkapi apikey premium,mohon untuk bijak menggunakan apikey kami!
+- Run di node js 20-21
+- Gunakan bot dengan bijak.
+- Jangan spam command.
+- Beberapa fitur hanya bisa digunakan admin atau owner.
+- Jika bot tidak merespon, tunggu beberapa saat.
 
 ---
 
 ## ❤️ Thanks
-
-Penyedia Baileys¹: @itsliaa/baileys
-Penyedia Baileys² : ourin-baileys
 
 Base by **Ryo Yamada**
 Base Utama by **ShirokamiRyzen**  
