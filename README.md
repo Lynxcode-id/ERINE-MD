@@ -2,7 +2,7 @@
   <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/file_00000000b5d471faa4c5c8b876d8ca6f.png" width="380"/>
 </p>
 
-<h1 align="center">ERINE MD</h1>
+<h1 align="center">𝐄𝐑𝐈𝐍𝐄-𝐀𝐈 | 𝐄𝐑𝐈𝐍𝐄-𝐌𝐃</h1>
 <p align="center"><b>WhatsApp Multi-Device Bot</b></p>
 
 <p align="center">
