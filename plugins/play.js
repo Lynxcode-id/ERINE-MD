@@ -1,13 +1,16 @@
 /**
- * YouTube Play - JKT48 Edition 🌸
+ * YouTube Play - JKT48 Edition 🌸 (Ultra Stable Link Preview)
  * -----------------------------
  * Type    : Plugins ESM
  * Creator : Lynx 
- * System  : API Downloader
+ * System  : API Downloader + Jimp + lib/uploadImage
  */
 
 import fetch from 'node-fetch'
 import yts from 'yt-search'
+import Jimp from 'jimp'
+import uploadImage from '../lib/uploadImage.js'
+import { generateWAMessageFromContent, generateWAMessageContent } from '@whiskeysockets/baileys'
 
 function formatNumber(num) {
   return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
@@ -41,25 +44,44 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
     const v = search.videos[0]
     if (!v) throw '❌ Wah, ngga nemu lagunya di setlist manapun.'
 
-    let caption = `🌸 *𝙴𝚁𝙸𝙽𝙴 𝙿𝙻𝙰𝚈 𝙴𝙽𝙶𝙸𝙽𝙴* 🌸\n\n`
-    caption += `🎤 *Judul:* ${v.title}\n`
-    caption += `🌟 *Artis:* ${v.author.name}\n`
-    caption += `⏱️ *Durasi:* ${v.timestamp}\n`
-    caption += `👀 *Penonton:* ${formatNumber(v.views)}\n`
-    caption += `📅 *Rilis:* ${v.ago}\n\n`
-    caption += `🎧 _Sedang menyiapkan audionya, tunggu sebentar ya..._\n`
-    caption += `> © ERINE-MD`
+    const image = await Jimp.read(v.thumbnail)
+    const buffer = await image
+        .cover(1024, 576)
+        .quality(70)
+        .getBufferAsync(Jimp.MIME_JPEG)
 
-    let buttons = [
-      { buttonId: `.ytmp4 ${v.url}`, buttonText: { displayText: '🎬 Lihat Performance (MP4)' }, type: 1 }
-    ]
+    const stableThumbUrl = await uploadImage(buffer)
+    let imageMsg = await generateWAMessageContent(
+      { image: { url: stableThumbUrl } },
+      { upload: conn.waUploadToServer }
+    )
+    let imgMeta = imageMsg.imageMessage 
 
-    await conn.sendMessage(m.chat, {
-        image: { url: v.thumbnail },
-        caption: caption,
-        buttons: buttons,
-        headerType: 4 
+    let msg = generateWAMessageFromContent(m.chat, {
+      extendedTextMessage: {
+        text: `🌸 _Sedang menyiapkan audio..._\n\n🔗 https://youtu.be/${v.videoId}`,
+        matchedText: `https://youtu.be/${v.videoId}`,
+        title: v.title,
+        description: `👤 ${v.author.name} • ⏱️ ${v.timestamp} • 👀 ${formatNumber(v.views)} views`,
+        previewType: 2,
+        jpegThumbnail: imgMeta.jpegThumbnail, 
+        thumbnailDirectPath: imgMeta.directPath, 
+        thumbnailSha256: imgMeta.fileSha256,
+        thumbnailEncSha256: imgMeta.fileEncSha256,
+        mediaKey: imgMeta.mediaKey, 
+        mediaKeyTimestamp: imgMeta.mediaKeyTimestamp,
+        thumbnailHeight: 576, 
+        thumbnailWidth: 1024, 
+        inviteLinkGroupTypeV2: 0,
+        contextInfo: { 
+          mentionedJid: [] 
+        }
+      }
     }, { quoted: m })
+
+    await conn.relayMessage(m.chat, msg.message, { 
+      messageId: msg.key.id 
+    })
 
     const apiUrl = `https://api.theresav.biz.id/download/ytmp3/v2?url=${encodeURIComponent(v.url)}&bitrate=128&apikey=x34J0`
     const apiRes = await fetch(apiUrl)
@@ -73,7 +95,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     const filename = data?.result?.title ? `${data.result.title}.mp3` : `${v.title}.mp3`
     const sizeMB = await getFileSizeMB(audioUrl)
-
     if (sizeMB > 50) {
       await conn.sendMessage(m.chat, {
         document: { url: audioUrl },
@@ -97,7 +118,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 }
 
-handler.help = ['play']
+handler.help = ['play4']
 handler.tags = ['downloader']
 handler.command = /^play4$/i
 handler.limit = true
