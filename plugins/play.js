@@ -8,7 +8,7 @@
 
 import fetch from 'node-fetch'
 import yts from 'yt-search'
-import Jimp from 'jimp'
+import * as Jimp from "jimp"
 import uploadImage from '../lib/uploadImage.js'
 import { generateWAMessageFromContent, generateWAMessageContent } from '@whiskeysockets/baileys'
 
