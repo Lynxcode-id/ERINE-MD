@@ -118,9 +118,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   }
 }
 
-handler.help = ['play4']
+handler.help = ['play']
 handler.tags = ['downloader']
-handler.command = /^play4$/i
+handler.command = /^play$/i
 handler.limit = true
 
 export default handler
