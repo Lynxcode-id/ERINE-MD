@@ -21,10 +21,10 @@ let handler = async (m, { conn, participants, isAdmin, isBotAdmin }) => {
 
     if (luarList.length === 0) {
         await m.react('✅');
-        return m.reply(`┌˚₊ ๑│ ᴀ ɴ ᴛ ɪ  ʟ ᴜ ᴀ ʀ │๑˚₊ 🛡️\n┇ \n│ Aman cuy! Tidak ditemukan nomor luar negeri di grup ini.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        return m.reply(`┌˚₊ ๑│ ᴀ ɴ ᴛ ɪ  ʟ ᴜ ᴀ ʀ │๑˚₊ 🛡️\n┇ \n│ Aman cuy! Tidak ditemukan nomor luar negeri di grup ini.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
     }
 
-    let caption = `┌˚₊ ๑│ ᴀ ɴ ᴛ ɪ  ʟ ᴜ ᴀ ʀ │๑˚₊ 🧹\n┇ \n│ 🔍 Ditemukan *${luarList.length}* nomor luar negeri.\n│ Mengeksekusi pembersihan...\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+    let caption = `┌˚₊ ๑│ ᴀ ɴ ᴛ ɪ  ʟ ᴜ ᴀ ʀ │๑˚₊ 🧹\n┇ \n│ 🔍 Ditemukan *${luarList.length}* nomor luar negeri.\n│ Mengeksekusi pembersihan...\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
     
     await conn.sendMessage(m.chat, { text: caption.trim() }, { quoted: m });
 

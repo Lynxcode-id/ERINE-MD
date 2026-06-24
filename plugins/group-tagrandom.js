@@ -24,7 +24,7 @@ let handler = async (m, { conn, text, participants, usedPrefix, command }) => {
 │ ✨ *Terpilih:* @${targetJid.split('@')[0]} ${reason}
 ┇ 
 └˚₊ ๑ ────────────── ๑˚₊
-> © ERINE-AI`;
+> © ERINE-AI X LYNX DECODE`;
 
     await conn.sendMessage(m.chat, { 
         text: caption.trim(), 

@@ -1,8 +1,7 @@
-let handler = async (m, { conn, text, participants }) => {
+let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!m.isGroup)
-    return m.reply('❌ Perintah ini hanya bisa digunakan di grup.')
+    return m.reply(`┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴀ ɴ ᴀ ɢ ᴇ ᴍ ᴇ ɴ ᴛ │๑˚₊ ⚠️\n┇ \n│ ❌ Perintah ini hanya bisa digunakan di grup.\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`)
 
-  // 🔥 Perbaikan 1: Bisa pakai tag, reply, ATAU ketik nomor manual
   let target = m.mentionedJid?.[0] 
     ? m.mentionedJid[0] 
     : m.quoted 
@@ -12,58 +11,46 @@ let handler = async (m, { conn, text, participants }) => {
         : false
 
   if (!target) {
-    return m.reply(
-      '❌ Tag, reply, atau ketik nomor orang yang ingin dikeluarkan.\n\n' +
-      'Contoh:\n' +
-      '.kick @user\n' +
-      '.kick (reply pesan)\n' +
-      '.kick 628xxx'
-    )
+    return m.reply(`┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴀ ɴ ᴀ ɢ ᴇ ᴍ ᴇ ɴ ᴛ │๑˚₊ ⚙️\n┇ \n│ ❌ *Format Salah!*\n│ Tag, reply, atau ketik nomor target yang\n│ ingin dikeluarkan.\n│ \n│ 💡 *Contoh:*\n│ ${usedPrefix + command} @user\n│ ${usedPrefix + command} 628xxx\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`)
   }
 
-  // 🔥 Perbaikan 2: Pengecekan JID bot yang lebih valid
   let botJid = conn.decodeJid(conn.user.id)
   if (target === botJid)
-    return m.reply('❌ Tidak bisa mengeluarkan bot.')
+    return m.reply(`┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴀ ɴ ᴀ ɢ ᴇ ᴍ ᴇ ɴ ᴛ │๑˚₊ ⚠️\n┇ \n│ ❌ Bot tidak bisa mengeluarkan dirinya sendiri.\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`)
 
-  // 🔥 Perbaikan 3: Pengecekan admin yang lebih akurat
-  let isTargetAdmin = participants.find(
-    p => p.id === target && (p.admin === 'admin' || p.admin === 'superadmin')
-  )
-
-  if (isTargetAdmin)
-    return m.reply('❌ Tidak bisa mengeluarkan admin grup.')
+  await m.react('⏳')
 
   try {
-    // Eksekusi kick
     await conn.groupParticipantsUpdate(
       m.chat,
       [target],
       'remove'
     )
 
-    // 🔥 Perbaikan 4: Stiker dipisah biar kalau gagal load URL gak ngebatalin pesan sukses
     try {
       await conn.sendMessage(m.chat, {
         sticker: { url: 'https://files.catbox.moe/h4q4hq.webp' }
       }, { quoted: m })
     } catch (e) {
-      m.reply('✅ Anggota berhasil dikeluarkan.') // Pesan cadangan kalau stiker gagal
+      m.reply(`┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴀ ɴ ᴀ ɢ ᴇ ᴍ ᴇ ɴ ᴛ │๑˚₊ ✅\n┇ \n│ 👋 Anggota berhasil dikeluarkan dari grup.\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`) 
     }
+    await m.react('✅')
 
   } catch (err) {
     console.error('[KICK ERROR]', err)
-    m.reply('❌ Gagal mengeluarkan anggota. Pastikan bot adalah admin.')
+    await m.react('❌')
+    m.reply(`┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ  ᴍ ᴀ ɴ ᴀ ɢ ᴇ ᴍ ᴇ ɴ ᴛ │๑˚₊ ❌\n┇ \n│ Gagal mengeluarkan anggota.\n│ Pastikan bot memiliki akses Admin yang sah.\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`)
   }
 }
 
-handler.help = ['kick @user', 'kick (reply pesan)', 'kick <nomor>']
+handler.help = ['kick @user', 'kick (reply)', 'kick <nomor>']
 handler.tags = ['group']
-handler.command = ['kick']
+handler.command = /^(kick|tendang)$/i
 
-handler.admin = true
-handler.botAdmin = true
+handler.admin = true 
+handler.botAdmin = true 
 handler.owner = false
 handler.premium = false
+handler.group = true
 
 export default handler

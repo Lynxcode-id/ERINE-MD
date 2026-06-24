@@ -23,7 +23,7 @@ let handler = async (m, { conn, text, participants, groupMetadata }) => {
         caption += `│ 🛡️ @${v.split('@')[0]}\n`;
     });
 
-    caption += `┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+    caption += `┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
 
     await conn.sendMessage(m.chat, { 
         text: caption.trim(), 

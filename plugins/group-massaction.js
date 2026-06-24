@@ -14,13 +14,14 @@ let handler = async (m, { conn, usedPrefix, command, isAdmin, isBotAdmin }) => {
 
     await m.react('⏳');
     
+    // Nentuin action berdasarkan command yang diketik
     let action = command.toLowerCase().includes('promote') ? 'promote' : 'demote';
     let roleText = action === 'promote' ? 'menaikkan jabatan (Promote)' : 'menurunkan jabatan (Demote)';
     
     try {
         await conn.groupParticipantsUpdate(m.chat, users, action);
         
-        let caption = `┌˚₊ ๑│ ᴍ ᴀ s s  ᴀ ᴄ ᴛ ɪ ᴏ ɴ │๑˚₊ ⚙️\n┇ \n│ ✅ Berhasil ${roleText} kepada *${users.length}* member secara massal!\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+        let caption = `┌˚₊ ๑│ ᴍ ᴀ s s  ᴀ ᴄ ᴛ ɪ ᴏ ɴ │๑˚₊ ⚙️\n┇ \n│ ✅ Berhasil ${roleText} kepada *${users.length}* member secara massal!\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
         
         await conn.sendMessage(m.chat, { 
             text: caption, 

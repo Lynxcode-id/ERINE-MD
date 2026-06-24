@@ -42,7 +42,7 @@ let handler = async (m, { conn, command, usedPrefix }) => {
     
     let randomTod = list[Math.floor(Math.random() * list.length)];
 
-    let caption = `┌˚₊ ๑│ ᴛ ᴏ ᴅ  ɢ ᴀ ᴍ ᴇ │๑˚₊ ${icon}\n┇ \n│ ${typeText} buat: @${m.sender.split('@')[0]}\n│ \n│ 📢 *Tantangan:* \n│ ${randomTod}\n┇ \n│ *Harus dilakukan cuy! Jan curang ya.*\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+    let caption = `┌˚₊ ๑│ ᴛ ᴏ ᴅ  ɢ ᴀ ᴍ ᴇ │๑˚₊ ${icon}\n┇ \n│ ${typeText} buat: @${m.sender.split('@')[0]}\n│ \n│ 📢 *Tantangan:* \n│ ${randomTod}\n┇ \n│ *Harus dilakukan cuy! Jan curang ya.*\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
 
     await conn.sendMessage(m.chat, { 
         text: caption, 

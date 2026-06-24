@@ -17,7 +17,7 @@ let handler = async (m, { conn, participants }) => {
         text += `│ *${i + 1}.* @${v.split('@')[0]}\n│ 💬 *Total Chat:* ${count} pesan\n┇ \n`;
     });
 
-    text += `└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+    text += `└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
     conn.sendMessage(m.chat, { text, mentions: admins }, { quoted: m });
 }
 
