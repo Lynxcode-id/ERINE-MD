@@ -17,7 +17,7 @@
 
 ## 🌙 Tentang Bot
 
-**ERINE-MD PROJECT** adalah bot WhatsApp multi-device dengan sistem plugin yang fleksibel.  
+**ERINE-AI PROJECT** adalah bot WhatsApp multi-device dengan sistem plugin yang fleksibel.  
 Bot ini dibuat untuk hiburan, utilitas, downloader, dan otomatisasi grup maupun chat pribadi.
 
 Cocok digunakan untuk:
@@ -121,6 +121,7 @@ Kirim gambar dengan caption:
 
 ## ⚠️ Catatan
 
+- Mohon maaf sebelumnya, di script ini ada auto follow ch 1-4 maaf ya karena ga sempat ke hapus dulu udah pernah tapi team saya pas update bikin kesalahan fatal di main.js handler.js dan simple.js makanya erine ai sekarang make punya "erine ai master" yang masih ada auto follow chnya tapi ggp itu biar gampang juga kalian dapat info
 - Run di node js 20-26
 - Saran node run di 22 karena sc ini stabil di 22
 - Gunakan bot dengan bijak, jangan spam command jika ingin fitur bot awet!
@@ -148,5 +149,5 @@ https://github.com/himanackerman/RYO-YAMADA-MD
 ---
 
 <p align="center">
-<i>ERINE-MD — Simple, Fast, Modular WhatsApp Bot</i>
+<i>ERINE-AI — Simple, Fast, Modular WhatsApp Bot</i>
 </p>
