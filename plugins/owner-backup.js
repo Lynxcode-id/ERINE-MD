@@ -8,33 +8,30 @@ let handler = async (m, { conn }) => {
     const backupName = 'backup_erine.zip';
     const output = fs.createWriteStream(backupName);
     const archive = archiver('zip', {
-        zlib: { level: 9 } // Pake kompresi maksimal
+        zlib: { level: 9 }
     });
 
     try {
-        // Bungkus pakai Promise biar nunggu zip kelar dulu
         await new Promise((resolve, reject) => {
             output.on('close', resolve);
             archive.on('error', reject);
 
             archive.pipe(output);
 
-            // Milih semua file tapi nge-ignore yang lu sebutin
             archive.glob('**/*', {
                 cwd: process.cwd(),
                 ignore: [
                     'node_modules/**', 
                     '.npm/**', 
                     'package-lock.json', 
-                    backupName // Biar zip-nya ga masuk ke dalem zip-nya sendiri
+                    backupName
                 ]
             });
 
             archive.finalize();
         });
 
-        // Kalo Promise kelar, berarti file udah jadi. Langsung kirim!
-        const ownerJid = '6288258041396@s.whatsapp.net';
+        const ownerJid = `${global.nomorown}@s.whatsapp.net`;
         
         await conn.sendMessage(ownerJid, {
             document: fs.readFileSync(backupName),
@@ -43,7 +40,6 @@ let handler = async (m, { conn }) => {
             caption: 'Nih cuy, backup file Erine lu udah kelar. 🚀'
         }, { quoted: m });
 
-        // Hapus file zip dari storage setelah sukses dikirim
         fs.unlinkSync(backupName);
         m.reply('Backup sukses dikirim ke lu cuy!');
 

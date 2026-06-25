@@ -25,7 +25,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isBotAdmin }) => {
             limit: 5 // Batas jumlah vote untuk kick
         };
 
-        m.reply(`┌˚₊ ๑│ ᴠ ᴏ ᴛ ᴇ ᴋ ɪ ᴄ ᴋ  ᴍ ᴜ ʟ ᴀ ɪ │๑˚₊ ⚖️\n┇ \n│ Target: @${target.split('@')[0]}\n│ Pemilih: 1/${conn.votekick[id].limit}\n┇ \n│ Ketik *${usedPrefix}upvote* untuk setuju mengeluarkan target!\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`, null, { mentions: [target] });
+        m.reply(`┌˚₊ ๑│ ᴠ ᴏ ᴛ ᴇ ᴋ ɪ ᴄ ᴋ  ᴍ ᴜ ʟ ᴀ ɪ │๑˚₊ ⚖️\n┇ \n│ Target: @${target.split('@')[0]}\n│ Pemilih: 1/${conn.votekick[id].limit}\n┇ \n│ Ketik *${usedPrefix}upvote* untuk setuju mengeluarkan target!\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`, null, { mentions: [target] });
     }
 
     else if (command === 'upvote') {
@@ -37,7 +37,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isBotAdmin }) => {
         vote.voters.push(m.sender);
 
         if (vote.voters.length >= vote.limit) {
-            await m.reply(`┌˚₊ ๑│ ᴠ ᴏ ᴛ ᴇ ᴋ ɪ ᴄ ᴋ  s ᴜ ᴋ s ᴇ s │๑˚₊ 🔨\n┇ \n│ Target telah mencapai ${vote.limit} vote!\n│ Mengeksekusi target...\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+            await m.reply(`┌˚₊ ๑│ ᴠ ᴏ ᴛ ᴇ ᴋ ɪ ᴄ ᴋ  s ᴜ ᴋ s ᴇ s │๑˚₊ 🔨\n┇ \n│ Target telah mencapai ${vote.limit} vote!\n│ Mengeksekusi target...\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
             await conn.groupParticipantsUpdate(m.chat, [vote.target], 'remove');
             delete conn.votekick[id];
         } else {

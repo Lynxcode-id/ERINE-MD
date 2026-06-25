@@ -11,7 +11,7 @@ let handler = async (m, { conn, args, usedPrefix, command, isAdmin, isBotAdmin }
     if (!isBotAdmin) return m.reply('❌ Bot harus jadi Admin!');
 
     if (!args[0]) {
-        return m.reply(`┌˚₊ ๑│ ᴘ ᴇ s ᴀ ɴ  s ᴇ ᴍ ᴇ ɴ ᴛ ᴀ ʀ ᴀ │๑˚₊ ⏱️\n┇ \n│ ❌ Format salah! Pilih opsi timer:\n│ • 24jam\n│ • 7hari\n│ • 90hari\n│ • off (matikan)\n┇ \n│ *Contoh:* ${usedPrefix + command} 24jam\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        return m.reply(`┌˚₊ ๑│ ᴘ ᴇ s ᴀ ɴ  s ᴇ ᴍ ᴇ ɴ ᴛ ᴀ ʀ ᴀ │๑˚₊ ⏱️\n┇ \n│ ❌ Format salah! Pilih opsi timer:\n│ • 24jam\n│ • 7hari\n│ • 90hari\n│ • off (matikan)\n┇ \n│ *Contoh:* ${usedPrefix + command} 24jam\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
     }
 
     let timer = 0;
@@ -28,7 +28,7 @@ let handler = async (m, { conn, args, usedPrefix, command, isAdmin, isBotAdmin }
     try {
         await conn.sendMessage(m.chat, { disappearingMessagesInChat: timer });
         let status = timer === 0 ? 'dinonaktifkan ❌' : `diaktifkan selama *${p}* ✅`;
-        m.reply(`┌˚₊ ๑│ ᴘ ᴇ s ᴀ ɴ  s ᴇ ᴍ ᴇ ɴ ᴛ ᴀ ʀ ᴀ │๑˚₊ ⏱️\n┇ \n│ Fitur pesan sementara berhasil ${status}\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        m.reply(`┌˚₊ ๑│ ᴘ ᴇ s ᴀ ɴ  s ᴇ ᴍ ᴇ ɴ ᴛ ᴀ ʀ ᴀ │๑˚₊ ⏱️\n┇ \n│ Fitur pesan sementara berhasil ${status}\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
     } catch (e) {
         await m.react('❌');
         m.reply('❌ Gagal mengubah setelan pesan sementara.');

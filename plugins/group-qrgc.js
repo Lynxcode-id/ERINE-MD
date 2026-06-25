@@ -18,6 +18,7 @@ let handler = async (m, { conn, isBotAdmin }) => {
         let meta = await conn.groupMetadata(m.chat).catch(() => ({}));
         let gcName = meta.subject || 'Group';
 
+        // Pake API QR Server gratisan
         let qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=${encodeURIComponent(url)}`;
 
         let caption = `┌˚₊ ๑│ ǫ ʀ  ʟ ɪ ɴ ᴋ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔲
@@ -26,7 +27,7 @@ let handler = async (m, { conn, isBotAdmin }) => {
 │ ✨ Scan QR Code ini menggunakan kamera atau scanner untuk langsung bergabung ke dalam grup!
 ┇ 
 └˚₊ ๑ ────────────── ๑˚₊
-> © ERINE-AI`;
+> © ERINE-AI X LYNX DECODE`;
 
         await conn.sendMessage(m.chat, { 
             image: { url: qrApi }, 

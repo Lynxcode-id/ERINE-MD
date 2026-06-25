@@ -16,11 +16,11 @@ let handler = async (m, { conn, args, usedPrefix, command, isAdmin, isBotAdmin }
     if (isClose) {
         await m.react('⏳');
         await conn.groupSettingUpdate(m.chat, 'locked');
-        m.reply(`┌˚₊ ๑│ s ᴇ ᴛ ᴇ ʟ ᴀ ɴ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔒\n┇ \n│ ✅ *Info Grup Dikunci!*\n│ Sekarang hanya Admin yang bisa mengganti Nama, Deskripsi, dan Foto Grup.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        m.reply(`┌˚₊ ๑│ s ᴇ ᴛ ᴇ ʟ ᴀ ɴ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔒\n┇ \n│ ✅ *Info Grup Dikunci!*\n│ Sekarang hanya Admin yang bisa mengganti Nama, Deskripsi, dan Foto Grup.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
     } else if (isOpen) {
         await m.react('⏳');
         await conn.groupSettingUpdate(m.chat, 'unlocked');
-        m.reply(`┌˚₊ ๑│ s ᴇ ᴛ ᴇ ʟ ᴀ ɴ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔓\n┇ \n│ ✅ *Info Grup Dibuka!*\n│ Semua peserta sekarang dapat mengedit Info Grup.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        m.reply(`┌˚₊ ๑│ s ᴇ ᴛ ᴇ ʟ ᴀ ɴ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔓\n┇ \n│ ✅ *Info Grup Dibuka!*\n│ Semua peserta sekarang dapat mengedit Info Grup.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
     } else {
         m.reply(`❌ Format salah!\n\n*Pilih opsi:*\n${usedPrefix + command} lock\n${usedPrefix + command} unlock`);
     }

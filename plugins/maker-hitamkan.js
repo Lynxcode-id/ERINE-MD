@@ -22,6 +22,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
         let resultImage = json.result.image;
 
+        // Mengirimkan hasilnya kembali ke chat tanpa watermark
         await conn.sendMessage(m.chat, {
             image: { url: resultImage },
             caption: `✅ *Berhasil bang fotonya udah di hitamin 😹*`

@@ -15,9 +15,9 @@ let handler = async (m, { conn, text, usedPrefix, command, isAdmin }) => {
         if (id in conn.absen) return m.reply(`❌ Masih ada sesi absen yang berjalan di grup ini.\n\nKetik ${usedPrefix}tutupabsen untuk mengakhiri.`);
         
         conn.absen[id] = [
-            m.reply(`┌˚₊ ๑│ ᴀ ʙ s ᴇ ɴ s ɪ  ᴅ ɪ ᴍ ᴜ ʟ ᴀ ɪ │๑˚₊ 📝\n┇ \n│ Silakan ketik *${usedPrefix}hadir* atau *${usedPrefix}absen* untuk mengisi daftar hadir.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`),
-            [],
-            text || '-'
+            m.reply(`┌˚₊ ๑│ ᴀ ʙ s ᴇ ɴ s ɪ  ᴅ ɪ ᴍ ᴜ ʟ ᴀ ɪ │๑˚₊ 📝\n┇ \n│ Silakan ketik *${usedPrefix}hadir* atau *${usedPrefix}absen* untuk mengisi daftar hadir.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`),
+            [], // Array buat nyimpen jid
+            text || '-' // Fix: variabel text sudah aman di sini
         ];
     } 
     
@@ -43,7 +43,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isAdmin }) => {
             text += `│ *${i + 1}.* @${v.split('@')[0]}\n`;
         });
         
-        text += `┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+        text += `┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
         
         conn.sendMessage(m.chat, { text: text.trim(), mentions: absenList }, { quoted: m });
     }
@@ -53,7 +53,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isAdmin }) => {
         if (!(id in conn.absen)) return m.reply('❌ Gak ada absen yang lagi jalan.');
         
         let absenList = conn.absen[id][1];
-        m.reply(`┌˚₊ ๑│ ᴀ ʙ s ᴇ ɴ s ɪ  ᴅ ɪ ᴛ ᴜ ᴛ ᴜ ᴘ │๑˚₊ 🔒\n┇ \n│ Sesi absen telah diakhiri.\n│ 👥 *Total Hadir:* ${absenList.length} orang\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        m.reply(`┌˚₊ ๑│ ᴀ ʙ s ᴇ ɴ s ɪ  ᴅ ɪ ᴛ ᴜ ᴛ ᴜ ᴘ │๑˚₊ 🔒\n┇ \n│ Sesi absen telah diakhiri.\n│ 👥 *Total Hadir:* ${absenList.length} orang\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
         delete conn.absen[id];
     }
 }

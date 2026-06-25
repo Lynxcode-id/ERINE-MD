@@ -1,68 +1,71 @@
-// Threads downloader
-// API : https://rynekoo-api.hf.space
-import fetch from 'node-fetch'
+import axios from 'axios'
+import { Button, Carousel } from '../lib/nixcode.js'
 
-let handler = async (m, { conn, args }) => {
-  if (!args[0]) {
-    return m.reply('Masukkan link Threads\n\nContoh:\n.threads https://www.threads.com/xxxxx')
-  }
-
-  try {
-    let input = encodeURIComponent(args[0])
-    let api = `https://rynekoo-api.hf.space/downloader/threads?url=${input}`
-
-    let res = await fetch(api)
-    let json = await res.json()
-
-    if (!json.success || !json.result) {
-      throw 'Data tidak valid'
+let handler = async (m, { conn, text, usedPrefix, command }) => {
+    if (!text) {
+        return m.reply(`┌˚₊ ๑│ ᴛ ʜ ʀ ᴇ ᴀ ᴅ s  ᴅ ʟ │๑˚₊ ⚙️\n┇ \n│ ❌ *Format Salah!*\n│ Masukkan URL Threads.\n│ \n│ 💡 *Contoh:*\n│ ${usedPrefix + command} https://www.threads.com/@kholidiyah/post/DZyWB96EztH\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-MD`)
     }
 
-    let result = json.result
-    let caption = (result.text || result.caption || '').trim()
+    await m.react('⏳')
 
-    let videos = []
-    if (Array.isArray(result.videos)) {
-      videos = result.videos.flat().filter(v => v?.url)
+    try {
+        const apiKey = "x34J0"
+        const apiUrl = `https://api.theresav.biz.id/download/threads?url=${encodeURIComponent(text)}&apikey=${apiKey}`
+        
+        const { data } = await axios.get(apiUrl)
+        if (!data.status || !data.result) throw new Error("Data tidak ditemukan atau API bermasalah.")
+
+        let res = data.result
+        let username = res.user?.username || "unknown"
+        let captionText = res.text || "Tidak ada teks"
+
+        let carousel = new Carousel(conn)
+            .setBody(`🧵 *THREADS DOWNLOADER*\n👤 @${username}\n\n💬 ${captionText}`)
+            .setFooter('© ERINE-MD | INF PROJECT')
+
+        // Jika ada video
+        if (res.videos && res.videos.length > 0) {
+            let vid = res.videos[0][0]
+            carousel.addCard(
+                await new Button(conn)
+                    .setTitle('🎥 Video Threads')
+                    .setBody(`Durasi: Tidak diketahui`)
+                    .setFooter(`Oleh: @${username}`)
+                    .setImage(vid.thumb)
+                    .addUrl('⬇️ Download Video', vid.url, true, { icon: 'PROMOTION' })
+                    .addCopy('📋 Copy Link', vid.url, { icon: 'DOCUMENT' })
+                    .toCard()
+            )
+        }
+
+        // Jika ada image
+        if (res.images && res.images.length > 0) {
+            let img = res.images[0][0]
+            carousel.addCard(
+                await new Button(conn)
+                    .setTitle('🖼️ Gambar Threads')
+                    .setBody(`Resolusi: ${img.width}x${img.height}`)
+                    .setFooter(`Oleh: @${username}`)
+                    .setImage(img.url)
+                    .addUrl('⬇️ Download Image', img.url, true, { icon: 'PROMOTION' })
+                    .addCopy('📋 Copy Link', img.url, { icon: 'DOCUMENT' })
+                    .toCard()
+            )
+        }
+
+        await carousel.send(m.chat, { quoted: m })
+        await m.react('✅')
+
+    } catch (e) {
+        console.error('[THREADS ERROR]', e)
+        await m.react('❌')
+        m.reply(`┌˚₊ ๑│ ᴛ ʜ ʀ ᴇ ᴀ ᴅ s  ᴅ ʟ │๑˚₊ ❌\n┇ \n│ *Gagal Mendownload!*\n│ 📡 *Respon:* ${e.message}\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-MD`)
     }
-
-    let images = []
-    if (Array.isArray(result.images)) {
-      images = result.images.flat().filter(i => i?.url)
-    }
-
-    if (videos.length > 0) {
-      let video = videos[0]
-
-      await conn.sendMessage(m.chat, {
-        video: { url: video.url },
-        caption
-      }, { quoted: m })
-
-      return
-    }
-
-    if (images.length > 0) {
-      for (let img of images) {
-        await conn.sendMessage(m.chat, {
-          image: { url: img.url },
-          caption
-        }, { quoted: m })
-      }
-      return
-    }
-
-    m.reply('Tidak ditemukan media')
-
-  } catch (err) {
-    console.error(err)
-    m.reply('Gagal mengambil media Threads')
-  }
 }
 
 handler.help = ['threads <url>']
 handler.tags = ['downloader']
-handler.command = /^threads$/i
+handler.command = /^(threads|threadsdl)$/i
 handler.limit = true
 
 export default handler

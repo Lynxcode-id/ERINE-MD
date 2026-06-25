@@ -35,7 +35,7 @@ let handler = async (m, { conn, participants, isAdmin, isBotAdmin }) => {
 
     if (siderList.length === 0) {
         await m.react('✅');
-        return m.reply(`┌˚₊ ๑│ ᴀ ɴ ᴛ ɪ  s ɪ ᴅ ᴇ ʀ │๑˚₊ 👻\n┇ \n│ Mantap cuy! Grup ini aktif semua, gak ada sider/member hantu.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        return m.reply(`┌˚₊ ๑│ ᴀ ɴ ᴛ ɪ  s ɪ ᴅ ᴇ ʀ │๑˚₊ 👻\n┇ \n│ Mantap cuy! Grup ini aktif semua, gak ada sider/member hantu.\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
     }
 
     m.reply(`🧹 *Ditemukan ${siderList.length} Sider (Tidak aktif > 14 Hari)!*\nMengeksekusi pembersihan...`);

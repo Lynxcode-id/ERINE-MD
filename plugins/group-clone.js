@@ -1,3 +1,4 @@
+// File: plugins/group-clone.js
 /**
  * ───「 FEATURE AUTHOR 」───
  * 👤 Developer : Lynx Decode
@@ -15,13 +16,16 @@ let handler = async (m, { conn, isOwner }) => {
         let name = meta.subject || 'Erine Cloned Group';
         let desc = meta.desc || 'No Description';
 
-        m.reply(`┌˚₊ ๑│ ᴄ ʟ ᴏ ɴ ᴇ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔄\n┇ \n│ 🔄 Sedang mengkloning grup:\n│ *${name}*\n│ \n│ Proses ini mungkin butuh waktu...\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`);
+        m.reply(`┌˚₊ ๑│ ᴄ ʟ ᴏ ɴ ᴇ  ɢ ʀ ᴜ ᴘ │๑˚₊ 🔄\n┇ \n│ 🔄 Sedang mengkloning grup:\n│ *${name}*\n│ \n│ Proses ini mungkin butuh waktu...\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
 
-        let group = await conn.groupCreate(name, [m.sender]);
+        // 1. Buat grup baru
+        let group = await conn.groupCreate(name, [m.sender]); // Bikin grup, invite owner bot langsung
         let id = group.id;
 
+        // 2. Set Deskripsi Grup Baru
         await conn.groupUpdateDescription(id, desc);
 
+        // 3. Ambil Link Grup Baru
         let link = await conn.groupInviteCode(id);
         
         let caption = `┌˚₊ ๑│ ᴄ ʟ ᴏ ɴ ᴇ  s ᴜ ᴋ s ᴇ s │๑˚₊ ✅
@@ -34,7 +38,7 @@ let handler = async (m, { conn, isOwner }) => {
 │ https://chat.whatsapp.com/${link}
 ┇ 
 └˚₊ ๑ ────────────── ๑˚₊
-> © ERINE-AI`;
+> © ERINE-AI X LYNX DECODE`;
 
         await conn.sendMessage(m.chat, { text: caption.trim() }, { quoted: m });
         await m.react('✅');

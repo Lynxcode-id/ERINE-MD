@@ -23,7 +23,7 @@ let handler = async (m, { conn, text, command, usedPrefix, isAdmin }) => {
         let meta = await conn.groupMetadata(m.chat).catch(() => ({}));
         let gcName = meta.subject || 'Group';
 
-        let caption = `┌˚₊ ๑│ ʀ ᴜ ʟ ᴇ s  ɢ ʀ ᴜ ᴘ │๑˚₊ 📜\n┇ \n│ 📍 *Grup:* ${gcName}\n┇ \n${rulesText.split('\n').map(v => `│ ${v}`).join('\n')}\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI`;
+        let caption = `┌˚₊ ๑│ ʀ ᴜ ʟ ᴇ s  ɢ ʀ ᴜ ᴘ │๑˚₊ 📜\n┇ \n│ 📍 *Grup:* ${gcName}\n┇ \n${rulesText.split('\n').map(v => `│ ${v}`).join('\n')}\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`;
 
         await conn.sendMessage(m.chat, { text: caption }, { quoted: m });
     }

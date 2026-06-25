@@ -1,6 +1,5 @@
 import { generateWAMessageFromContent, prepareWAMessageMedia, proto } from '@whiskeysockets/baileys'
 
-// --- HELPER UI (Native Flow List) ---
 async function sendInteractive(conn, jid, title, text, footer, buttonText, sections, quoted) {
     let msg = generateWAMessageFromContent(jid, {
         viewOnceMessage: {
@@ -24,8 +23,8 @@ async function sendInteractive(conn, jid, title, text, footer, buttonText, secti
 
 let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isROwner }) => {
     let isEnable = /true|enable|(turn)?on|1/i.test(command)
-    let chat = global.db.data.chats[m.chat]
-    let user = global.db.data.users[m.sender]
+    let chat = global.db.data.chats[m.chat] || {}
+    let user = global.db.data.users[m.sender] || {}
     let type = (args[0] || '').toLowerCase()
     let isAll = false
     let isUser = false
@@ -125,6 +124,13 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
                 id: `${usedPrefix}${v.s ? 'disable' : 'enable'} ${v.n}`
             }));
 
+            let uOptions = [
+                { n: 'autolevelup', s: user.autolevelup }
+            ].map(v => ({
+                title: `${getS(v.s)} ${v.n.toUpperCase()}`,
+                id: `${usedPrefix}${v.s ? 'disable' : 'enable'} ${v.n}`
+            }));
+
             let oOptions = [
                 { n: 'public', s: !global.opts['self'] },
                 { n: 'autoread', s: global.opts['autoread'] },
@@ -138,6 +144,7 @@ let handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, isR
 
             let sections = [
                 { title: "👥 SETELAN GRUP", rows: gOptions },
+                { title: "👤 SETELAN USER", rows: uOptions },
                 { title: "👑 SETELAN KHUSUS OWNER", rows: oOptions }
             ];
 

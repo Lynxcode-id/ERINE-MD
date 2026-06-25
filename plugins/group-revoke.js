@@ -25,7 +25,7 @@ let handler = async (m, { conn, isAdmin, isBotAdmin }) => {
 │ https://chat.whatsapp.com/${newLink}
 ┇ 
 └˚₊ ๑ ────────────── ๑˚₊
-> © ERINE-AI`;
+> © ERINE-AI X LYNX DECODE`;
 
         await conn.sendMessage(m.chat, { text: caption.trim() }, { quoted: m });
         await m.react('✅');
@@ -40,6 +40,5 @@ handler.help = ['revoke', 'resetlink'];
 handler.tags = ['group'];
 handler.command = /^(revoke|resetlink)$/i;
 handler.group = true;
-handler.admin = true;
 
 export default handler;

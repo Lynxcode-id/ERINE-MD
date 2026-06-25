@@ -1,13 +1,13 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/c1bfb70786a1d1b86b03e12cd71d5549.jpg" width="380"/>
+  <img src="https://raw.githubusercontent.com/Lynxcode-id/picture/refs/heads/main/file_00000000b5d471faa4c5c8b876d8ca6f.png" width="380"/>
 </p>
 
-<h1 align="center">ERINE MD</h1>
-<p align="center"><b>WhatsApp Multi-Device Bot</b></p>
+<h1 align="center">𝐄𝐑𝐈𝐍𝐄-𝐀𝐈</h1>
+<p align="center"><b>WhatsApp Bot Multi Device</b></p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/Lynxcode-id/ERINE-MD-">
-  <img src="https://img.shields.io/github/forks/Lynxcode-id/ERINE-MD-">
+  <img src="https://img.shields.io/github/stars/Lynxcode-id/ERINE-MD">
+  <img src="https://img.shields.io/github/forks/Lynxcode-id/ERINE-MD">
   <a href="https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i">
     <img src="https://img.shields.io/badge/WHATSAPP_CHANNEL-25D366?style=flat-square&logo=whatsapp&logoColor=white">
   </a>
@@ -17,7 +17,7 @@
 
 ## 🌙 Tentang Bot
 
-**ERINE-MD PROJECT** adalah bot WhatsApp multi-device dengan sistem plugin yang fleksibel.  
+**ERINE-AI PROJECT** adalah bot WhatsApp multi-device dengan sistem plugin yang fleksibel.  
 Bot ini dibuat untuk hiburan, utilitas, downloader, dan otomatisasi grup maupun chat pribadi.
 
 Cocok digunakan untuk:
@@ -26,6 +26,12 @@ Cocok digunakan untuk:
 - 👥 Manajemen grup
 - ✨ AI tools
 - 🖼️ Sticker maker
+- 🔥 Berjualan
+- ⚡ Open jasa sewa bot
+- 😎 Open jasa jadibot
+- 🌟 Push kontak
+- 🥸 Jpm jasa share gtulah
+- ✨ Dan masih banyak lagi chuy..
 
 ---
 
@@ -69,20 +75,23 @@ Kirim gambar dengan caption:
 ### ▶️ Download Video TikTok
 ```
 .tiktok https://vt.tiktok.com/xxxx
-.tthd
-.tt
+.ttslide
+.ttmp3
 ```
 
 ### ▶️ Download Video Instagram
 ```
 .ig https://www.instagram.com/p/xxxx
-.ig story 
+.ig story
+.ig reels
 ```
 
 ### ▶️ Download Lagu
 ```
 .play judul lagu
-.play3 <- versi full button 
+.play3
+.spotifyplay
+.spplay
 ```
 
 ### ▶️ Chat AI
@@ -90,6 +99,8 @@ Kirim gambar dengan caption:
 .ai rekomendasi anime romance
 .gpt
 .gemini
+.erineai
+.rine
 ```
 
 ### ▶️ Game & Fun
@@ -103,30 +114,40 @@ Kirim gambar dengan caption:
 ```
 .menu
 .menu all
-.menu tags
+.help
 ```
 
 ---
 
 ## ⚠️ Catatan
 
-- Run di node js 20-21
-- Gunakan bot dengan bijak.
-- Jangan spam command.
-- Beberapa fitur hanya bisa digunakan admin atau owner.
-- Jika bot tidak merespon, tunggu beberapa saat.
+- Mohon maaf sebelumnya, di script ini ada auto follow ch 1-4 maaf ya karena ga sempat ke hapus dulu udah pernah tapi team saya pas update bikin kesalahan fatal di main.js handler.js dan simple.js makanya erine ai sekarang make punya "erine ai master" yang masih ada auto follow chnya tapi ggp itu biar gampang juga kalian dapat info
+- Run di node js 20-26
+- Saran node run di 22 karena sc ini stabil di 22
+- Gunakan bot dengan bijak, jangan spam command jika ingin fitur bot awet!
+- Jangan make fitur kalo ga penting, ingat script ini pake apikey yang ada limitnya! jadi tetap berhemat.
+- Bot ini support all button, sup airich dll.
+- Jika kalian mengalami susah memasukkan nomor pas mau pairing spam aja nomornya terus sampai muncul pairingnya sebenarnya itu bugs, tapi nanti aja lah di perbaiki di next update.
+- Jika ingin script bot ini yang no enc, beli di pengembang bot ini ya harga? cek sendiri make command .sc2
+- Jangan lupa gift stars untuk repo ini yah jika kamj suka dengan bot ini.
+- Bantu owner dengan support, dan donasi agar fitur dan bot tetap berkembang. terima kasih all!
+- Bot ini di rancang untuk kebutuhan multi tasking, kuat di segala medan dan fast respon, tapi jika terlalu over di spam terkadang sering mengalami rate limit jika itu terjadi maka restart panel dan jika tidak mempan maka hapus folder sessions lalu start panel / pairing ulang.
+- Ada saran? ataupun masukan kami siap menerima semuanya.
 
 ---
 
 ## ❤️ Thanks
 
-Base by **Ryo Yamada**
-Base Utama by **ShirokamiRyzen**  
+Penyedia Baileys : "ourin-baileys"
+Penyedia Baileys : "@itsliaaa/baileys"
+
+Base by **Ryo Yamada** <- Hilman
+Base Utama by **ShirokamiRyzen** <- Ryzen maaf jika salah sebut
 https://github.com/ShirokamiRyzen/Nao-MD
 https://github.com/himanackerman/RYO-YAMADA-MD
 
 ---
 
 <p align="center">
-<i>ERINE-MD — Simple, Fast, Modular WhatsApp Bot</i>
+<i>ERINE-AI — Simple, Fast, Modular WhatsApp Bot</i>
 </p>
