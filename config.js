@@ -43,10 +43,10 @@ const readMore = more.repeat(4001)
 global.owner = [['6288258041396', 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ', true]] // Ganti
 global.mods = [] // Bebas 
 global.prems = [] // Bebas 
-global.nomorbot = '6285185681661' // No Bot + Pairing
+global.nomorbot = '6285185681661' // No Bot
 global.nomorown = '6288258041396'// No Utama
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
-global.version = '20.5.3' // Versi Script Ini
+global.version = '20.5.0' // Versi Script Ini
 global.autotyping = false // Default : false
 global.autorecording = false // Default : false
 
@@ -54,12 +54,12 @@ global.autorecording = false // Default : false
 
 global.readMore = readMore
 global.author = 'ҽɾιɳҽ ρɾσʝҽƈƚ'
-global.namebot = 'ҽɾιɳҽ ᥲі'
-global.wm = 'ҽɾιɳҽ-ᥲі x ʅყɳx ɱαɳυҽʅȥ'
+global.namebot = 'ҽɾιɳҽ ɱԃ'
+global.wm = 'ҽɾιɳҽ-ɱԃ x ʅყɳx ɱαɳυҽʅȥ'
 global.watermark = wm
 global.botdate = `❈ DATE: ${week} ${date}\n❀ 𝗧𝗶𝗺𝗲: ${wktuwib}`
 global.bottime = `T I M E : ${wktuwib}`
-global.stickpack = `ҽɾιɳҽ-ᥲі ✦\nPowered by ${namebot}\nwa.me/${nomorbot}`
+global.stickpack = `ᴇʀɪɴᴇ ᴘʀᴏᴊᴇᴄᴛ ✦\nPowered by ${namebot}\nwa.me/${nomorbot}`
 global.stickauth = `ƈ : ҽɾʝɳҽ ρɾσʝҽƈƚ`
 global.week = `${week} ${date}`
 global.wibb = `${wktuwib}`
@@ -111,6 +111,9 @@ global.menuAudio = [
     'https://files.catbox.moe/hc9hrb.mp3'
 ]
 
+global.menuaudio = [
+'https://c.termai.cc/a131/2TZYlSS.mp3'
+]
 // SET IDN - SHOWROOM 
 
 export const GROUP_IDS = [
@@ -130,10 +133,11 @@ export const CHANNEL_IDS = [
 global.chId = '120363400612665352@newsletter'
 global.newsletterName = '「 🐣 ᴇʀɪɴᴇ-ᴍᴅ ɪɴғᴏʀᴍᴀᴛɪᴏɴ 」'
 
+// cpanel
+
 // ==========================================
 // ⚙️ KONFIGURASI PANEL & PTERODACTYL
 // ==========================================
-
 global.cpanel = {
     v1: {
         domain: 'https://panel.lynxsukakopi.kantinserver.my.id',
@@ -164,7 +168,6 @@ global.cpanel = {
 // ==========================================
 // ⚙️ KONFIGURASI CLOUDFLARE (SUBDOMAIN)
 // ==========================================
-
 global.subdomain = { 
     "jhonaley.net": { zone: "e67db64db8ec671f105c77ee521daa37", apitoken: "-eNyMkEo9Wy1_n92YhDZ3QBDlVihX-1VGCUzfrj8" },
     "jhonaley.web.id": { zone: "dd00b76d94af1e8d5f37f4253f77861f", apitoken: "MHXAKlSaWbFcCLDqo7t-A-KFx1N89vUOwjvSgVTt" },
@@ -177,7 +180,6 @@ global.subdomain = {
     "barmodsdomain.my.id": { zone: "05478e906fa1556f81ae0eaf86816060", apitoken: "nkIplLsfGW-FSUYEpbSt3_I2-a9JIWZIvGO5W6xN" }, 
     "rikionline.shop": { zone: "082ec80d7367d6d4f7c52600034ac635", apitoken: "r3XUyNYtxNQYwZtGUIAChRqe0uTzwV4eVO7JpJ_l" }
 };
-
 // SET MENU DISPLAY
 
 global.dmenut = '𖠌 ┈┈┈〈' //top
