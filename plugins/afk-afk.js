@@ -5,11 +5,14 @@ let handler = async (m, { conn, text }) => {
     user.afk = + new Date
     user.afkReason = text
     let userName = conn.getName(m.sender)
+    
+    // Ngambil PP User, kalau di-private pake gambar default
     let pp = await conn.profilePictureUrl(m.sender, 'image').catch(_ => 'https://files.catbox.moe/vsliak.jpg')
 
     await m.react('💤');
 
     try {
+        // Mode Minimalis: Tanpa setTitle dan setFooter biar kotak ngga kebesaran
         await new AIRich(conn)
             .addProduct({
                 title: 'System Notification', 

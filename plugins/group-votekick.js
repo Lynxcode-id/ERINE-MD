@@ -22,7 +22,7 @@ let handler = async (m, { conn, text, usedPrefix, command, isBotAdmin }) => {
         conn.votekick[id] = {
             target: target,
             voters: [m.sender],
-            limit: 5
+            limit: 5 // Batas jumlah vote untuk kick
         };
 
         m.reply(`┌˚₊ ๑│ ᴠ ᴏ ᴛ ᴇ ᴋ ɪ ᴄ ᴋ  ᴍ ᴜ ʟ ᴀ ɪ │๑˚₊ ⚖️\n┇ \n│ Target: @${target.split('@')[0]}\n│ Pemilih: 1/${conn.votekick[id].limit}\n┇ \n│ Ketik *${usedPrefix}upvote* untuk setuju mengeluarkan target!\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`, null, { mentions: [target] });

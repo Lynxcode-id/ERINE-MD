@@ -31,24 +31,31 @@ let handler = async (m, { conn }) => {
 
     let caption = `┌˚₊ ๑│ s ᴛ ᴀ ᴛ ɪ s ᴛ ɪ ᴋ  ʙ ᴏ ᴛ │๑˚₊ 📊\n┇ \n│ 🔧 *Total Fitur:* ${totalFitur}\n│ 📖 *Total Command:* ${totalCommand}\n┇ \n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`.trim();
 
+    // 1. Kirim Teks Statistik
     await conn.sendMessage(
       m.chat,
       { text: caption },
       { quoted: global.fkontak || m }
     );
 
+    // 2. Download audio dari Catbox ke Buffer
     const audioUrl = 'https://files.catbox.moe/a2546f.mp3';
     const res = await fetch(audioUrl);
     if (!res.ok) throw new Error('Gagal mengunduh audio dari Catbox.');
     const audioBuffer = await res.buffer();
+
+    // 3. Setup lokasi file temporary (Menggunakan os.tmpdir dari plugin playch)
     tempInput = path.join(os.tmpdir(), `${Date.now()}_fitur_in.mp3`);
     tempOutput = path.join(os.tmpdir(), `${Date.now()}_fitur_out.opus`);
     fs.writeFileSync(tempInput, audioBuffer);
+
+    // 4. Proses Convert ke Opus murni lewat Ffmpeg (Fix argumen bitrate '128k')
     await new Promise((resolve, reject) => {
         spawn('ffmpeg', ['-i', tempInput, '-vn', '-ac', '1', '-c:a', 'libopus', '-b:a', '128k', '-y', tempOutput])
             .on('close', code => code === 0 ? resolve() : reject(new Error('Ffmpeg conversion failed.')));
     });
 
+    // 5. Kirim Audio VN asli Opus (Dijamin work, mengadopsi cara playch)
     await conn.sendMessage(
       m.chat,
       { 
@@ -66,6 +73,7 @@ let handler = async (m, { conn }) => {
     await m.react('❌');
     m.reply(`┌˚₊ ๑│ s ʏ s ᴛ ᴇ ᴍ  ᴇ ʀ ʀ ᴏ ʀ │๑˚₊ ❌\n┇ Gagal mengirim audio: ${e.message}\n└˚₊ ๑ ────────────── ๑˚₊\n> © ERINE-AI X LYNX DECODE`);
   } finally {
+    // Bersihkan file sampah di panel biar gak penuh
     if (tempInput && fs.existsSync(tempInput)) fs.unlinkSync(tempInput);
     if (tempOutput && fs.existsSync(tempOutput)) fs.unlinkSync(tempOutput);
   }

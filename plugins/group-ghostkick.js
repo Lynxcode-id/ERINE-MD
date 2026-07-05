@@ -1,3 +1,8 @@
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 📝 Plugin : Silent/Ghost Kick
+ */
+
 let handler = async (m, { conn, usedPrefix, command, isAdmin, isBotAdmin }) => {
     if (!isAdmin) return m.reply('❌ Khusus Admin grup!');
     if (!isBotAdmin) return m.reply('❌ Bot harus jadi Admin dulu!');
@@ -11,10 +16,11 @@ let handler = async (m, { conn, usedPrefix, command, isAdmin, isBotAdmin }) => {
     if (target === conn.user.jid) return m.reply('❌ Masa bot disuruh nge-kick diri sendiri.');
     if (target === m.sender) return m.reply('❌ Lah, mau keluar mah left aja sendiri cuy.');
 
-    await m.react('🤫');
+    await m.react('🤫'); // React doang, gak usah ngirim pesan heboh
 
     try {
         await conn.groupParticipantsUpdate(m.chat, [target], 'remove');
+        // Sengaja gak ngirim m.reply('Berhasil kick') biar senyap
     } catch (e) {
         console.error('[GHOST KICK ERROR]', e);
         m.reply('❌ Gagal mengeksekusi ghost kick. Pastikan target valid.');

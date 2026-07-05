@@ -1,3 +1,9 @@
+/**
+ * ───「 FEATURE AUTHOR 」───
+ * 👤 Developer : Lynx Decode
+ * 📝 Plugin: Play Channel + Thumbnail Pasti Nampil (Image Quoted VN)
+ */
+
 import fetch from 'node-fetch';
 import yts from 'yt-search';
 import fs from 'fs';
@@ -6,17 +12,26 @@ import os from 'os';
 import { spawn } from 'child_process';
 
 const handler = async (m, { conn, text, usedPrefix, command }) => {
-    const idsal = '120363400612665352@newsletter';  // idch lu
+    // JID Channel Erine-AI
+    const idsal = '120363400612665352@newsletter'; 
     
     if (!text) return m.reply(`❌ Masukkan judul lagu!\nContoh: ${usedPrefix + command} dandelions`);
 
     let tempInput, tempOutput;
     try {
         await m.react('⏳');
+
+        // 1. Search YT
         const v = (await yts(text)).videos[0];
         if (!v) throw new Error('Lagu tidak ditemukan.');
+
+        // 2. Download Thumbnail & Audio
         const thumb = await (await fetch(v.thumbnail)).buffer();
+        
+        // 🔥 API Downloader Baru (AxlyDev)
         const dataAPI = await (await fetch(`https://axlyapi.qzz.io/download/ytmp3?url=${encodeURIComponent(v.url)}`)).json();
+        
+        // 🔥 Cocokin sama struktur JSON API yang baru
         if (!dataAPI?.status || !dataAPI?.data?.download_url) throw new Error('Link download error atau API mati.');
         
         const audioBuffer = await (await fetch(dataAPI.data.download_url)).buffer();
@@ -24,11 +39,15 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
         tempInput = path.join(os.tmpdir(), `${Date.now()}_in.mp3`);
         tempOutput = path.join(os.tmpdir(), `${Date.now()}_out.opus`);
         fs.writeFileSync(tempInput, audioBuffer);
+
+        // 3. Convert ke Opus (PTT/VN)
         await new Promise((resolve, reject) => {
+            // Argumen bitrate diisi '128k' biar ffmpeg gak error
             spawn('ffmpeg', ['-i', tempInput, '-vn', '-ac', '1', '-c:a', 'libopus', '-b:a', '128k', '-y', tempOutput])
                 .on('close', code => code === 0 ? resolve() : reject());
         });
 
+        // 4. Kirim "Card" Thumbnail dulu
         const caption = `🎧 *${v.title}*\n👤 *Author:* ${v.author.name}\n⏳ *Duration:* ${v.timestamp}\n🔗 ${v.url}\n\n*© ERINE-AI PlayCh*`;
 
         const imgMsg = await conn.sendMessage(idsal, {
@@ -36,6 +55,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
             caption: caption
         });
 
+        // 5. Kirim Audio VN sebagai reply ke pesan gambar di atas
         await conn.sendMessage(idsal, {
             audio: fs.readFileSync(tempOutput),
             mimetype: 'audio/ogg; codecs=opus',

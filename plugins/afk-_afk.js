@@ -7,6 +7,8 @@ handler.before = async function (m, { conn }) {
   let user = DB.data.users[m.sender]
   
   if (!user) return true
+
+  // Fungsi buat ngerapihin hitungan waktu
   const clockString = (ms) => {
     let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
     let m_time = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
@@ -14,6 +16,7 @@ handler.before = async function (m, { conn }) {
     return [h, m_time, s].map(v => v.toString().padStart(2, 0)).join(':')
   }
 
+  // 🔥 Trigger pas user berhenti AFK
   if (user.afk > -1) {
     let timeAFK = clockString(new Date - user.afk)
     let reason = user.afkReason
@@ -41,6 +44,7 @@ handler.before = async function (m, { conn }) {
     }
   }
   
+  // 🔥 Trigger pas ada orang ngetag user yang lagi AFK
   let jids = [...new Set([...(m.mentionedJid || []), ...(m.quoted ? [m.quoted.sender] : [])])]
   for (let jid of jids) {
     let taggedUser = DB.data.users[jid]

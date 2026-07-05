@@ -8,33 +8,48 @@ import fs from 'fs'
 import path from 'path'
 
 let handler = async (m, { conn, text, usedPrefix, command }) => {
+    // --- UI KHAS ERINE-AI ---
     const headerUI = "┌˚₊ ๑│ ᴇ ʀ ɪ ɴ ᴇ - ᴀ ɪ  ʀ ᴀ ᴛ ɪ ɴ ɢ │๑˚₊"
     const hrUI = "└˚₊ ๑ ────────────── ๑˚₊"
     const footerUI = "> © ERINE-AI | USER FEEDBACK"
+
+    // --- SETUP DATABASE ---
     const dirPath = './database'
     const filePath = path.join(dirPath, 'rating.json')
+
+    // Otomatis bikin folder & file kalau belum ada
     if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true })
     if (!fs.existsSync(filePath)) fs.writeFileSync(filePath, JSON.stringify([]))
 
+    // Helper baca & tulis file JSON
     const readDB = () => JSON.parse(fs.readFileSync(filePath, 'utf-8'))
     const writeDB = (data) => fs.writeFileSync(filePath, JSON.stringify(data, null, 2))
 
     try {
         await m.react('⏳')
+
+        // ==========================================
+        // 1. FITUR INPUT RATING (-rating)
+        // ==========================================
         if (command === 'rating') {
             if (!text || !text.includes('|')) {
                 await m.react('❌')
                 return m.reply(`${headerUI} 📝\n┇ \n│ *FORMAT SALAH!*\n│ \n│ ◦ *Format Pendek:*\n│ ${usedPrefix + command} nama | bintang | ulasan\n│ \n│ ◦ *Format Panjang:*\n│ ${usedPrefix + command} nama | bintang | ulasan | saran | kritik | masukan | perbaikan\n│ \n│ 💡 *Catatan:* Bintang dari 0 - 10\n┇ \n${hrUI}\n${footerUI}`)
             }
 
+            // Parsing teks berdasarkan pembatas pipa (|)
             let args = text.split('|').map(v => v.trim())
             let nama = args[0]
             let bintang = parseFloat(args[1])
             let ulasan = args[2]
+            
+            // Opsional (kalau pakai format pendek, sisanya otomatis jadi strip "-")
             let saran = args[3] || '-'
             let kritik = args[4] || '-'
             let masukan = args[5] || '-'
             let perbaikan = args[6] || '-'
+
+            // Validasi Input
             if (!nama || isNaN(bintang) || !ulasan) {
                 await m.react('❌')
                 return m.reply(`${headerUI} ❌\n┇ \n│ Pastikan *Nama*, *Bintang (Angka)*, dan *Ulasan* terisi dengan benar!\n┇ \n${hrUI}\n${footerUI}`)
@@ -46,6 +61,8 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             }
 
             let db = readDB()
+            
+            // Cek apakah user dengan nama ini udah pernah ngasih rating
             let userIdx = db.findIndex(v => v.nama.toLowerCase() === nama.toLowerCase())
             
             let ratingData = {
@@ -61,12 +78,12 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             }
 
             if (userIdx !== -1) {
-                db[userIdx] = ratingData
+                db[userIdx] = ratingData // Kalau udah ada, timpa (update)
             } else {
-                db.push(ratingData)
+                db.push(ratingData) // Kalau belum ada, tambahin baru
             }
 
-            writeDB(db)
+            writeDB(db) // Save ke JSON
 
             let replyText = `${headerUI} ⭐\n┇ \n` +
                             `│ ✅ *RATING BERHASIL DISIMPAN!*\n` +
@@ -81,6 +98,9 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
             await m.react('✅')
         }
 
+        // ==========================================
+        // 2. FITUR CEK RATING (-viewrating)
+        // ==========================================
         if (command === 'viewrating') {
             if (!text) {
                 await m.react('❌')
@@ -95,6 +115,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
                 return m.reply(`${headerUI} ❌\n┇ \n│ Data rating untuk nama *${text}* tidak ditemukan di database.\n┇ \n${hrUI}\n${footerUI}`)
             }
 
+            // Tampilan full info user yang ngasih rating
             let viewText = `${headerUI} 🔍\n┇ \n` +
                            `│ 👤 *Nama:* ${data.nama}\n` +
                            `│ ⭐ *Bintang:* ${data.bintang}/10\n` +
