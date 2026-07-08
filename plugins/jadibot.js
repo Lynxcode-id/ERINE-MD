@@ -1,1 +1,108 @@
-function _0x371d(){const _0x4e9e1b=['push','prem','7VvVsoZ','11XGcUrr','sender','react','nomorown','❌\x20Nomor\x20','map','\x20sudah\x20memiliki\x20sesi\x20jadibot\x20yang\x20aktif.','isJadibot','premium','main','target','8JAdFFW','id-ID','clone','full','*\x20berhasil\x20dikirim\x20ke\x20owner.\x0a','❌\x20Jadibot\x20Premium\x20hanya\x20dapat\x20digunakan\x20oleh\x20user\x20premium\x20yang\x20aktif.','test','premiumTime','acc','Requester\x20:\x20','1495086yxQgVN','2120144tcMKMC','jadibot','help','filter','command','Waktu\x20:\x20','now','pushName','315215aTusGd','clonefull','✅\x20Sesi\x20jadibot\x20','regular','789744ozqrDr','9XkNOmm','free','@s.whatsapp.net','❌\x20Gagal\x20memulai\x20jadibot:\x20','message','requesterName','requester','❌\x20Perintah\x20ini\x20tidak\x20bisa\x20dipakai\x20di\x20dalam\x20sesi\x20jadibot.','4060toGTju','🧩\x20Request\x20clone\x20untuk\x20*','4992510tYAnWi','reply','trim','jadibotclone','sendMessage','isArray','request\x20clone\x20via\x20','stopjadibot','users','vip','Ketik:\x0a','254449TAAkiU','data','replace','🧩\x20*REQUEST\x20JADIBOT\x20CLONE*\x0a\x0a','toLowerCase','owner'];_0x371d=function(){return _0x4e9e1b;};return _0x371d();}const _0x164403=_0x3e30;(function(_0x5ba13f,_0x20ab8e){const _0x4b9768=_0x3e30,_0x3561e8=_0x5ba13f();while(!![]){try{const _0x8a1df=-parseInt(_0x4b9768(0x14f))/0x1+-parseInt(_0x4b9768(0x12d))/0x2+parseInt(_0x4b9768(0x12c))/0x3*(parseInt(_0x4b9768(0x122))/0x4)+-parseInt(_0x4b9768(0x135))/0x5+parseInt(_0x4b9768(0x144))/0x6*(parseInt(_0x4b9768(0x157))/0x7)+parseInt(_0x4b9768(0x139))/0x8*(parseInt(_0x4b9768(0x13a))/0x9)+-parseInt(_0x4b9768(0x142))/0xa*(parseInt(_0x4b9768(0x158))/0xb);if(_0x8a1df===_0x20ab8e)break;else _0x3561e8['push'](_0x3561e8['shift']());}catch(_0x766337){_0x3561e8['push'](_0x3561e8['shift']());}}}(_0x371d,0x862b5));import{startJadibot,stopJadibot,isActive,requestCloneJadibot}from'../lib/jadibot.js';function _0x3e30(_0x5183cc,_0x228227){_0x5183cc=_0x5183cc-0x120;const _0x371d3f=_0x371d();let _0x3e3076=_0x371d3f[_0x5183cc];return _0x3e3076;}function onlyNumber(_0x31cbc5=''){const _0x23799e=_0x3e30;return String(_0x31cbc5||'')[_0x23799e(0x151)](/[^0-9]/g,'');}function parseJadibotArgs(_0x3849cc='',_0x228738=''){const _0x535cbb=_0x3e30,_0x206809=String(_0x3849cc||'')[_0x535cbb(0x146)]()['split'](/\s+/)[_0x535cbb(0x130)](Boolean);let _0x48b41f=onlyNumber(_0x228738),_0x1a2acc=_0x535cbb(0x138);for(const _0x472d4c of _0x206809){const _0x331940=_0x472d4c[_0x535cbb(0x153)]();if([_0x535cbb(0x138),'reg',_0x535cbb(0x13b)]['includes'](_0x331940))_0x1a2acc='regular';else{if([_0x535cbb(0x160),_0x535cbb(0x156),_0x535cbb(0x14d)]['includes'](_0x331940))_0x1a2acc=_0x535cbb(0x160);else{if([_0x535cbb(0x124),_0x535cbb(0x125),_0x535cbb(0x136),_0x535cbb(0x12a)]['includes'](_0x331940))_0x1a2acc=_0x535cbb(0x124);else{if(/^\d{8,16}$/[_0x535cbb(0x128)](onlyNumber(_0x472d4c)))_0x48b41f=onlyNumber(_0x472d4c);}}}}return{'target':_0x48b41f,'mode':_0x1a2acc};}let handler=async(_0x15dd62,{conn:_0x511dd6,text:_0x52515b,usedPrefix:_0x50fa25,command:_0x1b5340,isOwner:_0x2b70e4})=>{const _0x2af64d=_0x3e30;if(_0x511dd6[_0x2af64d(0x15f)])return _0x15dd62[_0x2af64d(0x145)](_0x2af64d(0x141));const _0x34cc74=global['db'][_0x2af64d(0x150)][_0x2af64d(0x14c)][_0x15dd62['sender']]||{},_0x29df17=onlyNumber(_0x15dd62[_0x2af64d(0x159)]);if(_0x1b5340==='stopjadibot'){const {target:_0x18aada}=parseJadibotArgs(_0x52515b,_0x15dd62[_0x2af64d(0x159)]),_0x515bc7=(_0x2b70e4&&_0x18aada?_0x18aada:_0x29df17)+_0x2af64d(0x13c);if(!isActive(_0x515bc7))return _0x15dd62[_0x2af64d(0x145)]('❌\x20Sesi\x20jadibot\x20tidak\x20ditemukan.');return await _0x15dd62[_0x2af64d(0x15a)]('⏳'),await stopJadibot(_0x515bc7,!![]),await _0x15dd62['react']('✅'),_0x15dd62['reply'](_0x2af64d(0x137)+_0x515bc7+'\x20berhasil\x20dihentikan.');}const {target:_0x291856,mode:_0x3bac90}=parseJadibotArgs(_0x52515b,_0x15dd62[_0x2af64d(0x159)]),_0x27a482=_0x291856+_0x2af64d(0x13c);if(!_0x2b70e4&&_0x291856!==_0x29df17)return _0x15dd62['reply']('❌\x20Kamu\x20hanya\x20bisa\x20membuat\x20jadibot\x20untuk\x20nomormu\x20sendiri.');if(isActive(_0x27a482))return _0x15dd62[_0x2af64d(0x145)](_0x2af64d(0x15c)+_0x291856+_0x2af64d(0x15e));if(_0x3bac90===_0x2af64d(0x160)&&(!_0x34cc74[_0x2af64d(0x160)]||_0x34cc74[_0x2af64d(0x129)]&&_0x34cc74[_0x2af64d(0x129)]<Date[_0x2af64d(0x133)]()))return _0x15dd62[_0x2af64d(0x145)](_0x2af64d(0x127));if(_0x3bac90==='clone'){const _0x307ad4=requestCloneJadibot({'target':_0x291856,'requester':_0x15dd62[_0x2af64d(0x159)],'requesterName':_0x15dd62[_0x2af64d(0x134)]||'','chat':_0x15dd62['chat'],'note':_0x2af64d(0x14a)+_0x1b5340}),_0x3ec4cf=(global[_0x2af64d(0x154)]||[])[_0x2af64d(0x15d)](_0x3cdef9=>Array[_0x2af64d(0x149)](_0x3cdef9)?_0x3cdef9[0x0]:_0x3cdef9);if(global[_0x2af64d(0x15b)])_0x3ec4cf[_0x2af64d(0x155)](global[_0x2af64d(0x15b)]);const _0x25a538=[...new Set(_0x3ec4cf['map'](_0x65c466=>onlyNumber(_0x65c466))[_0x2af64d(0x130)](Boolean))];for(const _0x5cb031 of _0x25a538){await _0x511dd6[_0x2af64d(0x148)](_0x5cb031+_0x2af64d(0x13c),{'text':_0x2af64d(0x152)+('Target\x20:\x20'+_0x307ad4[_0x2af64d(0x121)]+'\x0a')+(_0x2af64d(0x12b)+_0x307ad4[_0x2af64d(0x140)]+'\x0a')+('Nama\x20:\x20'+(_0x307ad4[_0x2af64d(0x13f)]||'-')+'\x0a')+(_0x2af64d(0x132)+new Date(_0x307ad4['createdAt'])['toLocaleString'](_0x2af64d(0x123))+'\x0a\x0a')+_0x2af64d(0x14e)+('`'+_0x50fa25+'accjadibotclone\x20'+_0x307ad4['target']+'`')})['catch'](()=>{});}return _0x15dd62[_0x2af64d(0x145)](_0x2af64d(0x143)+_0x291856+_0x2af64d(0x126)+'Mohon\x20tunggu\x20persetujuan\x20dari\x20owner.');}await _0x15dd62[_0x2af64d(0x15a)]('⏳');try{await startJadibot(_0x511dd6,_0x15dd62,_0x27a482,![],_0x3bac90),await _0x15dd62[_0x2af64d(0x15a)]('✅');}catch(_0x5a1e07){return await _0x15dd62[_0x2af64d(0x15a)]('❌'),_0x15dd62['reply'](_0x2af64d(0x13d)+(_0x5a1e07[_0x2af64d(0x13e)]||String(_0x5a1e07)));}};handler[_0x164403(0x12f)]=[_0x164403(0x12e),'jadibotprem',_0x164403(0x147),_0x164403(0x14b)],handler['tags']=[_0x164403(0x120),'jadibot'],handler[_0x164403(0x131)]=/^(jadibot|jadibotprem|jadibotclone|stopjadibot)$/i,handler[_0x164403(0x154)]=![];export default handler;
+import {
+    startJadibot,
+    stopJadibot,
+    isActive,
+    requestCloneJadibot
+} from '../lib/jadibot.js'
+
+function onlyNumber(text = '') {
+    return String(text || '').replace(/[^0-9]/g, '')
+}
+
+function parseJadibotArgs(text = '', sender = '') {
+    const parts = String(text || '').trim().split(/\s+/).filter(Boolean)
+    let target = onlyNumber(sender)
+    let mode = 'regular'
+
+    for (const part of parts) {
+        const p = part.toLowerCase()
+        if (['regular', 'reg', 'free'].includes(p)) mode = 'regular'
+        else if (['premium', 'prem', 'vip'].includes(p)) mode = 'premium'
+        else if (['clone', 'full', 'clonefull', 'acc'].includes(p)) mode = 'clone'
+        else if (/^\d{8,16}$/.test(onlyNumber(part))) target = onlyNumber(part)
+    }
+
+    return { target, mode }
+}
+
+let handler = async (m, { conn, text, usedPrefix, command, isOwner }) => {
+    if (conn.isJadibot) return m.reply('❌ Perintah ini tidak bisa dipakai di dalam sesi jadibot.')
+
+    const user = global.db.data.users[m.sender] || {}
+    const senderNum = onlyNumber(m.sender)
+
+    if (command === 'stopjadibot') {
+        const { target } = parseJadibotArgs(text, m.sender)
+        const jid = `${(isOwner && target) ? target : senderNum}@s.whatsapp.net`
+
+        if (!isActive(jid)) return m.reply('❌ Sesi jadibot tidak ditemukan.')
+
+        await m.react('⏳')
+        await stopJadibot(jid, true)
+        await m.react('✅')
+        return m.reply(`✅ Sesi jadibot ${jid} berhasil dihentikan.`)
+    }
+
+    const { target, mode } = parseJadibotArgs(text, m.sender)
+    const targetJid = `${target}@s.whatsapp.net`
+
+    if (!isOwner && target !== senderNum) {
+        return m.reply('❌ Kamu hanya bisa membuat jadibot untuk nomormu sendiri.')
+    }
+
+    if (isActive(targetJid)) {
+        return m.reply(`❌ Nomor ${target} sudah memiliki sesi jadibot yang aktif.`)
+    }
+
+    if (mode === 'premium' && (!user.premium || (user.premiumTime && user.premiumTime < Date.now()))) {
+        return m.reply('❌ Jadibot Premium hanya dapat digunakan oleh user premium yang aktif.')
+    }
+
+    if (mode === 'clone') {
+        const req = requestCloneJadibot({
+            target,
+            requester: m.sender,
+            requesterName: m.pushName || '',
+            chat: m.chat,
+            note: `request clone via ${command}`
+        })
+
+        const ownerList = (global.owner || []).map(v => Array.isArray(v) ? v[0] : v)
+        if (global.nomorown) ownerList.push(global.nomorown)
+        const ownerTargets = [...new Set(ownerList.map(v => onlyNumber(v)).filter(Boolean))]
+
+        for (const own of ownerTargets) {
+            await conn.sendMessage(`${own}@s.whatsapp.net`, {
+                text:
+                    `🧩 *REQUEST JADIBOT CLONE*\n\n` +
+                    `Target : ${req.target}\n` +
+                    `Requester : ${req.requester}\n` +
+                    `Nama : ${req.requesterName || '-'}\n` +
+                    `Waktu : ${new Date(req.createdAt).toLocaleString('id-ID')}\n\n` +
+                    `Ketik:\n` +
+                    `\`${usedPrefix}accjadibotclone ${req.target}\``
+            }).catch(() => {})
+        }
+
+        return m.reply(
+            `🧩 Request clone untuk *${target}* berhasil dikirim ke owner.\n` +
+            `Mohon tunggu persetujuan dari owner.`
+        )
+    }
+
+    await m.react('⏳')
+    try {
+        await startJadibot(conn, m, targetJid, false, mode)
+        await m.react('✅')
+    } catch (e) {
+        await m.react('❌')
+        return m.reply(`❌ Gagal memulai jadibot: ${e.message || String(e)}`)
+    }
+}
+
+handler.help = ['jadibot', 'jadibotprem', 'jadibotclone', 'stopjadibot']
+handler.tags = ['main', 'jadibot']
+handler.command = /^(jadibot|jadibotprem|jadibotclone|stopjadibot)$/i
+handler.owner = false
+
+export default handler

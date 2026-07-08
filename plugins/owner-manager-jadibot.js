@@ -116,7 +116,7 @@ let handler = async (m, { conn, command, text, usedPrefix }) => {
 
 handler.help = ['listjadibot', 'cleansessionjadibot', 'deljadibot <nomor>']
 handler.tags = ['owner', 'jadibot']
-handler.command = /^(listjadibot|jadibotlist|cleansessionjadibot|cleanjadibot|deljadibot)$/i
+handler.command = /^(listjadibot|jadibotlist|cleansessionjadibot|cleanjadibot|deljadibot|clearsesijadibot|clearjadibot)$/i
 handler.owner = true
 
 export default handler

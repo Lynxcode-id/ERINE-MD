@@ -21,7 +21,7 @@ let handler = async (m, { conn, usedPrefix }) => {
             `Ketik *${usedPrefix}jadibot* untuk mulai`
         )
     }
-
+    
     const sessionjadibot = sessions.get(id)
     const uptime = sessionjadibot?.startedAt
         ? format(Date.now() - sessionjadibot.startedAt)
