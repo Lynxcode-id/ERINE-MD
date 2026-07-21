@@ -56,6 +56,7 @@
     "axios": "^1.4.0",
     "axios-cookiejar-support": "^5.0.3",
     "baileys_helper": "latest",
+    "baileys": "latest",
     "baileys-inmemory-store": "1.0.1",
     "baileys-mbuilder": "latest",
     "bing-translate-api": "^4.0.2",
