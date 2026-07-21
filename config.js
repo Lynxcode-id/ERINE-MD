@@ -40,13 +40,13 @@ const readMore = more.repeat(4001)
 
 // MAIN INFO - KETERANGAN
 
-global.owner = [['6288258041396', 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ', true]] // Ganti
+global.owner = [['6288258041396', 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ', true]] // Ganti jadi no utama klean - owner
 global.mods = [] // Bebas 
 global.prems = [] // Bebas 
-global.nomorbot = '6285185681661' // No Bot
-global.nomorown = '6288258041396'// No Utama
+global.nomorbot = '6285185681661' // No Bot - Untuk pairing code, jangan minim literasi anjing
+global.nomorown = '6288258041396'// No utama - owner jga
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
-global.version = '20.6.2' // Versi Script Ini
+global.version = '20.6.3' // Versi Script Ini
 global.autotyping = false // Default : false
 global.autorecording = false // Default : false
 
