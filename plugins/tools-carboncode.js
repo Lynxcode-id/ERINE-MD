@@ -47,4 +47,4 @@ handler.tags = ['tools', 'maker'];
 handler.command = /^(carbon|codeimg|carboncode)$/i;
 handler.limit = true;
 
-export default handler;*
+export default handler;
