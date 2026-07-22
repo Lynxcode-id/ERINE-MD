@@ -1,6 +1,6 @@
 {
   "name": "ERINE-MD BY LYNX",
-  "version": "20.6.3",
+  "version": "20.6.2",
   "description": "Erine Project MD - WhatsApp Multi-Device Bot",
   "main": "index.js",
   "type": "module",
@@ -51,14 +51,16 @@
     "@whiskeysockets/baileys": "npm:@itsliaaa/baileys@latest",
     "akinator": "^1.0.1",
     "archiver": "^7.0.1",
+    "async-mutex": "^0.5.0",
     "audio-decode": "^2.2.3",
     "awesome-phonenumber": "^5.10.0",
     "axios": "^1.4.0",
     "axios-cookiejar-support": "^5.0.3",
-    "baileys_helper": "latest",
     "baileys": "latest",
+    "baileys_helper": "latest",
     "baileys-inmemory-store": "1.0.1",
     "baileys-mbuilder": "latest",
+    "better-sqlite3": "^11.10.0",
     "bing-translate-api": "^4.0.2",
     "brat-canvas": "^1.0.30",
     "cfonts": "^3.2.0",
@@ -130,7 +132,9 @@
     "sharp@0.30.7": true,
     "skia-canvas@3.0.8": true,
     "@itsliaaa/baileys@0.3.18-final": true,
-    "protobufjs@7.6.3": true,
-    "baileys-mbuilder@4.6.0-lts": true
+    "baileys-mbuilder@4.6.0-lts": true,
+    "better-sqlite3@11.10.0": true,
+    "protobufjs@7.6.5": true,
+    "baileys@7.0.0-rc13": true
   }
 }
