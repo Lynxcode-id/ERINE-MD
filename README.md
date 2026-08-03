@@ -42,7 +42,7 @@
 
 ## 🌙&nbsp; Tentang Bot
 
-**ERINE-AI PROJECT** adalah bot WhatsApp multi-device dengan sistem plugin yang fleksibel.
+**ERINE-AI PROJECT** adalah bot WhatsApp multi-device dengan sistem plugin yang fleksibel dan stabil.
 Bot ini dibuat untuk hiburan, utilitas, downloader, dan otomatisasi grup maupun chat pribadi.
 
 <br>
