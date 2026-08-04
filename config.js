@@ -1,7 +1,8 @@
 /**
  * 95% NO ENC - 100 FREE
  * Yang jual mental miskin + moga rejekinya seret
- * Mau riview script atau rename ulang script ini?
+ * Project ini kami share, tujuannya bukan untuk kalian rename bebas
+ * Project ini kami share supaya kalian merasakan juga script yang kami kebangkan
  * Tag yt : @lynxdecode_ | Github : Lynxcode-id
  * Script akan selalu di kembangkan, ketemu bug/error
  * Ketik .lapor penanganan fix 24j kelar!!
