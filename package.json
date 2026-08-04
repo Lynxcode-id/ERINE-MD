@@ -1,7 +1,7 @@
 {
   "name": "ERINE-MD BY LYNX - DINDA",
   "version": "20.6.8",
-  "description": "Erine Project MD - WhatsApp Multi-Device
+  "description": "Erine Project MD - WhatsApp Multi-Device",
   "main": "index.js",
   "type": "module",
   "directories": {
