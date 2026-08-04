@@ -39,11 +39,13 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@adiwajshing/keyed-db": "latest",
+    "@audio/decode": "^3.11.2",
     "@bochilteam/scraper": "^5.0.1",
     "@cacheable/node-cache": "latest",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@file-kiwi/node": "^1.0.9",
     "@ibaraki-douji/pixivts": "^2.4.1",
+    "@itsliaaa/starseal": "^0.5.1",
     "@kyzzknz/femboy-canvas": "^1.0.0",
     "@napi-rs/canvas": "^1.0.0",
     "@resvg/resvg-js": "^2.6.2",
@@ -135,6 +137,6 @@
     "baileys-mbuilder@4.6.0-lts": true,
     "better-sqlite3@11.10.0": true,
     "protobufjs@7.6.5": true,
-    "baileys@7.0.0-rc13": true
+    "baileys@7.0.0-rc14": true
   }
 }
