@@ -1,5 +1,5 @@
 /**
- * 85% NO ENC - 100 FREE
+ * 95% NO ENC - 100 FREE
  * Yang jual mental miskin + moga rejekinya seret
  * Mau riview script atau rename ulang script ini?
  * Tag yt : @lynxdecode_ | Github : Lynxcode-id
@@ -7,7 +7,7 @@
  * Ketik .lapor penanganan fix 24j kelar!!
  * Based on Nao ESM
  * Base Script : Hlman Ryo
- * Dev - Pengembang² :  Erine MD - Lynx code
+ * Dev - Pengembang sekarang :  ERINE-AI - Lynx Code - Dinda Novi
  * Ikuti saluran kami untuk info update project ini
  * https://chat.whatsapp.com/CSMhBRB2DoICQwyy61txr0
  * https://whatsapp.com/channel/0029VbAnuii6GcGCu73oep1i
@@ -46,7 +46,7 @@ global.prems = [] // Bebas
 global.nomorbot = '6285185681661' // No Bot - Untuk pairing code, jangan minim literasi anjing
 global.nomorown = '6288258041396'// No utama - owner jga
 global.nameown = 'ʟʏɴx ᴅᴇᴄᴏᴅᴇ' // Nama Owner
-global.version = '20.6.5' // Versi Script Ini
+global.version = '20.6.8' // Versi Script Ini
 global.autotyping = false // Default : false
 global.autorecording = false // Default : false
 
